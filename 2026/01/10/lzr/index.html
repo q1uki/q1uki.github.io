@@ -19,12 +19,12 @@
   <meta name="author" content="q1uki">
   <meta name="keywords" content="">
   
-    <meta name="description" content="title： 【论文阅读】《LZR:Identifying Unexpected Internet Services》笔记与思考论文原文与资料源代码数据原文PPT演讲（youtube） 引言中文友好的《LZR: Identifying Unexpected Internet Services》（LZR：发现预期外的网络服务）论文阅读笔记。含有大量原文机翻和概括，斜体字为我的补充。 研究要点 调查">
+    <meta name="description" content="论文原文与资料源代码数据原文PPT演讲（youtube） 引言中文友好的《LZR: Identifying Unexpected Internet Services》（LZR：发现预期外的网络服务）论文阅读笔记。含有大量原文机翻和概括，斜体字为我的补充。 研究要点 调查了网络中服务的部署位置，评估部署在意外端口上服务的安全态势。 过去的扫描假设服务部署在常见端口上，忽略了意外服务端口的扫描。响应S">
 <meta property="og:type" content="article">
 <meta property="og:title" content="q1uki&#39;s blog">
 <meta property="og:url" content="http://q1uki.github.io/2026/01/10/lzr/index.html">
 <meta property="og:site_name" content="q1uki&#39;s blog">
-<meta property="og:description" content="title： 【论文阅读】《LZR:Identifying Unexpected Internet Services》笔记与思考论文原文与资料源代码数据原文PPT演讲（youtube） 引言中文友好的《LZR: Identifying Unexpected Internet Services》（LZR：发现预期外的网络服务）论文阅读笔记。含有大量原文机翻和概括，斜体字为我的补充。 研究要点 调查">
+<meta property="og:description" content="论文原文与资料源代码数据原文PPT演讲（youtube） 引言中文友好的《LZR: Identifying Unexpected Internet Services》（LZR：发现预期外的网络服务）论文阅读笔记。含有大量原文机翻和概括，斜体字为我的补充。 研究要点 调查了网络中服务的部署位置，评估部署在意外端口上服务的安全态势。 过去的扫描假设服务部署在常见端口上，忽略了意外服务端口的扫描。响应S">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260110233036206.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260110233045683.png">
@@ -35,7 +35,7 @@
 <meta property="og:image" content="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260110233237565.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260110233427249.png">
 <meta property="article:published_time" content="2026-01-10T23:29:40.101Z">
-<meta property="article:modified_time" content="2026-01-10T23:44:54.927Z">
+<meta property="article:modified_time" content="2026-01-10T23:46:11.026Z">
 <meta property="article:author" content="q1uki">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260110233036206.png">
@@ -231,7 +231,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          7.3k words
+          7.2k words
         
       </span>
     
@@ -284,8 +284,7 @@
             
               <div class="markdown-body">
                 
-                <hr>
-<h2 id="title：-【论文阅读】《LZR-Identifying-Unexpected-Internet-Services》笔记与思考"><a href="#title：-【论文阅读】《LZR-Identifying-Unexpected-Internet-Services》笔记与思考" class="headerlink" title="title： 【论文阅读】《LZR:Identifying Unexpected Internet Services》笔记与思考"></a>title： 【论文阅读】《LZR:Identifying Unexpected Internet Services》笔记与思考</h2><h1 id="论文原文与资料"><a href="#论文原文与资料" class="headerlink" title="论文原文与资料"></a>论文原文与资料</h1><p><a target="_blank" rel="noopener" href="https://github.com/stanford-esrg/lzr">源代码</a><br><a target="_blank" rel="noopener" href="https://data.esrg.stanford.edu/study/lzr">数据</a><br><a target="_blank" rel="noopener" href="https://lizizhikevich.github.io/assets/papers/lzr.pdf">原文</a><br><a target="_blank" rel="noopener" href="https://www.usenix.org/system/files/sec21_slides_izhikevich.pdf">PPT</a><br><a target="_blank" rel="noopener" href="https://www.usenix.org/conference/usenixsecurity21/presentation/izhikevich">演讲</a>（youtube）</p>
+                <h1 id="论文原文与资料"><a href="#论文原文与资料" class="headerlink" title="论文原文与资料"></a>论文原文与资料</h1><p><a target="_blank" rel="noopener" href="https://github.com/stanford-esrg/lzr">源代码</a><br><a target="_blank" rel="noopener" href="https://data.esrg.stanford.edu/study/lzr">数据</a><br><a target="_blank" rel="noopener" href="https://lizizhikevich.github.io/assets/papers/lzr.pdf">原文</a><br><a target="_blank" rel="noopener" href="https://www.usenix.org/system/files/sec21_slides_izhikevich.pdf">PPT</a><br><a target="_blank" rel="noopener" href="https://www.usenix.org/conference/usenixsecurity21/presentation/izhikevich">演讲</a>（youtube）</p>
 <h1 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h1><p>中文友好的《LZR: Identifying Unexpected Internet Services》（LZR：发现预期外的网络服务）论文阅读笔记。含有大量原文机翻和概括，斜体字为我的补充。</p>
 <h1 id="研究要点"><a href="#研究要点" class="headerlink" title="研究要点"></a>研究要点</h1><ul>
 <li>调查了网络中服务的部署位置，评估部署在意外端口上服务的安全态势。</li>
