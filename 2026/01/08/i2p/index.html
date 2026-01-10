@@ -26,7 +26,7 @@
 <meta property="og:site_name" content="q1uki&#39;s blog">
 <meta property="og:description" content="简介I2P（Invisible Internet Project ）是去中心化的点到点（P2P）匿名网络，使用JAVA开发。与Tor类似，都是通过若干个网络节点来加密和传输数据，但匿名度比Tor更高。Tor主要致力于为用户提供匿名访问实施和操作外部的互联网服务，解决“匿名性”和“隐藏服务”，侧重应用层设计，构建了一个“覆盖网络”。I2P试图将现有互联网服务转移到I2P网络，并在框架内提供服务实现，">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="https://i-blog.csdnimg.cn/direct/783dfef12d47424aa08cf2b92a8de683.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260110225516044.png">
 <meta property="og:image" content="https://i-blog.csdnimg.cn/direct/677d85314bc34f6ea79e9133b8f2295e.png">
 <meta property="og:image" content="https://i-blog.csdnimg.cn/direct/101aaaab508e4ba99d15eb49c991c23e.png">
 <meta property="og:image" content="https://i-blog.csdnimg.cn/direct/c01f2efd6d26410fb2f7ce246d877cd0.png">
@@ -36,10 +36,10 @@
 <meta property="og:image" content="https://i-blog.csdnimg.cn/direct/90b814bff28945cbbf5f0915c49eb1f1.png">
 <meta property="og:image" content="https://i-blog.csdnimg.cn/direct/39e20b4ac7fb416b9e805851271487d8.png">
 <meta property="article:published_time" content="2026-01-08T23:26:50.030Z">
-<meta property="article:modified_time" content="2025-04-27T08:27:30.145Z">
+<meta property="article:modified_time" content="2026-01-10T22:55:44.279Z">
 <meta property="article:author" content="q1uki">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://i-blog.csdnimg.cn/direct/783dfef12d47424aa08cf2b92a8de683.png">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260110225516044.png">
   
   
   
@@ -294,7 +294,7 @@
 <li><p>设置代理<br>通过I2P访问网站需要设置本地代理，默认HTTP代理端口为4444，HTTPS为4445。</p>
 </li>
 </ol>
-<p>启动成功后，访问127.0.0.1:7657就能看到I2P的控制台，包括设置和各项网络指标。<br><img src="https://i-blog.csdnimg.cn/direct/783dfef12d47424aa08cf2b92a8de683.png" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"><br>网络指标：<br><img src="https://i-blog.csdnimg.cn/direct/677d85314bc34f6ea79e9133b8f2295e.png" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"></p>
+<p>启动成功后，访问127.0.0.1:7657就能看到I2P的控制台，包括设置和各项网络指标。<img src="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260110225516044.png" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"><br>网络指标：<br><img src="https://i-blog.csdnimg.cn/direct/677d85314bc34f6ea79e9133b8f2295e.png" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"></p>
 <h1 id="机制"><a href="#机制" class="headerlink" title="机制"></a>机制</h1><ol>
 <li><p>Kad算法<br> 用途：通过种子节点扩散获取网络节点信息、将传输的原始数据拆散为加密数据包通过多条隧道交叉疏散传递。</p>
 <p> 特点：<br> ① 拿到的只是整个I2P网络的一小部分节点<br> ② 不需要目录服务器<br> ③ 每一台运行I2P的主机都是网络中继，共享带宽帮别人转发数据<br> ④ 只要连上一次I2P，就能不断获取网络中部分其他节点的信息，保证与I2P网络维持连接</p>
