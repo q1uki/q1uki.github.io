@@ -1,0 +1,766 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/tab.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="q1uki">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="title: 【论文阅读】《Detecting probe resistant proxy》实验验证与分析 《detecting probe resistant proxy》论文阅读，对其中obfs4部分进行验证实验，并分析了obfs4proxy的部分源代码结构和函数、obfs4协议及其使用的加密方法和身份验证方式。 目录 目录 1 引言 2 论文阅读 2.1 探针选择 2.2 实验数据 2.3">
+<meta property="og:type" content="article">
+<meta property="og:title" content="q1uki&#39;s blog">
+<meta property="og:url" content="http://q1uki.github.io/2026/01/10/obfs4_bridge_scan/index.html">
+<meta property="og:site_name" content="q1uki&#39;s blog">
+<meta property="og:description" content="title: 【论文阅读】《Detecting probe resistant proxy》实验验证与分析 《detecting probe resistant proxy》论文阅读，对其中obfs4部分进行验证实验，并分析了obfs4proxy的部分源代码结构和函数、obfs4协议及其使用的加密方法和身份验证方式。 目录 目录 1 引言 2 论文阅读 2.1 探针选择 2.2 实验数据 2.3">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260110231135876.png">
+<meta property="article:published_time" content="2026-01-10T23:07:12.339Z">
+<meta property="article:modified_time" content="2026-01-10T23:17:57.233Z">
+<meta property="article:author" content="q1uki">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260110231135876.png">
+  
+  
+  
+  <title>q1uki&#39;s blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"q1uki.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 8.1.1"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>q1uki</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>Home</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>Archives</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>Categories</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>Tags</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>About</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text=""></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2026-01-10 23:07" pubdate>
+          January 10, 2026 pm
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          3.7k words
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          31 mins
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header"></h1>
+            
+            
+              <div class="markdown-body">
+                
+                <p>title: 【论文阅读】《Detecting probe resistant proxy》实验验证与分析</p>
+<p>《detecting probe resistant proxy》论文阅读，对其中obfs4部分进行验证实验，并分析了obfs4proxy的部分源代码结构和函数、obfs4协议及其使用的加密方法和身份验证方式。</p>
+<h1 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h1><ul>
+<li><a href="#%E7%9B%AE%E5%BD%95">目录</a></li>
+<li><a href="#1-%E5%BC%95%E8%A8%80">1 引言</a></li>
+<li><a href="#2-%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB">2 论文阅读</a><ul>
+<li><a href="#21-%E6%8E%A2%E9%92%88%E9%80%89%E6%8B%A9">2.1 探针选择</a></li>
+<li><a href="#22-%E5%AE%9E%E9%AA%8C%E6%95%B0%E6%8D%AE">2.2 实验数据</a></li>
+<li><a href="#23-%E5%AE%9E%E9%AA%8C%E7%BB%93%E6%9E%9C">2.3 实验结果</a></li>
+<li><a href="#24-%E6%A3%80%E6%B5%8B%E6%96%B9%E6%B3%95">2.4 检测方法</a></li>
+</ul>
+</li>
+<li><a href="#3-obfs4proxy%E5%88%86%E6%9E%90">3 obfs4proxy分析</a><ul>
+<li><a href="#31-obfs4%E5%8D%8F%E8%AE%AE%E9%AA%8C%E8%AF%81%E9%80%BB%E8%BE%91">3.1 obfs4协议验证逻辑</a></li>
+<li><a href="#32-obfs4proxy%E6%BA%90%E4%BB%A3%E7%A0%81%E9%83%A8%E5%88%86%E7%BB%93%E6%9E%84">3.2 obfs4proxy源代码部分结构</a></li>
+<li><a href="#33-obfs4proxy%E6%BA%90%E4%BB%A3%E7%A0%81%E9%83%A8%E5%88%86%E5%87%BD%E6%95%B0">3.3 obfs4proxy源代码部分函数</a></li>
+</ul>
+</li>
+<li><a href="#4-%E5%88%86%E6%9E%90%E4%B8%8E%E5%AE%9E%E9%AA%8C">4 分析与实验</a><ul>
+<li><a href="#41-%E8%AE%BA%E6%96%87%E7%AE%80%E6%9E%90">4.1 论文简析</a></li>
+<li><a href="#42-%E5%AE%9E%E9%AA%8C%E9%AA%8C%E8%AF%81">4.2 实验验证</a></li>
+<li><a href="#43-%E5%AE%9E%E9%AA%8C%E5%88%86%E6%9E%90">4.3 实验分析</a></li>
+<li><a href="#44-%E5%AE%9E%E9%AA%8C%E7%BB%93%E8%AE%BA">4.4 实验结论</a></li>
+</ul>
+</li>
+<li><a href="#5-%E5%90%8E%E7%BB%AD">5 后续</a></li>
+<li><a href="#%E7%9B%B8%E5%85%B3%E8%B5%84%E6%96%99">相关资料</a></li>
+</ul>
+<h1 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h1><p>当时看到这篇对代理检测的论文，对它的中文讨论较少，整理了自己阅读和实验后的笔记（关注于tor的obfs4），方便有需要的同学一起学习讨论。<br>（现在obfs4将要过时，推出了新的WebTunnels，但升级迭代仍需时间）</p>
+<h1 id="论文阅读"><a href="#论文阅读" class="headerlink" title="论文阅读"></a>论文阅读</h1><h2 id="探针选择"><a href="#探针选择" class="headerlink" title="探针选择"></a>探针选择</h2><p>我们的攻击集中在这样一个观察上，即从不使用数据进行响应是互联网上的异常行为。通过发送由流行协议和随机数据组成的探针，我们可以从超过400k IP&#x2F;端口对的Tap数据集中的几乎所有端点（94%）获得响应。<br>对于不响应的端点，代理特有的TCP行为（如超时和数据阈值）与其他服务器相比存在不同。  </p>
+<p>从6个基本探测开始：HTTP、TLS、MODBUS、S7、随机字节，以及连接后不发送数据的空探测。对于每个探测，我们都会记录服务器如何响应其响应的数据（如果有）、关闭连接的时间（如果有）以及如何关闭连接（TCP FIN或RST）。</p>
+<ul>
+<li><p>HTTP：对于HTTP，我们发送一个简单的HTTP&#x2F;1.1 GET请求，主机头为example.com。大部分服务器将响应重定向或错误页面进行响应。即使不是HTTP的服务器也可能使用其协议固有的错误消息对此探测作出响应。</p>
+</li>
+<li><p>TLS：我们发送一条TLS客户端Hello消息，该消息通常由Chromium版本71浏览器生成。这包括流行的密码套件和扩展，即使服务器不支持TLS，也应该响应TLS警报消息。</p>
+</li>
+<li><p>Modbus：Modbus通常用于监控和数据采集（SCADA）环境中的可编程逻辑控制器（PLC）和其他嵌入式设备。使用了ZGrab中定义的探针，它发送一个3字节的命令，从远程主机请求设备信息描述符。</p>
+</li>
+<li><p>S7:S7是西门子PLC设备使用的专有协议。再次使用ZGrab中定义的探针，该探针通过COTP&#x2F;S7协议发送设备标识符请求。</p>
+</li>
+<li><p>随机字节：不同数量随机字节的探测，服务器将解析失败，并以错误消息响应，或者以区别于代理服务器的方式关闭连接。</p>
+</li>
+<li><p>空探针：在连接后不发送数据。一些协议（如SSH）让服务器首先（或同时）与客户端通信。对于其他协议，当客户端发送了一些初始数据时，与不发送数据时相比，实现可能具有不同的超时。  </p>
+</li>
+<li><p>DNS AXFR：根据DNS规范构建了一个DNS AXFR（区域传输）查询探测。</p>
+</li>
+<li><p>STUN: 实现了一个基于ZGrab-Golang库的STUN探测，用于探测Cisco WebEx设备</p>
+</li>
+</ul>
+<h2 id="实验数据"><a href="#实验数据" class="headerlink" title="实验数据"></a>实验数据</h2><ul>
+<li><p>代理端点<br>从Tor的BridgeDB收集了20多个obfs4代理端点</p>
+</li>
+<li><p>非代理端点<br>使用ZMap的主动网络扫描和网络流数据的被动收集。<br>我们使用ZMap向每个TCP端口（0-65535）上的20000个主机发送一个SYN数据包，总共有13亿次探测。发现了150万个响应SYN ACK的端点，我们将其标记为ZMap数据集。<br>科罗拉多大学的10 Gbps网关中采样netflow数据来收集端点。在无网络审查国家中，绝大多数流量不包含代理，所以收集到的端点主要是其他服务。在3天的时间跨度内，从ISP收集了超过550000个服务器IP&#x2F;端口 的节点。其中，433286（79%）个主机接受了连接（使用一个TCP SYN-ACK响应），其余的大多数在尝试连接时只是超时。<br>后续扫描是在观察到连接后的几天内进行的，一些服务器可能在这段时间内移动了IP或离线。其次，服务器可能配置了防火墙，只允许从某些IP进行访问，可能会阻塞ZMap扫描主机。最终在这个数据集中捕获超过40万个发送数据的服务器。</p>
+</li>
+</ul>
+<h2 id="实验结果"><a href="#实验结果" class="headerlink" title="实验结果"></a>实验结果</h2><p>我们向190万个节点发送13个探测（第III-A节中的7个探测和6个随机数据范围为4KB-40KB的探测），并记录服务器是否和何时响应数据或关闭连接。如果服务器关闭，我们将记录它是否使用FIN或RST。如果服务器没有响应或关闭连接，我们将在300秒后超时，并将结果标记为超时。记录他们的关闭阈值。</p>
+<p>由于抗探测代理从不响应数据，因此可以将响应的端点丢弃。在被动Tap数据集中，这排除了94%的主机，只留下26021个潜在代理。在ZMap数据集中，绝大多数主机对任何探测都没有数据响应，仅丢弃1.16%的端点 。</p>
+<p>原因是ZMap识别的节点中，防火墙使用了chaff策略，仅在特定的子网上对SYN做出响应。42%的节点行为相同，不发送数据也不关闭与探测器的连接。将响应数据聚类（响应类型、响应字节数、连接关闭时间或超时时间） 在Tap数据集中，最流行的响应组包含3%的端点，似乎是Cloudflare网络中的TLS服务器（99.9％在具有端口443的端点上）。图2显示了ZMap和Tap数据集的不同响应集（按流行程度排序）的CDF，说明Tap数据集中有更大的多样性。前10个响应集占ZMap数据集中超过80%的端点，但只有13%的端点是在Tap中收集的。</p>
+<h2 id="检测方法"><a href="#检测方法" class="headerlink" title="检测方法"></a>检测方法</h2><ol>
+<li><p>缓冲阈值<br> 服务器将在接收到一定数量的字节后使用FIN关闭，并可能在接收到更高数量的字节之后使用RST关闭。代理服务的关闭阈值大多数是唯一的。<br> 考虑一个从客户端读取N个字节并尝试将其解析为协议头的服务器。如果解析失败（例如无效字段、校验和或MAC），服务器可以简单地关闭连接。<br> 如果客户端仅发送N−1字节，服务器可能会保持连接打开，并在尝试解析之前等待其他数据。  </p>
+<p> obfs4握手长度可达8192字节，因此服务器在确定客户端无效并进入closeAfterDelay函数之前读取了这么多字节。此函数在随机延迟（30-90秒）后关闭连接，或在服务器启动时读取额外的N个字节（在0和8192之间随机选择的N个）后关闭。然而，这些读取都是使用1448字节的缓冲区完成的。这意味着，如果发送了$8192+N$字节，obfs4服务器将发送FIN，如果发送$8192 + N − ((8192 + N)mod 1448) + 1448$字节，则返回rst。是obfs4独有行为。  </p>
+<p> <strong>论文作者与torproject交流研究成果后，obfs4proxy已于0.0.11版本修复关闭阈值的行为。</strong></p>
+</li>
+<li><p>超时时间<br>许多端点根据其接收的数据量具有不同的超时。<br>不确认数据的主机不是标准的TCP行为，我们会重传，代理不会有这种行为，不影响结果。  </p>
+<p> <strong>修复关闭阈值，但仍能观察到超时行为。</strong></p>
+</li>
+<li><p>不响应任何探测是罕见的。</p>
+</li>
+</ol>
+<h1 id="obfs4proxy分析"><a href="#obfs4proxy分析" class="headerlink" title="obfs4proxy分析"></a>obfs4proxy分析</h1><h2 id="obfs4协议验证逻辑"><a href="#obfs4协议验证逻辑" class="headerlink" title="obfs4协议验证逻辑"></a>obfs4协议验证逻辑</h2><h3 id="握手过程"><a href="#握手过程" class="headerlink" title="握手过程"></a>握手过程</h3><pre><code class=" mermaid">sequenceDiagram
+    Client-&gt;&gt;Server: SYN+ECN+CWR
+    Server--&gt;&gt;Client: SYN+ACK 
+    Client-&gt;&gt;Server: ACK
+    Client-&gt;&gt;Server: PSH+ACK+data
+</code></pre>
+<h3 id="data内容"><a href="#data内容" class="headerlink" title="data内容"></a>data内容</h3><p>涉及算法：curve25519</p>
+<p>客户端及服务端都必须有自己的Keypair实例。根据curve25519包中的定义，PrivateKey在一定范围内随机生成。根据ECC算法，PublicKey可以通过调用curve25519.ScalarBaseMult()从私钥生成。  </p>
+<p>Representative秘钥根据公钥生成，在需要的时候可以调用extra25519.RepresentativeToPublicKey()函数再次转换为公钥。Keypair的定义及初始化代码位于NewKeypair()函数中，该函数在ntor.go文件中定义。</p>
+<p>用extra25519.go里的ScalarBaseMult()，根据privatekey生成public和representative。representative通过Elligator 2映射完成混淆，避免收集到相当数量的公钥后推断出加密算法。<br><a target="_blank" rel="noopener" href="http://elligator.cr.yp.to/elligator-20130828.pdf">算法详细说明</a></p>
+<p>客户端及服务端都应当保存好私钥，将公钥以Representative秘钥的形式发送给对方。Obfs4客户端的连接过程从握手报文开始，因此我们来看一下客户端的握手报文。该报文的整体结构如下所示：</p>
+<p><img src="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260110231135876.png" srcset="/img/loading.gif" lazyload></p>
+<ol>
+<li>Keypair.representative，其长度为20h字节。在服务器端，它可以作为还原客户端的公钥。（obfs4 bridge配置行）</li>
+<li>使用随机字节的填充数据，其数据大小范围在4Dh至1FC0h之间，该填充数据会混淆握手数据包的大小，从而使其更难识别。</li>
+<li>第一部分Keypair.representative的HMAC值。Obfs4使用SHA-256生成HMAC，长度为20h字节。Obfs4仅将前10h字节保留为HMAC，其余10h字节将被丢弃。  </li>
+<li>Obfs4使用当前系统时间来计算UNIX Epoch时间（从UTC时间1970年1月1日星期四00:00:00开始）的小时值。计算数据包中前三个部分的HMAC值，加上（指拼接起来）字符串中的小时值。同样，其结果长度为20h字节，前10h字节作为数据包的第四部分。（防重放）</li>
+</ol>
+<h2 id="obfs4proxy源代码部分结构"><a href="#obfs4proxy源代码部分结构" class="headerlink" title="obfs4proxy源代码部分结构"></a>obfs4proxy源代码部分结构</h2><h3 id="common"><a href="#common" class="headerlink" title="common&#x2F;"></a>common&#x2F;</h3><p>  密码学、socks5等组件    </p>
+<h3 id="internal"><a href="#internal" class="headerlink" title="internal&#x2F;"></a>internal&#x2F;</h3><p>  更新的混淆算法  </p>
+<h3 id="obfs4proxy"><a href="#obfs4proxy" class="headerlink" title="obfs4proxy&#x2F;"></a><strong>obfs4proxy&#x2F;</strong></h3><p>obfs4proxy.go  主函数  </p>
+<h3 id="transports"><a href="#transports" class="headerlink" title="transports&#x2F;"></a><strong>transports&#x2F;</strong></h3><p>包含meeklite、obfs2、3、4、 scramblesuit传输协议的实现   </p>
+<ul>
+<li><strong>obfs4&#x2F;</strong>  <ul>
+<li>framing&#x2F; 数据帧的处理  <ul>
+<li>handshake_ntor.go 完成obfs4握手，包括验证  </li>
+<li>obfs4.go 握手相关函数</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="obfs4proxy源代码部分函数"><a href="#obfs4proxy源代码部分函数" class="headerlink" title="obfs4proxy源代码部分函数"></a>obfs4proxy源代码部分函数</h2><h3 id="obfs4-go"><a href="#obfs4-go" class="headerlink" title="obfs4.go"></a>obfs4.go</h3><ul>
+<li><p>WrapConn()<br>调用了serverHandshake()，不管返回什么错，都closeAfterDelay()。  </p>
+</li>
+<li><p>serverHandshake()<br>新建服务端握手，设置基准超时时间。<br>然后按能读取的最大长度（8192）设置缓冲区，读取收包，保存收包内容，接下来parseClientHandshake()解析内容。<br>如果解析错误是ErrMarkNotFoundYet，继续读包，其他错误则函数返回错误。<br>解析正常则清空缓冲区。</p>
+</li>
+</ul>
+<h3 id="handshake-ntor-go"><a href="#handshake-ntor-go" class="headerlink" title="handshake_ntor.go"></a>handshake_ntor.go</h3><ul>
+<li><p>parseClientHandshake()<br>对于接收内容过少&#x2F;接收内容长度未达上限时，或找不到MarkMAC，准备了ErrMarkNotFoundYet的错误处理，可以返回继续读。<br>其他错误都关闭连接。找不到markMAC&#x2F;HMAC&#x2F;包长度不合规（有握手中不需要的数据），返ErrInvalidHandshake。<br>重放，返ErrReplayedHandshake。<br>计算验证不通过，返ErrNtorFailed。  </p>
+</li>
+<li><p>closeAfterDelay()<br><a target="_blank" rel="noopener" href="https://gitlab.com/yawning/obfs4/-/commit/1a6129b66ff3e66c347b54fbae203c1c61d12d74">closeAfterDelay()被修改</a>，修复了因阈值产生FIN和RST的漏洞。旧版本会在延迟30s&#x2F;接收一定长度数据后终止连接，新版本都是延迟30s终止连接。  </p>
+</li>
+<li><p>SetReadDeadline()<br>开始读数据30s后，再有数据进入也返回超时错误，并终止连接。（论文里说有随机延迟，我没找到）</p>
+</li>
+</ul>
+<h3 id="obfs4proxy-go"><a href="#obfs4proxy-go" class="headerlink" title="obfs4proxy.go"></a>obfs4proxy.go</h3><ul>
+<li><p>parseClientHandshake()<br>对于接收内容过少&#x2F;接收内容长度未达上限时，或找不到MarkMAC，准备了ErrMarkNotFoundYet的错误处理，可以返回继续读。<br>其他错误都关闭连接。找不到markMAC&#x2F;HMAC&#x2F;包长度不合规（有握手中不需要的数据），返ErrInvalidHandshake。<br>重放，返ErrReplayedHandshake。<br>计算验证不通过，返ErrNtorFailed。  </p>
+</li>
+<li><p>closeAfterDelay()<br><a target="_blank" rel="noopener" href="https://gitlab.com/yawning/obfs4/-/commit/1a6129b66ff3e66c347b54fbae203c1c61d12d74">closeAfterDelay()被修改</a>，修复了因阈值产生FIN和RST的漏洞。旧版本会在延迟30s&#x2F;接收一定长度数据后终止连接，新版本都是延迟30s终止连接。  </p>
+</li>
+<li><p>SetReadDeadline()<br>开始读数据30s后，再有数据进入也返回超时错误，并终止连接。（论文里说有随机延迟，我没找到）</p>
+</li>
+</ul>
+<h1 id="分析与实验"><a href="#分析与实验" class="headerlink" title="分析与实验"></a>分析与实验</h1><h2 id="论文简析"><a href="#论文简析" class="headerlink" title="论文简析"></a>论文简析</h2><p>论文人工构造的obfs4决策树中，首先随机发送17k的数据，2s内返回RST则进入下一步，发送其他探针，30s–90s之内返回FIN，则为obfs4。17k数据是为了引发阈值问题，已被修复，但延时FIN的情况仍然存在。</p>
+<p>论文中针对obfs4 bridge的实验数据过少，我决定自己实验验证。在测试了几个已知obfs4 bridge后，我发现巧合的，每一个bridge都有固定的超时时间。</p>
+<p>猜想：每一个bridge都有固定的超时时间。（有可能bridge在重启服务后会改变？随机延时时间只生成一次？）<br>对6个已知obfs4 bridge进行测试，发送同样的data（重放tor浏览器发起的成功握手中的data），命中了验证不通过的错误，进入closeAfterDelay()。<br>对每个bridge发起两次握手。对于同一bridge，在两个不同ip客户端上，发起的两次握手均经过相同时间后返回FIN，时间均落在[30,90]s。 </p>
+<h2 id="实验验证"><a href="#实验验证" class="headerlink" title="实验验证"></a>实验验证</h2><ol>
+<li><p>测试集：对<a target="_blank" rel="noopener" href="https://github.com/scriptzteam/Tor-Bridges-Collector">测试集</a>进行验证过滤后，得到四百余存活服务。</p>
+</li>
+<li><p>判断条件：TLS和HTTP探针无响应，17k字节返回RST或超时时间（返回FIN）为[30,90]s。</p>
+</li>
+<li><p>实验结果：  </p>
+<p>① 80%服务判断为obfs4 bridge。其中，50%返回RST，50%超时时间在范围内。<br>② 6%服务判断不为obfs4 bridge。<br>③ 10%服务无法确定，发17k字节立刻收到FIN，TLS和HTTP均超时。</p>
+</li>
+</ol>
+<h2 id="实验分析"><a href="#实验分析" class="headerlink" title="实验分析"></a>实验分析</h2><ol>
+<li>80%bridge服务命中判断条件，验证了判断条件可行。</li>
+<li>6%服务中，发送TLS和HTTP均有回应，可探测出其他服务，应是提供的服务发生了变化，符合预期。</li>
+<li>剩下10%服务，未命中判断条件，但是挑了几个，在tor浏览器中设置配置行后，可以作为bridge使用。发送20k字节后，50%返回RST。重放obfs4握手data之后，全部在[30,90]s内FIN。<br>猜测这些是已升级至新版本的bridge服务，重放握手数据后，则检验失败，进入延迟FIN函数。但是20k已经超过了论文所观察到的RST阈值，后来再发了30k，只有少数个响应RST。</li>
+</ol>
+<h2 id="实验结论"><a href="#实验结论" class="headerlink" title="实验结论"></a>实验结论</h2><ol>
+<li>发送足够大的随机数据，马上返回RST（obfs4proxy 0.0.11版本已修复）  </li>
+<li>发送符合握手长度数据，[30,90]s内返回FIN</li>
+</ol>
+<h1 id="后续"><a href="#后续" class="headerlink" title="后续"></a>后续</h1><p>结合其他特征后，已实现主动收集方案。</p>
+<h1 id="相关资料"><a href="#相关资料" class="headerlink" title="相关资料"></a>相关资料</h1><p><a target="_blank" rel="noopener" href="https://gitlab.torproject.org/legacy/trac/-/issues/7349">torproject对于ORPort的讨论</a>(<a target="_blank" rel="noopener" href="https://gitlab.torproject.org/tpo/core/tor/-/issues/7349">move to here</a>)<br><a target="_blank" rel="noopener" href="https://jiangph2016.github.io/2020/04/07/detect-probe/">论文精读</a><br><a target="_blank" rel="noopener" href="https://github.com/net4people/bbs/issues/26">论文讨论issue</a><br><a target="_blank" rel="noopener" href="http://meetbot.debian.net/tor-meeting/2020/tor-meeting.2020-04-02-17.59.html">torproject会议记录</a><br><a target="_blank" rel="noopener" href="http://meetbot.debian.net/tor-meeting/2020/tor-meeting.2020-04-02-17.59.log.html">torproject聊天记录</a>  </p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div></div>
+      <div>http://q1uki.github.io/2026/01/10/obfs4_bridge_scan/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>Author</div>
+          <div>q1uki</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Posted on</div>
+          <div>January 10, 2026</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>Licensed under</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - Attribution">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2026/01/10/lzr/" title="">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile"></span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2026/01/08/rat/" title="【学习记录】六个RAT（远控木马）协议的通信特征（Gh0st, darkcomet, XtremeRAT, QuasarRAT, GreameRAT, njrat）">
+                        <span class="hidden-mobile">【学习记录】六个RAT（远控木马）协议的通信特征（Gh0st, darkcomet, XtremeRAT, QuasarRAT, GreameRAT, njrat）</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>Table of Contents</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">Keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">Blog works best with JavaScript enabled</div>
+  </noscript>
+</body>
+</html>
