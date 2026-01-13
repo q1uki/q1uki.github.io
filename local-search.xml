@@ -4,6 +4,25 @@
   
   
   <entry>
+    <title>使用GNS3模拟简单的三层架构企业组网</title>
+    <link href="/2026/01/11/gns3/"/>
+    <url>/2026/01/11/gns3/</url>
+    
+    <content type="html"><![CDATA[<h1 id="安装GNS3"><a href="#安装GNS3" class="headerlink" title="安装GNS3"></a>安装GNS3</h1><h1 id="导入镜像（坑）"><a href="#导入镜像（坑）" class="headerlink" title="导入镜像（坑）"></a>导入镜像（坑）</h1><p>有的镜像没有你想要的功能，多换几个试试</p><p>可以用路由器来模拟L3交换机</p><h1 id="网络设计"><a href="#网络设计" class="headerlink" title="网络设计"></a>网络设计</h1><h1 id="调试设备"><a href="#调试设备" class="headerlink" title="调试设备"></a>调试设备</h1><p>各个docker和vm</p><h1 id="配置二层交换机（L2）"><a href="#配置二层交换机（L2）" class="headerlink" title="配置二层交换机（L2）"></a>配置二层交换机（L2）</h1><h1 id="配置核心三层交换机（core-L3）"><a href="#配置核心三层交换机（core-L3）" class="headerlink" title="配置核心三层交换机（core L3）"></a>配置核心三层交换机（core L3）</h1><h1 id="配置汇聚三层交换机（distribution-L3）"><a href="#配置汇聚三层交换机（distribution-L3）" class="headerlink" title="配置汇聚三层交换机（distribution L3）"></a>配置汇聚三层交换机（distribution L3）</h1><h1 id="配置pfsense防火墙"><a href="#配置pfsense防火墙" class="headerlink" title="配置pfsense防火墙"></a>配置pfsense防火墙</h1><p>开源且配置便捷，兼顾外部路由、防火墙、开vpn的功能，救大命</p><p>连个chrome docker上web管理界面</p><h1 id="配置DMZ服务器"><a href="#配置DMZ服务器" class="headerlink" title="配置DMZ服务器"></a>配置DMZ服务器</h1>]]></content>
+    
+    
+    <categories>
+      
+      <category>项目实践</category>
+      
+    </categories>
+    
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>LZR Identifying Unexpected Internet Services笔记与思考</title>
     <link href="/2026/01/10/lzr/"/>
     <url>/2026/01/10/lzr/</url>

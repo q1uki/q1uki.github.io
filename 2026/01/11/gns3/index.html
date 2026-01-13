@@ -19,21 +19,31 @@
   <meta name="author" content="q1uki">
   <meta name="keywords" content="">
   
-    <meta property="og:type" content="website">
-<meta property="og:title" content="q1uki&#39;s blog">
-<meta property="og:url" content="http://q1uki.github.io/index.html">
+    <meta name="description" content="这里是显示在首页的摘要内容，如果不写，Fluid 会自动截取正文前一部分">
+<meta property="og:type" content="article">
+<meta property="og:title" content="使用GNS3模拟简单的三层架构企业组网">
+<meta property="og:url" content="http://q1uki.github.io/2026/01/11/gns3/index.html">
 <meta property="og:site_name" content="q1uki&#39;s blog">
+<meta property="og:description" content="这里是显示在首页的摘要内容，如果不写，Fluid 会自动截取正文前一部分">
 <meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2026-01-11T10:00:00.000Z">
+<meta property="article:modified_time" content="2026-01-11T00:10:34.448Z">
 <meta property="article:author" content="q1uki">
 <meta name="twitter:card" content="summary_large_image">
   
   
   
-  <title>q1uki&#39;s blog</title>
+  <title>使用GNS3模拟简单的三层架构企业组网 - q1uki&#39;s blog</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
 
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
 
 
 
@@ -83,7 +93,7 @@
   <header>
     
 
-<div class="header-inner" style="height: 100vh;">
+<div class="header-inner" style="height: 70vh;">
   <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
   <div class="container">
     <a class="navbar-brand" href="/">
@@ -183,23 +193,59 @@
   
 
 <div id="banner" class="banner" parallax=true
-     style="background: url('/img/background.png') no-repeat center center; background-size: cover;">
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
   <div class="full-bg-img">
     <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="Welcome to q1uki&#39;s blog."></span>
+            <span id="subtitle" data-typed-text="使用GNS3模拟简单的三层架构企业组网"></span>
           
         </div>
 
         
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2026-01-11 10:00" pubdate>
+          January 11, 2026 am
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          121 words
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          2 mins
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
       </div>
 
-      
-        <div class="scroll-down-bar">
-          <i class="iconfont icon-arrowdown"></i>
-        </div>
       
     </div>
   </div>
@@ -211,47 +257,40 @@
 
   <main>
     
-      <div class="container nopadding-x-md">
-        <div id="board"
-          style="margin-top: 0">
-          
-          <div class="container">
-            <div class="row">
-              <div class="col-12 col-md-10 m-auto">
-                
-
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h2 class="index-header">
-        
-        <a href="/2026/01/11/gns3/" target="_self">
-          使用GNS3模拟简单的三层架构企业组网
-        </a>
-      </h2>
-
       
-      <a class="index-excerpt index-excerpt__noimg" href="/2026/01/11/gns3/" target="_self">
-        <div>
-          这里是显示在首页的摘要内容，如果不写，Fluid 会自动截取正文前一部分
-        </div>
-      </a>
 
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2026-01-11 10:00" pubdate>
-              2026-01-11
-            </time>
-          </div>
-        
-        
-          <div class="post-meta mr-3 d-flex align-items-center">
-            <i class="iconfont icon-category"></i>
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">使用GNS3模拟简单的三层架构企业组网</h1>
             
+            
+              <div class="markdown-body">
+                
+                <h1 id="安装GNS3"><a href="#安装GNS3" class="headerlink" title="安装GNS3"></a>安装GNS3</h1><h1 id="导入镜像（坑）"><a href="#导入镜像（坑）" class="headerlink" title="导入镜像（坑）"></a>导入镜像（坑）</h1><p>有的镜像没有你想要的功能，多换几个试试</p>
+<p>可以用路由器来模拟L3交换机</p>
+<h1 id="网络设计"><a href="#网络设计" class="headerlink" title="网络设计"></a>网络设计</h1><h1 id="调试设备"><a href="#调试设备" class="headerlink" title="调试设备"></a>调试设备</h1><p>各个docker和vm</p>
+<h1 id="配置二层交换机（L2）"><a href="#配置二层交换机（L2）" class="headerlink" title="配置二层交换机（L2）"></a>配置二层交换机（L2）</h1><h1 id="配置核心三层交换机（core-L3）"><a href="#配置核心三层交换机（core-L3）" class="headerlink" title="配置核心三层交换机（core L3）"></a>配置核心三层交换机（core L3）</h1><h1 id="配置汇聚三层交换机（distribution-L3）"><a href="#配置汇聚三层交换机（distribution-L3）" class="headerlink" title="配置汇聚三层交换机（distribution L3）"></a>配置汇聚三层交换机（distribution L3）</h1><h1 id="配置pfsense防火墙"><a href="#配置pfsense防火墙" class="headerlink" title="配置pfsense防火墙"></a>配置pfsense防火墙</h1><p>开源且配置便捷，兼顾外部路由、防火墙、开vpn的功能，救大命</p>
+<p>连个chrome docker上web管理界面</p>
+<h1 id="配置DMZ服务器"><a href="#配置DMZ服务器" class="headerlink" title="配置DMZ服务器"></a>配置DMZ服务器</h1>
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
 
 <span class="category-chains">
   
@@ -268,187 +307,131 @@
   
 </span>
 
-          </div>
-        
-        
-      </div>
-    </article>
-  </div>
+    </div>
+  
+  
+</div>
 
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h2 class="index-header">
-        
-        <a href="/2026/01/10/lzr/" target="_self">
-          LZR Identifying Unexpected Internet Services笔记与思考
-        </a>
-      </h2>
 
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>使用GNS3模拟简单的三层架构企业组网</div>
+      <div>http://q1uki.github.io/2026/01/11/gns3/</div>
+    </div>
+    <div class="license-meta">
       
-      <a class="index-excerpt index-excerpt__noimg" href="/2026/01/10/lzr/" target="_self">
-        <div>
-          论文原文与资料源代码数据原文PPT演讲（youtube） 引言中文友好的《LZR: Identifying Unexpected Internet Services》（LZR：发现预期外的网络服务）论文阅读笔记。含有大量原文机翻和概括，斜体字为我的补充。 研究要点 调查了网络中服务的部署位置，评估部署在意外端口上服务的安全态势。 过去的扫描假设服务部署在常见端口上，忽略了意外服务端口的扫描。响应S
+        <div class="license-meta-item">
+          <div>Author</div>
+          <div>q1uki</div>
         </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2026-01-10 23:29" pubdate>
-              2026-01-10
-            </time>
-          </div>
-        
-        
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h2 class="index-header">
-        
-        <a href="/2026/01/10/obfs4_bridge_scan/" target="_self">
-          【论文阅读】《Detecting probe resistant proxy》实验验证与分析
-        </a>
-      </h2>
-
       
-      <a class="index-excerpt index-excerpt__noimg" href="/2026/01/10/obfs4_bridge_scan/" target="_self">
-        <div>
-          《detecting probe resistant proxy》论文阅读，对其中obfs4部分进行验证实验，并分析了obfs4proxy的部分源代码结构和函数、obfs4协议及其使用的加密方法和身份验证方式。 引言当时看到这篇对代理检测的论文，对它的中文讨论较少，整理了自己阅读和实验后的笔记（关注于tor的obfs4），方便有需要的同学一起学习讨论。（现在obfs4将要过时，推出了新的WebTu
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2026-01-10 23:07" pubdate>
-              2026-01-10
-            </time>
-          </div>
-        
-        
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h2 class="index-header">
-        
-        <a href="/2026/01/08/rat/" target="_self">
-          【学习记录】六个RAT（远控木马）协议的通信特征（Gh0st, darkcomet, XtremeRAT, QuasarRAT, GreameRAT, njrat）
-        </a>
-      </h2>
-
       
-      <a class="index-excerpt index-excerpt__noimg" href="/2026/01/08/rat/" target="_self">
-        <div>
-          1 Gh0st1.1 基本情况Gh0stRAT最初由C.Rufus团队开发，客户端以服务的形式运行，可以随系统自启动，并通过隐藏文件和进程的方法躲避杀毒软件的检测。主要包括文件管理、系统信息收集、进程管理、屏幕截图、远程控制等模块，另外具有窃取密码、捕获网络流量和执行远程CMD命令的能力。通常通过电子邮件附件、恶意网站或软件漏洞传播。 该木马于2009年被初次发现。其3.6版本的源代码在互联网上免
+        <div class="license-meta-item license-meta-date">
+          <div>Posted on</div>
+          <div>January 11, 2026</div>
         </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2026-01-08 23:34" pubdate>
-              2026-01-08
-            </time>
-          </div>
-        
-        
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h2 class="index-header">
-        
-        <a href="/2026/01/08/i2p/" target="_self">
-          【学习记录】I2P概述
-        </a>
-      </h2>
-
       
-      <a class="index-excerpt index-excerpt__noimg" href="/2026/01/08/i2p/" target="_self">
-        <div>
-          简介I2P（Invisible Internet Project ）是去中心化的点到点（P2P）匿名网络，使用JAVA开发。与Tor类似，都是通过若干个网络节点来加密和传输数据，但匿名度比Tor更高。Tor主要致力于为用户提供匿名访问实施和操作外部的互联网服务，解决“匿名性”和“隐藏服务”，侧重应用层设计，构建了一个“覆盖网络”。I2P试图将现有互联网服务转移到I2P网络，并在框架内提供服务实现，
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2026-01-08 23:26" pubdate>
-              2026-01-08
-            </time>
-          </div>
-        
-        
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h2 class="index-header">
-        
-        <a href="/2026/01/08/hello-world/" target="_self">
-          Hello World
-        </a>
-      </h2>
-
       
-      <a class="index-excerpt index-excerpt__noimg" href="/2026/01/08/hello-world/" target="_self">
-        <div>
-          Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub. Quick
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2026-01-08 22:27" pubdate>
-              2026-01-08
-            </time>
+      
+        <div class="license-meta-item">
+          <div>Licensed under</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - Attribution">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
           </div>
-        
-        
-        
-      </div>
-    </article>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
   </div>
 
 
 
-
-
-              </div>
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2026/01/10/lzr/" title="LZR Identifying Unexpected Internet Services笔记与思考">
+                        <span class="hidden-mobile">LZR Identifying Unexpected Internet Services笔记与思考</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
             </div>
-          </div>
+
+            
+          </article>
         </div>
       </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>Table of Contents</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
     
 
     
@@ -541,6 +524,99 @@
 
 
 
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
 
   <script  src="/js/local-search.js" ></script>
 
