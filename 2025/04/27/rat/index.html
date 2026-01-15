@@ -1,0 +1,744 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/tab.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="q1uki">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="总结Gh0st, darkcomet, XtremeRAT, QuasarRAT, GreameRAT, njrat 六个远控木马的通信协议和特征">
+<meta property="og:type" content="article">
+<meta property="og:title" content="六个RAT（远控木马）协议的通信特征（Gh0st, darkcomet, XtremeRAT, QuasarRAT, GreameRAT, njrat）">
+<meta property="og:url" content="http://q1uki.github.io/2025/04/27/rat/index.html">
+<meta property="og:site_name" content="q1uki&#39;s blog">
+<meta property="og:description" content="总结Gh0st, darkcomet, XtremeRAT, QuasarRAT, GreameRAT, njrat 六个远控木马的通信协议和特征">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260110230103033.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260110230113559.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260110230127807.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260110230134647.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260110230145375.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260110230154725.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260110230207088.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260110230214398.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260110230222173.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260110230228551.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260110230237568.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260110230241588.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260110230249327.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260110230253151.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260110230359350.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260110230402790.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260110230408184.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260110230412582.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260110230415710.png">
+<meta property="article:published_time" content="2025-04-27T13:52:12.000Z">
+<meta property="article:modified_time" content="2026-01-15T19:36:38.310Z">
+<meta property="article:author" content="q1uki">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260110230103033.png">
+  
+  
+  
+  <title>六个RAT（远控木马）协议的通信特征（Gh0st, darkcomet, XtremeRAT, QuasarRAT, GreameRAT, njrat） - q1uki&#39;s blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"q1uki.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 8.1.1"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>q1uki</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>Home</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>Archives</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>Categories</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>Tags</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>About</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="六个RAT（远控木马）协议的通信特征（Gh0st, darkcomet, XtremeRAT, QuasarRAT, GreameRAT, njrat）"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2025-04-27 14:52" pubdate>
+          April 27, 2025 pm
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          2.7k words
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          23 mins
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">六个RAT（远控木马）协议的通信特征（Gh0st, darkcomet, XtremeRAT, QuasarRAT, GreameRAT, njrat）</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="1-Gh0st"><a href="#1-Gh0st" class="headerlink" title="1 Gh0st"></a>1 Gh0st</h1><h2 id="1-1-基本情况"><a href="#1-1-基本情况" class="headerlink" title="1.1 基本情况"></a>1.1 基本情况</h2><p>Gh0stRAT最初由C.Rufus团队开发，客户端以服务的形式运行，可以随系统自启动，并通过隐藏文件和进程的方法躲避杀毒软件的检测。主要包括文件管理、系统信息收集、进程管理、屏幕截图、远程控制等模块，另外具有窃取密码、捕获网络流量和执行远程CMD命令的能力。通常通过电子邮件附件、恶意网站或软件漏洞传播。</p>
+<p>该木马于2009年被初次发现。其3.6版本的源代码在互联网上免费开源，因此备受欢迎，很多被修改的变种都由此而来，如大灰狼。2018年监测到Iron Tiger组织在攻击活动中使用Gh0stRAT变种，2021年监测到Gh0stRAT变种通过虚假Telegram安装程序在用户计算机上植入后门。</p>
+<h2 id="1-2-基本特征"><a href="#1-2-基本特征" class="headerlink" title="1.2 基本特征"></a>1.2 基本特征</h2><ol>
+<li>TCP传输，默认监听端口为80，常见于8000、443 端口，默认伪装为 Microsoft Device Manager 服务</li>
+<li>数据(payload)头用明文显示magic number。如：Gh0st、GOLDt、HEART、Level、BeiJi</li>
+<li>固定的magic number会暴露自身版本信息</li>
+<li>对一些协议规范外的非法请求也会发出响应，如<code>GET / HTTP/1.0\r\n\r\n</code></li>
+<li>缺少有效的包校验手段</li>
+<li>没有合理的会话管理机制</li>
+<li>源代码中，负责通信的发包方法是<code>m_iocpServer()</code>，Gh0stRAT虽然有多个变种，但此方法为各内核中核心的部分，通常不被修改，各变种有一个统一的通信特征。</li>
+</ol>
+<h2 id="1-3-通信特征"><a href="#1-3-通信特征" class="headerlink" title="1.3 通信特征"></a>1.3 通信特征</h2><p>环境搭建参考：<a target="_blank" rel="noopener" href="https://blog.csdn.net/ll121221/article/details/80499645">gh0st3.6 + vc6.0 + windows xp编译过程</a></p>
+<p><img src="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260110230103033.png" srcset="/img/loading.gif" lazyload alt="image-20260110230102985"></p>
+<center><small>被控端发起请求信息</small></center>
+
+<p>整个通信过程中，用于传输数据的流量包的TCP标志位均包括PSH。在Gh0stRAT的握手中，被控端首先发起TCP连接请求。经过三次握手建立TCP连接后，被控端发送以”<code>Gh0st\xae\x00\x00\x00\xe0\x00\x00\x00\x78\x9c</code>“为前缀，包含经编码混淆后的自身系统信息的payload供上线。</p>
+<p><img src="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260110230113559.png" srcset="/img/loading.gif" lazyload alt="image-20260110230113520"></p>
+<center><small>主控端响应</small></center>
+
+<p>主控端收到上线信息后，响应表示确认的流量包，Payload中同样以“<code>Gh0st \xae\x00\x00\x00\xe0\x00\x00\x00\x78\x9c</code>”为前缀。第14-15字节“<code>\x78\x9c</code>”为zlib的压缩头部，在Gh0st通信包中位置固定，见<a target="_blank" rel="noopener" href="https://www.freebuf.com/articles/paper/167917.html">Gh0st大灰狼RAT家族通讯协议分析</a>。</p>
+<h1 id="2-DarkcometRAT"><a href="#2-DarkcometRAT" class="headerlink" title="2 DarkcometRAT"></a>2 DarkcometRAT</h1><h2 id="2-1-基本情况"><a href="#2-1-基本情况" class="headerlink" title="2.1 基本情况"></a>2.1 基本情况</h2><p>DarkcometRAT在2008年由Jean-Pierre Lesueur开发，又称“暗黑彗星”，除了远控木马常见的加密和混淆技术外，还带有rootkit功能，允许在系统中隐藏自身存在。2012年，木马作者停止了对于这款木马的更新，最新版本停留在5.4.1。</p>
+<p>现在活跃的木马基本使用动态域名作为服务器域名，以“ddns.net”和“duckdns.org”为主，占比超过了50%。在腾讯反病毒实验室近年某月的<a target="_blank" rel="noopener" href="http://221.5.97.116/dlied6.qq.com/invc/xfspeed/qqpcmgr/other/Habo-201606-ThreatIntelligence.pdf">威胁情报态势报告</a>中发现，Darkcomet是该月使用最多的恶意网络协议，单日峰值达3000个。</p>
+<h2 id="2-2-基本特征"><a href="#2-2-基本特征" class="headerlink" title="2.2 基本特征"></a>2.2 基本特征</h2><ol>
+<li>TCP传输，默认监听端口为1604</li>
+<li>RC4算法对通信流量进行加密和解密，主控端和被控端需要使用相同的密钥接受、发送信息</li>
+<li>使用预定义的命令字进行通信，参数之间用“|”隔开</li>
+<li><img src="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260110230127807.png" srcset="/img/loading.gif" lazyload></li>
+</ol>
+<center><small>主控端发送“IDTYPE”命令字</small></center>
+
+<ol start="4">
+<li>涉及传输数据的流量包的TCP标志位均包括PSH</li>
+</ol>
+<h2 id="2-3-通信特征"><a href="#2-3-通信特征" class="headerlink" title="2.3 通信特征"></a>2.3 通信特征</h2><p>完成TCP三次握手后，主控端会用预先设定的密钥，发送经RC4算法加密后的命令字“<code>IDTYPE</code>”。</p>
+<p>默认密钥与版本有关，均形如“<code>#KCMDDC𝑥#-8900123456789</code>”， 𝑥为版本号，其中“<code>0123456789</code>”为用户可更改字段。</p>
+<p>具体对应如下表所示： </p>
+<p><img src="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260110230134647.png" srcset="/img/loading.gif" lazyload></p>
+<p>随后被控端响应命令字“<code>SERVER</code>”密文，主控端接收后响应命令字“<code>GetSIN</code>”请求被控端主机信息并附带接收信息的数据库的IP地址，被控端接收后响应自身信息，完成Darkcomet握手。 </p>
+<h2 id="2-4-平台对比"><a href="#2-4-平台对比" class="headerlink" title="2.4 平台对比"></a>2.4 平台对比</h2><p>shodan：搜索darkcomet，结果多在1604默认端口，且匹配响应均为V5的#KCMDDC5#-890密钥对应密文。<br>360：多在3333端口，都是12位数时间戳，次多的6666端口，响应多为”000000009002”，应是误报，也包含shodan上的结果（都归在了“应用：darkcomet远控软件”里，此分类没有误报），同时还有“应用：darkcomet rat”分类，包含匹配时间戳的误报，猜测匹配规则是<code>^[0-9A-F]{12}$</code>。<br>fofa：跟360类似。<br>nmap：匹配规则也是<code>^[0-9A-F]{12}$</code>。(来源：darkcomet客户端与主控端进行tcp握手后，主控端会用预先设定的密钥，发送rc4算法加密后的命令字’IDTYPE’，默认密钥与版本有关。rc4加密后的密文长度为12位，由0-9和A-F构成。)</p>
+<h1 id="3-njRAT"><a href="#3-njRAT" class="headerlink" title="3 njRAT"></a>3 njRAT</h1><h2 id="3-1-基本情况"><a href="#3-1-基本情况" class="headerlink" title="3.1 基本情况"></a>3.1 基本情况</h2><p>njRAT，别名Bladabindi，于2013年首次被发现，使用.NET框架开发。<br>2016年10月，Softpedia 报告称某破解版VMware下载会通过pastebin下载安装njRAT，若终止进程将会使计算机崩溃。<br>2023年1月，木马病毒在中东地区扩散，攻击者使用.cab文件进行“政治对话”，实际在打开运行后会启动一个.vbs脚本，从云上下载njRAT安装到本地。</p>
+<h2 id="3-2-基本特征"><a href="#3-2-基本特征" class="headerlink" title="3.2 基本特征"></a>3.2 基本特征</h2><ol>
+<li>TCP传输， 0.6.4版本的默认监听端口为1177，不同版本的默认端口不同</li>
+<li>涉及传输数据的流量包的TCP标志位均包括PSH</li>
+<li>参数之间用<code>|’|’|</code>隔开</li>
+</ol>
+<h2 id="3-3-通信特征"><a href="#3-3-通信特征" class="headerlink" title="3.3 通信特征"></a>3.3 通信特征</h2><p>①client-&gt;server：上线<br>被控端主动向主控端发起TCP连接，TCP三次握手完成后，发送自身信息以完成上线。参数之间用“<code>|’|’|</code>”隔开，后缀的关键字为“<code>[endof]</code>”。</p>
+<p>“lv”：命令字；<br>“SGFjS2VkXzVDNjBFQUYz”：经base64编码后的被控端名称，即图中的“Name”；<br>“WIN-GH46O995DIB”、“ win7”：被控端系统信息，对应图中 PC、user；<br>“ 2023-02-21”：客户端安装时间，对应图中 Install Date；<br>“\x57\x69\x6e\x20\x37\x20\xbc\xd2\xcd\xa5\xc6\xd5\xcd\xa8\xb0\xe6\x20\x53\x50\x31\x20\x78\x36\x34”：被控端操作系统名，对应图中“Operating system”；<br>“No”：表示摄像头状况，这里没有，对应图中“Cam”；<br>“0.6.4”：njRAT版本，对应图中“Ver.”；“5q2j5Zyo5o2V6I63IEFkYXB0ZXIgZm9yIGxvb3BiYWNrIHRyYWZmaWMgY2FwdHVyZQ&#x3D;&#x3D;”： base64 编码后的被控端活动窗口名，这里是“正在捕获 Adapter for loopback traffic capture”，为 Wireshark的窗口，对应图中“Active Window”。 </p>
+<p>通信流量捕获：</p>
+<p><img src="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260110230145375.png" srcset="/img/loading.gif" lazyload alt="image-20260110230145334"><br>server端控制台：</p>
+<p><img src="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260110230154725.png" srcset="/img/loading.gif" lazyload alt="image-20260110230154682"><br>②server-&gt;client：<br>主控端响应“CAP|’|’|”， 表示捕获受害主机画面。</p>
+<p><img src="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260110230207088.png" srcset="/img/loading.gif" lazyload alt="image-20260110230207059"><br> ③client-&gt;server：<br> 被控端发送经编码的屏幕截图信息。</p>
+<p> <img src="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260110230214398.png" srcset="/img/loading.gif" lazyload><br>④server-&gt;client：<br>主控端发送关键字“P”保持连接，接下来重复此行为。</p>
+<p><img src="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260110230222173.png" srcset="/img/loading.gif" lazyload><br>⑤client-&gt;server：<br>被控端响应经base64 编码后的活跃窗口名，这里为 njRAT的窗口，同时响应关键字“P”保持连接，接下来重复此行为。</p>
+<p><img src="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260110230228551.png" srcset="/img/loading.gif" lazyload></p>
+<h1 id="4-GreameRAT"><a href="#4-GreameRAT" class="headerlink" title="4 GreameRAT"></a>4 GreameRAT</h1><h2 id="4-1-基本情况"><a href="#4-1-基本情况" class="headerlink" title="4.1 基本情况"></a>4.1 基本情况</h2><p>GreameRAT公布于2012年，来源于摩洛哥，使用Pascal语言开发， Delphi的unicode版本编译，同样具有模块化体系结构，允许攻击者根据自身需要添加或删除功能。</p>
+<h2 id="4-2-基本特征"><a href="#4-2-基本特征" class="headerlink" title="4.2 基本特征"></a>4.2 基本特征</h2><p>GreameRAT 使用 TCP传输，除 1.9版本外，其余默认监听端口均为777、888、999，1.9版本的默认端口仅有999。被控端和主控端握手通信中包含数据交换的流量包，其 TCP 标志位均包括PSH，其中密钥为默认的“123456”。</p>
+<h2 id="4-3-通信特征"><a href="#4-3-通信特征" class="headerlink" title="4.3 通信特征"></a>4.3 通信特征</h2><p>在 GreameRAT 握手中，被控端首先发送包含密钥长度n的数字，在测试环境中，发现25为固定常数，25+n即为发送的数字，在本次握手中为31，以“\x7c\0a”为后缀。</p>
+<p><img src="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260110230237568.png" srcset="/img/loading.gif" lazyload><br>被控端紧接着发送与密钥有关的校验数据。 </p>
+<p><img src="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260110230241588.png" srcset="/img/loading.gif" lazyload alt="image-20260110230241559"><br>只有当两个数据都正确，主控端才会依次响应“\x20\x0d\x0a”表示接收，以及后缀为“###@@@”的数据，完成握手。<img src="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260110230249327.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260110230253151.png" srcset="/img/loading.gif" lazyload><br>另外发现，若被控端除发送正确校验数据外，还发送了其他数据，主控端则会响应“tentarnovamente|”，是葡萄牙语的“tentar novamente”，意为重试。 </p>
+<h1 id="5-QuasarRAT"><a href="#5-QuasarRAT" class="headerlink" title="5 QuasarRAT"></a>5 QuasarRAT</h1><h2 id="5-1-基本情况"><a href="#5-1-基本情况" class="headerlink" title="5.1 基本情况"></a>5.1 基本情况</h2><p><a target="_blank" rel="noopener" href="https://github.com/quasar/Quasar">QuasarRAT</a> 由 github 用户 MaxXor 采用 C#开发，首次公开于 2014年 7月，曾名“xRAT”，主要针对 Windows 操作系统，采用计划任务和注册表项维持自身持久存在。<br>2018年2月，研究人员观察到一起通过恶意RTF文件分发QuasarRAT 作为最终有效载荷的攻击活动；2019年5月，enSilo观察到APT10使用PlugX 和 QuasarRAT 对东南亚政府和私人组织发起攻击。除此之外，著名的 APT攻击组织 “摩诃草”也曾长期使用此工具。</p>
+<h2 id="5-2-基本特征"><a href="#5-2-基本特征" class="headerlink" title="5.2 基本特征"></a>5.2 基本特征</h2><p>QuasarRAT 使用 TCP 传输，常见监听端口为 5678，与数据传输相关的流量包中，TCP标志位均包括PSH。</p>
+<h2 id="5-3-通信特征"><a href="#5-3-通信特征" class="headerlink" title="5.3 通信特征"></a>5.3 通信特征</h2><p>被控端主动向主控端发起 TCP连接，成功完成TCP连接后，主控端依次发送两个响应：<br><img src="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260110230359350.png" srcset="/img/loading.gif" lazyload alt="image-20260110230359318"><br><img src="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260110230402790.png" srcset="/img/loading.gif" lazyload alt="image-20260110230402761"><br>“RPCMethod: preinstall”是 QuasarRAT 的命令，用于在目标主机上预安装Quasar客户端，是QuasarRAT主控端区别于其他端口服务的通信特征。</p>
+<h1 id="6-XtemeRAT"><a href="#6-XtemeRAT" class="headerlink" title="6 XtemeRAT"></a>6 XtemeRAT</h1><h2 id="6-1-基本情况"><a href="#6-1-基本情况" class="headerlink" title="6.1 基本情况"></a>6.1 基本情况</h2><p>XtemeRAT发布于2010年，使用Delphi的Unicode版本开发，在GitHub 平台上开源，主要支持功能有文件与进程管理、键盘记录、服务管理和注册表管理。曾被北非狐（APT-C-44）组织用于针对阿拉伯语地区的攻击中。</p>
+<h2 id="6-2-基本特征"><a href="#6-2-基本特征" class="headerlink" title="6.2 基本特征"></a>6.2 基本特征</h2><p>XtremeRAT使用 TCP传输，默认监听端口为80、81、82，默认密码为1234567890。</p>
+<h2 id="6-3-通信特征"><a href="#6-3-通信特征" class="headerlink" title="6.3 通信特征"></a>6.3 通信特征</h2><p>被控端主动发起 TCP握手，完成 TCP三次握手建立连接后，被控端首先发送版本信息“myversion|3.2”。<br><img src="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260110230408184.png" srcset="/img/loading.gif" lazyload alt="image-20260110230408150"><br>主控端回复第一个响应“X\n\r”，作为响应前缀，是XtremeRAT的通信特征。<br><img src="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260110230412582.png" srcset="/img/loading.gif" lazyload alt="image-20260110230412547"><br>着主控端回复第二个响应，payload 中第 1-8 字节为密钥，在此例中密码为1234，第9-16字节为zlib压缩文件大小，此例中消息长度为152字节，均为小端序表示，第17-18字节为zlib指示符“\x78\x01”，在XtremeRAT通信中固定。<br><img src="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260110230415710.png" srcset="/img/loading.gif" lazyload></p>
+<h2 id="6-4-尝试编译源代码（没完成，后来找到了exe）"><a href="#6-4-尝试编译源代码（没完成，后来找到了exe）" class="headerlink" title="6.4 尝试编译源代码（没完成，后来找到了exe）"></a>6.4 尝试编译源代码（没完成，后来找到了exe）</h2><ol>
+<li>在delphi2010安装virtual tree view，将文件夹复制到$(BDS)\Components\VST</li>
+<li>delphi7上安装KOL unicode组件，或在delphi2010上安装“MirrorKOLPackageD12.dpk”。执行正常KOL安装，然后获取Unicode版本文件并替换。<br>感天动地，把那串乱码删掉就能装了</li>
+<li>创建项目：</li>
+</ol>
+<ul>
+<li>打开delphi7并转到：文件|新建|其他</li>
+<li>选择“向导”选项。将有一个KOL调色板。</li>
+<li>我做了一些修改，只能用作UNICODE，也就是说，不要在项目中使用“ansi”。</li>
+<li>打开文件“XtremeRAT.rar Components”并将数据复制到文件夹“$（BDS）\Components\”</li>
+</ul>
+<ol>
+<li>在delphi 2010中安装TMS组件</li>
+<li>delphi2010|| Options | Environment Options | Delphi Options | Library - Win32 |</li>
+</ol>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs c">$(BDS)\Source\Indy\indy10\System<br>$(BDS)\Source\Indy\indy10\Core<br>$(BDS)\Source\Indy\indy10\协议<br>$(BDS)\Components\TMS<br></code></pre></td></tr></table></figure>
+<ol>
+<li>安装AlphaControls.7.26组件，安装后将文件复制到<code>$(BDS)\Components\AlphaControls\D2010</code>文件夹，然后<br>转到delphi 2010中的工具选项|选项|环境选项| delphi选项|库-Win32|<br><code>$（BDS）\Components\AlphaControls\D2010</code></li>
+</ol>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" class="category-chain-item">学习笔记</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>六个RAT（远控木马）协议的通信特征（Gh0st, darkcomet, XtremeRAT, QuasarRAT, GreameRAT, njrat）</div>
+      <div>http://q1uki.github.io/2025/04/27/rat/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>Author</div>
+          <div>q1uki</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Posted on</div>
+          <div>April 27, 2025</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>Licensed under</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - Attribution">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2025/04/27/i2p/" title="I2P概述">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">I2P概述</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2024/12/09/obfs4_bridge_scan/" title="《Detecting probe resistant proxy》实验验证与分析">
+                        <span class="hidden-mobile">《Detecting probe resistant proxy》实验验证与分析</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>Table of Contents</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">Keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">Blog works best with JavaScript enabled</div>
+  </noscript>
+</body>
+</html>
