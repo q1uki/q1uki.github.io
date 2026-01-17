@@ -8,14 +8,14 @@
 <head>
   <meta charset="UTF-8">
 
-  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/tab.png">
   <link rel="icon" href="/img/tab.png">
   
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   
-  <meta name="theme-color" content="#2f4154">
+  <meta name="theme-color" content="#CE6D39">
   <meta name="author" content="q1uki">
   <meta name="keywords" content="">
   
@@ -57,11 +57,15 @@
 
 
 
+  
+<link rel="stylesheet" href="/css/custom.css">
+
+
 
   <script id="fluid-configs">
     var Fluid = window.Fluid || {};
     Fluid.ctx = Object.assign({}, Fluid.ctx)
-    var CONFIG = {"hostname":"q1uki.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+    var CONFIG = {"hostname":"q1uki.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":50,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
 
     if (CONFIG.web_analytics.follow_dnt) {
       var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
@@ -183,7 +187,7 @@
   
 
 <div id="banner" class="banner" parallax=true
-     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+     style="background: url('/img/post_background.jpg') no-repeat center center; background-size: cover;">
   <div class="full-bg-img">
     <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
       <div class="banner-text text-center fade-in-up">
@@ -228,57 +232,6 @@
     
     <div class="category row nomargin-x">
       <a class="category-item collapsed
-          list-group-item category-item-action col-10 col-md-11 col-xm-11" title="论文阅读"
-        id="heading-7545c85b0df88485ddabffad9bb45965" role="tab" data-toggle="collapse" href="#collapse-7545c85b0df88485ddabffad9bb45965"
-        aria-expanded="false"
-      >
-        论文阅读
-        <span class="list-group-count"></span>
-        <i class="iconfont icon-arrowright"></i>
-      </a>
-      
-        <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/" class="category-count col-2 col-md-1 col-xm-1">
-          <i class="iconfont icon-articles"></i>
-          <span>2</span>
-        </a>
-      
-      <div class="category-collapse collapse " id="collapse-7545c85b0df88485ddabffad9bb45965"
-           role="tabpanel" aria-labelledby="heading-7545c85b0df88485ddabffad9bb45965">
-        
-        
-          
-  <div class="category-post-list">
-    
-    
-      
-      
-        <a href="/2024/12/09/obfs4_bridge_scan/" title="【论文阅读】《Detecting probe resistant proxy》实验验证与分析"
-           class="list-group-item list-group-item-action
-           ">
-          <span class="category-post">【论文阅读】《Detecting probe resistant proxy》实验验证与分析</span>
-        </a>
-      
-    
-      
-      
-        <a href="/2024/12/09/lzr/" title="【论文阅读】《LZR: Identifying Unexpected Internet Services》笔记与思考"
-           class="list-group-item list-group-item-action
-           ">
-          <span class="category-post">【论文阅读】《LZR: Identifying Unexpected Internet Services》笔记与思考</span>
-        </a>
-      
-    
-  </div>
-
-        
-      </div>
-    </div>
-  
-    
-    
-    
-    <div class="category row nomargin-x">
-      <a class="category-item collapsed
           list-group-item category-item-action col-10 col-md-11 col-xm-11" title="学习笔记"
         id="heading-078425eaf316a180b0989442e53f920b" role="tab" data-toggle="collapse" href="#collapse-078425eaf316a180b0989442e53f920b"
         aria-expanded="false"
@@ -316,6 +269,57 @@
            class="list-group-item list-group-item-action
            ">
           <span class="category-post">【学习笔记】六个RAT（远控木马）协议的通信特征（Gh0st, darkcomet, XtremeRAT, QuasarRAT, GreameRAT, njrat）</span>
+        </a>
+      
+    
+  </div>
+
+        
+      </div>
+    </div>
+  
+    
+    
+    
+    <div class="category row nomargin-x">
+      <a class="category-item collapsed
+          list-group-item category-item-action col-10 col-md-11 col-xm-11" title="论文阅读"
+        id="heading-7545c85b0df88485ddabffad9bb45965" role="tab" data-toggle="collapse" href="#collapse-7545c85b0df88485ddabffad9bb45965"
+        aria-expanded="false"
+      >
+        论文阅读
+        <span class="list-group-count"></span>
+        <i class="iconfont icon-arrowright"></i>
+      </a>
+      
+        <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/" class="category-count col-2 col-md-1 col-xm-1">
+          <i class="iconfont icon-articles"></i>
+          <span>2</span>
+        </a>
+      
+      <div class="category-collapse collapse " id="collapse-7545c85b0df88485ddabffad9bb45965"
+           role="tabpanel" aria-labelledby="heading-7545c85b0df88485ddabffad9bb45965">
+        
+        
+          
+  <div class="category-post-list">
+    
+    
+      
+      
+        <a href="/2024/12/09/obfs4_bridge_scan/" title="【论文阅读】《Detecting probe resistant proxy》实验验证与分析"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">【论文阅读】《Detecting probe resistant proxy》实验验证与分析</span>
+        </a>
+      
+    
+      
+      
+        <a href="/2024/12/09/lzr/" title="【论文阅读】《LZR: Identifying Unexpected Internet Services》笔记与思考"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">【论文阅读】《LZR: Identifying Unexpected Internet Services》笔记与思考</span>
         </a>
       
     

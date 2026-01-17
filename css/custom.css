@@ -1,0 +1,13 @@
+html[data-user-color-scheme="dark"] #banner {
+  background-image: url('/img/background_dark.jpg') !important;
+}
+/* 1. 白天模式：导航栏文字悬浮时 */
+.navbar .nav-item .nav-link:hover {
+  /* 去掉悬浮背景块（可选，这样更简洁） */
+  background-color: #ffede1 !important;
+}
+html[data-user-color-scheme="dark"] .navbar .nav-item .nav-link:hover {
+  color: #142236;
+    /* 去掉悬浮背景块（可选，这样更简洁） */
+  background-color: #79c0ff !important;
+}
