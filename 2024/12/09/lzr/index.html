@@ -21,7 +21,7 @@
   
     <meta name="description" content="中文友好的《LZR: Identifying Unexpected Internet Services》（LZR：发现预期外的网络服务）论文阅读笔记。含有大量原文机翻和概括，斜体字为我的补充。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="《LZR: Identifying Unexpected Internet Services》笔记与思考">
+<meta property="og:title" content="【论文阅读】《LZR: Identifying Unexpected Internet Services》笔记与思考">
 <meta property="og:url" content="http://q1uki.github.io/2024/12/09/lzr/index.html">
 <meta property="og:site_name" content="q1uki&#39;s blog">
 <meta property="og:description" content="中文友好的《LZR: Identifying Unexpected Internet Services》（LZR：发现预期外的网络服务）论文阅读笔记。含有大量原文机翻和概括，斜体字为我的补充。">
@@ -30,19 +30,19 @@
 <meta property="og:image" content="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260110233045683.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260110233049700.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260110233136612.png">
-<meta property="og:image" content="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260110233144077.png">
-<meta property="og:image" content="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260110233228457.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260115201108438.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260115201148779.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260110233237565.png">
-<meta property="og:image" content="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260110233427249.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260115201412632.png">
 <meta property="article:published_time" content="2024-12-09T11:00:00.000Z">
-<meta property="article:modified_time" content="2026-01-15T19:42:04.241Z">
+<meta property="article:modified_time" content="2026-01-15T20:14:30.298Z">
 <meta property="article:author" content="q1uki">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260110233036206.png">
   
   
   
-  <title>《LZR: Identifying Unexpected Internet Services》笔记与思考 - q1uki&#39;s blog</title>
+  <title>【论文阅读】《LZR: Identifying Unexpected Internet Services》笔记与思考 - q1uki&#39;s blog</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -208,7 +208,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="《LZR: Identifying Unexpected Internet Services》笔记与思考"></span>
+            <span id="subtitle" data-typed-text="【论文阅读】《LZR: Identifying Unexpected Internet Services》笔记与思考"></span>
           
         </div>
 
@@ -279,12 +279,12 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">《LZR: Identifying Unexpected Internet Services》笔记与思考</h1>
+            <h1 id="seo-header">【论文阅读】《LZR: Identifying Unexpected Internet Services》笔记与思考</h1>
             
             
               <div class="markdown-body">
                 
-                <h1 id="论文原文与资料"><a href="#论文原文与资料" class="headerlink" title="论文原文与资料"></a>论文原文与资料</h1><p><a target="_blank" rel="noopener" href="https://github.com/stanford-esrg/lzr">源代码</a><br><a target="_blank" rel="noopener" href="https://data.esrg.stanford.edu/study/lzr">数据</a><br><a target="_blank" rel="noopener" href="https://lizizhikevich.github.io/assets/papers/lzr.pdf">原文</a><br><a target="_blank" rel="noopener" href="https://www.usenix.org/system/files/sec21_slides_izhikevich.pdf">PPT</a><br><a target="_blank" rel="noopener" href="https://www.usenix.org/conference/usenixsecurity21/presentation/izhikevich">演讲</a>（youtube）</p>
+                <h1 id="论文原文与资料"><a href="#论文原文与资料" class="headerlink" title="论文原文与资料"></a>论文原文与资料</h1><p><a target="_blank" rel="noopener" href="https://github.com/stanford-esrg/lzr">源代码</a><br><a target="_blank" rel="noopener" href="https://data.esrg.stanford.edu/study/lzr">数据</a><br><a target="_blank" rel="noopener" href="https://lizizhikevich.github.io/assets/papers/lzr.pdf">原文</a><br><a target="_blank" rel="noopener" href="https://www.usenix.org/system/files/sec21_slides_izhikevich.pdf">PPT</a><br><a target="_blank" rel="noopener" href="https://www.usenix.org/conference/usenixsecurity21/presentation/izhikevich">演讲</a>（YouTube）</p>
 <h1 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h1><p>中文友好的《LZR: Identifying Unexpected Internet Services》（LZR：发现预期外的网络服务）论文阅读笔记。含有大量原文机翻和概括，斜体字为我的补充。</p>
 <h1 id="研究要点"><a href="#研究要点" class="headerlink" title="研究要点"></a>研究要点</h1><ul>
 <li>调查了网络中服务的部署位置，评估部署在意外端口上服务的安全态势。</li>
@@ -292,115 +292,114 @@
 <li>根据在非预期服务端口上未完成应用层握手的行为，跟踪到防火墙和中间件，评估防扫描的有效性。</li>
 <li>发现由于服务运行在意外端口，L7握手需要预先建立秘密协议握手和确认每个端口上的数据。部署在意外端口上服务的安全性较差，如一些物联网设备。</li>
 <li>用一个数据包对88%的可识别服务进行指纹识别，五次握手识别99%的可识别意外服务。</li>
-<li>过滤响应良好，返回SYN-ACK但不能完成应用层握手的主机来提速。</li>
+<li>过滤响应良好、返回SYN-ACK但不能完成应用层握手的主机来提速。</li>
 </ul>
 <h1 id="找到真正的TCP服务"><a href="#找到真正的TCP服务" class="headerlink" title="找到真正的TCP服务"></a>找到真正的TCP服务</h1><p>TCP活动不能表明有应用层服务，因为存在安全防火工具如防火墙和中间件。</p>
-<h2 id="L4和L7的活性"><a href="#L4和L7的活性" class="headerlink" title="L4和L7的活性"></a>L4和L7的活性</h2><p>确认响应SYN-ACK包的主机是否完成常见端口对应服务的应用层握手。先用Zmap发SYN包，再用ZGrab尝试应用层握手。</p>
-<p>结果相当一部分响应tcp的主机未完成L7握手，在常见端口上最有可能完成应用层握手，稀有端口上少有。</p>
+<h2 id="L4和L7的活性"><a href="#L4和L7的活性" class="headerlink" title="L4和L7的活性"></a>L4和L7的活性</h2><p>确认响应SYN-ACK包的主机是否完成常见端口对应服务的应用层握手。先用ZMap发SYN包，再用ZGrab尝试应用层握手。</p>
+<p>结果相当一部分响应TCP的主机未完成L7握手，在常见端口上最有可能完成应用层握手，稀有端口上少有。</p>
 <p>下面通过分析两个扫描阶段的状态变化来分析应用层无响应。</p>
 <h2 id="连接回避"><a href="#连接回避" class="headerlink" title="连接回避"></a>连接回避</h2><p>防火墙如果无差别都伪造端口开放包的话，会影响正常用户的使用。所以防火墙需要按照某种规则来判断是否伪造响应，常见有将大量发送请求包的IP拉入黑名单。</p>
 <p>在使用ZGrab进行TCP握手中，部分端口不响应SYN-ACK，可能是网络故障、DHCP中断或阻塞了扫描器。使用另一个未连接过主机的IP来扫一个随机的临时端口以确认是否存在连接回避，发现有70%回应了这个未连接过的IP，也就是此前的IP被回避了。在回避的IP块上，40%的主机回避了&#x2F;32子网块，10%回避&#x2F;24，最大的一个是墨西哥的ISP Alestra Net (ASN 11172)，回避了&#x2F;20。</p>
-<p>对于被认为是恶意的IP，网络硬件（<em>如路由器</em> ）和主机软件（<em>如Snort</em>）会回避连接或动态阻塞。这些方法阻止了扫描者使用单个IP扫描网络，转而使用多个IP去到达目的主机，提高扫描者攻击的难度。通过比较单个源IP和多个源IP的扫描结果，发现会避开连接的主机并没有提供合法服务。如果扫描中能有效过滤，在研究中就可以安全地忽略掉它们。</p>
+<p>对于被认为是恶意的IP，网络硬件（<em>如路由器</em>）和主机软件（<em>如Snort</em>）会回避连接或动态阻塞。这些方法阻止了扫描者使用单个IP扫描网络，转而使用多个IP去到达目的主机，提高扫描者攻击的难度。通过比较单个源IP和多个源IP的扫描结果，发现会避开连接的主机并没有提供合法服务。如果扫描中能有效过滤，在研究中就可以安全地忽略掉它们。</p>
 <h2 id="有TCP响应的主机会说TCP吗"><a href="#有TCP响应的主机会说TCP吗" class="headerlink" title="有TCP响应的主机会说TCP吗"></a>有TCP响应的主机会说TCP吗</h2><p>在使用ZGrab进行第二次握手时，有96%的端口服务没有完成应用层握手并返回SYN-ACK。接下来探讨主机是否进入交换应用层数据的状态，或者在发送一个SYN-ACK后就停止响应。下图表示扫描器如何根据捕获的数据来推断服务器状态。要进入establish状态，服务器只需要发送一个SYN-ACK。一旦客户端发送ACK，就可以正常传输数据，数据量在服务器的SYN-ACK包中的window size指定。</p>
 <p>服务器可以在SYN-ACK中响应一个零窗口，当服务器准备接受数据时，客户端会发送后续ACK报文进行探测。图中ACKNOWLEDGE DATA定义为服务器允许客户端发送数据并确认客户端数据的状态。</p>
 <p>ACCEPT DATA为捕获服务器是否准备好接收数据，到达此状态的服务器将保持TCP连接打开足够长的时间以接受数据并确认。这两个状态用于区分建立的连接是否能交换数据。</p>
-<p><img src="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260110233036206.png" srcset="/img/loading.gif" lazyload><br><small>图1 握手过程</small></p>
+<p><img src="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260110233036206.png" srcset="/img/loading.gif" lazyload alt="LZR定义的TCP握手"></p>
 <p>基于ZGrab开发一个新扫描器建立TCP连接，发送两个换行符，推断服务器TCP状态。</p>
-<p><img src="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260110233045683.png" srcset="/img/loading.gif" lazyload alt="图2 具体算法" title="具体算法"></p>
+<p><img src="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260110233045683.png" srcset="/img/loading.gif" lazyload alt="TCP状态推断算法流程"></p>
 <p>通过扫描随机端口和IP地址后，发现16%常见端口和40%稀有端口上的服务无法进入ACKNOWLEDGES DATA状态。</p>
-<p><img src="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260110233049700.png" srcset="/img/loading.gif" lazyload></p>
-<p>图a 在有TCP响应的主机中，只有SYN-ACK响应和到达ACKNOWLEDGE DATA状态的端口占比<br>图b 返回了SYN-ACK主机无法进入ACKNOWLEDGE DATA状态的原因</p>
+<p><img src="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260110233049700.png" srcset="/img/loading.gif" lazyload alt="不同端口的TCP响应状态分布与握手失败原因分析"></p>
+<p><em>图注：(a) 在有TCP响应的主机中，只有SYN-ACK响应和到达ACKNOWLEDGE DATA状态的端口占比；(b) 返回了SYN-ACK主机无法进入ACKNOWLEDGE DATA状态的原因。</em></p>
 <h2 id="零窗口DDOS防护"><a href="#零窗口DDOS防护" class="headerlink" title="零窗口DDOS防护"></a>零窗口DDOS防护</h2><p>在不接受数据的服务中，13%的常见端口服务和26%稀有端口返回零窗口（<em>nmap中若使用window扫描，会认为零窗口是关闭的端口</em>）的TCP包并且不增加窗口值来主动阻止客户端发送数据。在所有扫描的端口中，99.94%返回零窗口的主机不会增加窗口值，90%对二次发送的探针不响应，10%复位连接。这些行为基于网络或主机而不是服务。</p>
-<p>其中99%的主机只要有一个端口返回了零窗口，同主机的其他端口也会返回零窗口。如果一个主机响应中从不增加窗口大小，那么这个主机可能永不响应。在juniper的安全服务网关代理中，使用这种方法来防止基于网络的SYN cookie的ddos攻击。响应零窗口的SYN-ACK报文，客户端发送ACK完成三次握手后，防火墙发送SYN包到墙后的服务器已建立连接。期间与客户端保持零大小的TCP窗口，中间件阻止了客户端向墙后服务器发送数据。</p>
+<p>其中99%的主机只要有一个端口返回了零窗口，同主机的其他端口也会返回零窗口。如果一个主机响应中从不增加窗口大小，那么这个主机可能永不响应。在Juniper的安全服务网关代理中，使用这种方法来防止基于网络的SYN cookie的DDOS攻击。响应零窗口的SYN-ACK报文，客户端发送ACK完成三次握手后，防火墙发送SYN包到墙后的服务器已建立连接。期间与客户端保持零大小的TCP窗口，中间件阻止了客户端向墙后服务器发送数据。</p>
 <p>零窗口SYN-ACK部署在整个子网中，90%具有零窗口SYN-ACK的IP在大于&#x2F;24的子网中进行。佛罗里达州管理服务部发出了全网16%的零窗口SYN-ACK，并占随机端口上所有SYN-ACK的3%。跟之后的RST相比，SYN-ACK的TTL始终近一跳，表明是网络设备发出的。</p>
 <h2 id="握手时中断连接"><a href="#握手时中断连接" class="headerlink" title="握手时中断连接"></a>握手时中断连接</h2><p>除了指定零窗口外，每个端口上有2%的主机从不确认数据（acknowledge data），尽管客户端返回了ACK，也不能完成三次握手。在重传7、8次SYN-ACK后推断服务器不会到达establish状态。不仅是TCP栈，在MCI通信服务下，在4567端口上重传SYN-ACK的IP在别的端口也会有同样的行为。真实服务响应的TTL是重传SYN-ACK的两倍以上，表明中间件选择性地丢包。</p>
-<p>在握手过程中中断连接时防御行为，是ISP保护用户的方式，CenturyLink (AS 209)、Frontier Communications (AS 5650)和MCI Communications Services (AS 701)将入站流量丢弃到4567&#x2F;TRAM post-SYN端口。韩国电信(AS 4766)和Axtel (AS 6503)占中断在7547&#x2F;CWMP端口上的连接的73%。在常见端口上很少出现这种情况，只有5%的响应TCP的主机不接受数据并中断了80端口上的连接。</p>
+<p>在握手过程中中断连接是防御行为，是ISP保护用户的方式，CenturyLink (AS 209)、Frontier Communications (AS 5650)和MCI Communications Services (AS 701)将入站流量丢弃到4567&#x2F;TRAM post-SYN端口。韩国电信(AS 4766)和Axtel (AS 6503)占中断在7547&#x2F;CWMP端口上的连接的73%。在常见端口上很少出现这种情况，只有5%的响应TCP的主机不接受数据并中断了80端口上的连接。</p>
 <h2 id="重置连接"><a href="#重置连接" class="headerlink" title="重置连接"></a>重置连接</h2><p>73%常见端口和34%稀有端口上不接收数据、不能到达ESTABLISH状态的服务会在客户端完成三次握手后立刻重置连接。根据RFC793，如果服务器不想与客户端通信，服务器应该在客户端确认SYN-ACK后关闭TCP连接。这是DenyHosts防火墙返回给扫描器的方式。运行在SSH的主机上发生阻塞比HTTP更频繁。类似发送零窗口的网络，这种行为也是由于DDOS保护引起的。</p>
 <p>为了防止SYN洪水攻击，中间件会代表服务器回传一个SYN-ACK，随后在客户端完成三次握手后与服务器建立连接。如果服务器拒绝连接，中间件将终止客户端的连接。Cisco IOS-based routers使用了这个方案。</p>
 <p>主机关闭常见端口上连接的可能性增加了20%，由于谷歌负载均衡器附带的标准防火墙策略默认情况下接受这些端口上的通信，以便能执行服务健康检查，并在端口关闭时依赖后端的虚拟机重置连接。</p>
-<h2 id="握手后的动态阻塞"><a href="#握手后的动态阻塞" class="headerlink" title="握手后的动态阻塞"></a>握手后的动态阻塞</h2><p>许多主机根本不承认所有数据，也不会回应后续握手。<br>为了区分是握手后避开扫描器和根本不承认数据的主机，我们同时使用初始连接的源IP和一个新IP去与初始回应了，但又不承认数据的主机进行L7握手。98%的主机回应了新IP，表示它们阻塞了之前传入的连接。这种动态阻塞的行为只发生在三次握手之后，不同于2.2中的连接回避。最大的握手后动态阻塞网络是Coming ABCDE HK (AS 133201)，占所有握手后阻塞的ip的48%。</p>
-<p>其他无法确认数据的主机没有执行动态阻塞，因为它们在实际握手之后不会响应任何东西，但始终响应所有扫描。Vodaphone (AS 133612)和Webclassit (AS 34358)在所有扫描端口上都有这种行为，并且占所有ip的66%。且TTL值不匹配，表明存在中间件。</p>
+<h2 id="握手后的动态阻塞"><a href="#握手后的动态阻塞" class="headerlink" title="握手后的动态阻塞"></a>握手后的动态阻塞</h2><p>许多主机根本不承认所有数据，也不会回应后续握手。<br>为了区分是握手后避开扫描器和根本不承认数据的主机，我们同时使用初始连接的源IP和一个新IP去与初始回应了，但又不承认数据的主机进行L7握手。98%的主机回应了新IP，表示它们阻塞了之前传入的连接。这种动态阻塞的行为只发生在三次握手之后，不同于2.2中的连接回避。最大的握手后动态阻塞网络是Coming ABCDE HK (AS 133201)，占所有握手后阻塞的IP的48%。</p>
+<p>其他无法确认数据的主机没有执行动态阻塞，因为它们在实际握手之后不会响应任何东西，但始终响应所有扫描。Vodafone (AS 133612)和Webclassit (AS 34358)在所有扫描端口上都有这种行为，并且占所有IP的66%。且TTL值不匹配，表明存在中间件。</p>
 <h2 id="中间件的防护能力"><a href="#中间件的防护能力" class="headerlink" title="中间件的防护能力"></a>中间件的防护能力</h2><p>动态阻塞，即在不确认数据的情况下完成握手，是降低扫描速度最有效的方法，该技术通过不接收扫描器的ACK来使扫描器超时。零窗口SYN-ACK也会导致超时，但零窗口很容易过滤。握手后关闭连接也只会导致可忽略不计的减速。</p>
 <h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>SYN-ACK不能表示服务是否存在。16%常见端口和40%稀有端口上的服务都被中间件保护，不接受数据。下面研究为什么使用TCP的主机不总是完成L7握手。</p>
-<h1 id="应用层服务部署"><a href="#应用层服务部署" class="headerlink" title="应用层服务部署"></a>应用层服务部署</h1><p>上节研究L4响应服务，不与L7服务通信，是由于dos和扫描保护。排除了28%伪服务后（<em>怎么排除的见3.1</em>），发现常见端口上27%的服务和稀有端口上63%的服务没有运行预期的应用层协议。本节分析完成意外应用层握手或承认数据，但不是任何可识别的应用层协议服务。可识别的部署在意外端口上的服务占比很大，按照iana分配的端口只占很少一部分，只有6.4%TLS服务在443端口上运行。</p>
+<h1 id="应用层服务部署"><a href="#应用层服务部署" class="headerlink" title="应用层服务部署"></a>应用层服务部署</h1><p>上节研究L4响应服务，不与L7服务通信，是由于DOS和扫描保护。排除了28%伪服务后（<em>怎么排除的见3.1</em>），发现常见端口上27%的服务和稀有端口上63%的服务没有运行预期的应用层协议。本节分析完成意外应用层握手或承认数据，但不是任何可识别的应用层协议服务。可识别的部署在意外端口上的服务占比很大，按照IANA分配的端口只占很少一部分，只有6.4%TLS服务在443端口上运行。</p>
 <h2 id="找到意外服务"><a href="#找到意外服务" class="headerlink" title="找到意外服务"></a>找到意外服务</h2><p>扫描部分IP，对于每个响应服务，首先使用预期的协议进行L7握手，失败时再使用30种协议扫描器进行后续握手。98%的IP提供不到4个无法识别的服务，2%的IP在超过6万个端口上提供无法识别的服务。在稀有端口上，大约75%无法识别的服务都是由几乎每个端口上都有无法识别服务的主机提供的。那些主机之所以在大多数端口上都有无法识别的服务，是因为一些网络会将所有流量丢弃到对安全敏感的端口。在所有端口返回SYN-ACK响应最多的前50个网络中，28%的网络将所有流量丢弃到445端口，10%网络丢弃到23端口。几乎每个端口上都有无法识别服务的主机集中在少数网络中。</p>
-<p>另外，在基于RST指纹的F5 Big-IP防火墙中，由于配置防火墙时使用了通配符或防火墙的SYN-cookie缓存过载，IP会在每个端口上响应。可以通过检查主机是否承认5个随机端口上的数据来识别排除这些主机。过滤后平均有10%的常见服务和25%的稀有服务在过滤后仍然无法识别(<em>即，对30次握手中的任何一次都没有回应</em>)。</p>
-<h2 id="意外服务的特征描述"><a href="#意外服务的特征描述" class="headerlink" title="意外服务的特征描述"></a>意外服务的特征描述</h2><p>常见端口上通常运行预期的协议服务，在80端口上大多数意外服务是基于tls的。</p>
-<h2 id="意外服务的安全性"><a href="#意外服务的安全性" class="headerlink" title="意外服务的安全性"></a>意外服务的安全性</h2><p>大量物联网设备占用非标准端口45，但研究上很多只研究标准端口（14、20、27、55、62、71）通过手动识别属于物联网制造商的服务器证书，我们发现物联网接口在意外端口上广泛存在;意外端口上50%的TLS服务器证书属于物联网设备，而这些TLS属于物联网设备的可能性是端口443的5倍。</p>
+<p>另外，在基于RST指纹的F5 Big-IP防火墙中，由于配置防火墙时使用了通配符或防火墙的SYN-cookie缓存过载，IP会在每个端口上响应。可以通过检查主机是否承认5个随机端口上的数据来识别排除这些主机。过滤后平均有10%的常见服务和25%的稀有服务在过滤后仍然无法识别（<em>即，对30次握手中的任何一次都没有回应</em>）。</p>
+<h2 id="意外服务的特征描述"><a href="#意外服务的特征描述" class="headerlink" title="意外服务的特征描述"></a>意外服务的特征描述</h2><p>常见端口上通常运行预期的协议服务，在80端口上大多数意外服务是基于TLS的。</p>
+<h2 id="意外服务的安全性"><a href="#意外服务的安全性" class="headerlink" title="意外服务的安全性"></a>意外服务的安全性</h2><p>大量物联网设备占用非标准端口45，但研究上很多只研究标准端口（14、20、27、55、62、71）。通过手动识别属于物联网制造商的服务器证书，我们发现物联网接口在意外端口上广泛存在；意外端口上50%的TLS服务器证书属于物联网设备，而这些TLS属于物联网设备的可能性是端口443的5倍。</p>
 <p>例如，韩国电信8000&#x2F;TLS中35%是icctv设备(即监控摄像头)，80&#x2F;TLS中38%是华为网络节点，分布在1%的国际网络中。在韩国网络中，8443端口上大约5%的TLS属于Android电视，至少20%属于路由器。</p>
 <p>未分配的端口也包含更多的TCP&#x2F;UPnP设备。例如，49152端口(主要在拉丁美洲和亚洲电信)上的TCP&#x2F;UPnP设备数量是80端口的12倍，58000和30005端口的数量是80端口的2倍。</p>
-<p>未分配端口上的TLS服务拥有已知私钥证书的可能性是分配端口上的1.71倍。在扫描未分配的端口时，我们发现已知私钥的证书数量是以前工作[32，36中报告的两倍多。例如，端口8081上40.2%的TLS主机是阿根廷电信（AS 10481和10318）中使用相同OpenSSL测试证书和已知私钥的DOCSIS 3.1无线网关，端口58000上39%的TLS主机是使用相同自签名证书和已知私钥的Qno无线设备。在23%的扫描端口中，公钥比端口443上的公钥更容易共享（最多1.7倍）（例如，80&#x2F;TLS的共享可能性是1.5倍）。尽管如此，之前研究互联网上加密密钥的工作将分析限制在443&#x2F;HTTPS、22&#x2F;SSH、995&#x2F;POP3、993&#x2F;IMAPS和25&#x2F;SMTPS。</p>
-<h2 id="总结-1"><a href="#总结-1" class="headerlink" title="总结"></a>总结</h2><p>很多流行协议是分布在全部65K端口上，而不是iana分配的端口上。</p>
+<p>未分配端口上的TLS服务拥有已知私钥证书的可能性是分配端口上的1.71倍。在扫描未分配的端口时，我们发现已知私钥的证书数量是以前工作[32，36]中报告的两倍多。例如，端口8081上40.2%的TLS主机是阿根廷电信（AS 10481和10318）中使用相同OpenSSL测试证书和已知私钥的DOCSIS 3.1无线网关，端口58000上39%的TLS主机是使用相同自签名证书和已知私钥的Qno无线设备。在23%的扫描端口中，公钥比端口443上的公钥更容易共享（最多1.7倍）（例如，80&#x2F;TLS的共享可能性是1.5倍）。尽管如此，之前研究互联网上加密密钥的工作将分析限制在443&#x2F;HTTPS、22&#x2F;SSH、995&#x2F;POP3、993&#x2F;IMAPS和25&#x2F;SMTPS。</p>
+<h2 id="总结-1"><a href="#总结-1" class="headerlink" title="总结"></a>总结</h2><p>很多流行协议是分布在全部65K端口上，而不是IANA分配的端口上。</p>
 <h1 id="高效识别服务"><a href="#高效识别服务" class="headerlink" title="高效识别服务"></a>高效识别服务</h1><p>之前对于L7握手，发送了30种握手（<em>探针</em>），本节讨论发送五种握手消息来发现99%可识别协议的意外服务。</p>
 <h2 id="协议发现"><a href="#协议发现" class="headerlink" title="协议发现"></a>协议发现</h2><p>两个加速协议发现的方向：</p>
 <ol>
-<li>在大量协议上触发协议识别响应的方法</li>
-<li>优化握手顺序以实现高效服务发现<ul>
+<li>在大量协议上触发协议识别响应的方法。</li>
+<li>优化握手顺序以实现高效服务发现。<ul>
 <li>banner指纹识别。</li>
-<li>最佳握手顺序。<br> IANA分配的端口和临时端口中，仅打开连接等待就可以识别超过一半的意外服务。对于IANA分配的端口，等待和发送TLS客户端Hello就能发现80%意外服务。临时端口中，等待和http发现83.4%的服务。</li>
+<li>最佳握手顺序。<br> IANA分配的端口和临时端口中，仅打开连接等待就可以识别超过一半的意外服务。对于IANA分配的端口，等待和发送TLS客户端Hello就能发现80%意外服务。临时端口中，等待和HTTP发现83.4%的服务。</li>
 </ul>
 </li>
 </ol>
 <h2 id="L7过滤的影响（应用层指纹识别）"><a href="#L7过滤的影响（应用层指纹识别）" class="headerlink" title="L7过滤的影响（应用层指纹识别）"></a>L7过滤的影响（<em>应用层指纹识别</em>）</h2><p>无法识别所有服务的一个原因是，即使协议猜测正确，选择的握手参数可能被拒绝。（如：SNMP中，服务器先确认数据，然后发送TCP RST来拒绝第一个数据包中未指定正确community string的请求）这种L7过滤策略会导致服务端不向客户端发送任何数据，阻碍指纹识别工作吗？</p>
-<p>实验：以PPTP为例，按照RFC2637，添加magic cookie（用于同步TCP数据流的待定常数）选项，一种请求中设置为0x1A2B3C4D，另一种设为0x11111111。标准中规定同步丢失就必须关闭控制连接的TCP会话，因此如果magic cookie不正确，发送数据给客户端的IP将会减少。实验结果如下图，可见握手参数确实对IP的响应有影响。<br><img src="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260110233136612.png" srcset="/img/loading.gif" lazyload></p>
+<p>实验：以PPTP为例，按照RFC2637，添加magic cookie（用于同步TCP数据流的待定常数）选项，一种请求中设置为0x1A2B3C4D，另一种设为0x11111111。标准中规定同步丢失就必须关闭控制连接的TCP会话，因此如果magic cookie不正确，发送数据给客户端的IP将会减少。实验结果如下图，可见握手参数确实对IP的响应有影响。</p>
+<p><img src="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260110233136612.png" srcset="/img/loading.gif" lazyload alt="PPTP协议中Magic Cookie选项对IP响应数量的影响"></p>
 <p>响应式IP在收到GET请求后确认数据并关闭连接，阻碍扫描器将服务识别为HTTP。通过发送带有option的请求，72%的IP以501（<em>方法未实现</em>）响应，17%的IP以405（<em>方法不允许</em>）响应，确认了它们使用HTTP。专门响应options请求的IP不局限于某个特定网络，在5.3%AS上都有。但80端口对于带options和不带options的请求响应差异较小。</p>
 <p>对于TLS，根据RFC8446，握手失败需生成错误消息，并在关闭连接前通知应用程序，但给出不兼容密码时，2.65%的IP将简单关闭连接，不出现任何应用层错误。如PPTP中错误的magic cookie将导致67.1%的IP不响应任何数据。主机根据options进行应用层过滤，不会向客户端发送任何数据，对于扫描器来说，难点在于猜测好的参数使主机返回正确响应。</p>
-<p><em>（像是nmap扫udp端口中提到的探针不一定能使主机返回正确响应）</em></p>
+<p><em>（像是nmap扫UDP端口中提到的探针不一定能使主机返回正确响应）</em></p>
 <h2 id="握手顺序的影响（对应最佳握手顺序）"><a href="#握手顺序的影响（对应最佳握手顺序）" class="headerlink" title="握手顺序的影响（对应最佳握手顺序）"></a>握手顺序的影响（<em>对应最佳握手顺序</em>）</h2><p>类似于握手选项阻止服务器的响应，在正确的握手之前重复尝试错误的握手可能阻止识别服务。对于主机在收到错误的L7信息后是否会过滤或拒绝连接，用以下实验评估：向1%IPv4中所有IANA分配的端口发送连续的HTTP GET和TLS hello，比较发送预期L7数据后完成后续握手的主机数和发送错误L7数据后完成后续握手的主机数。</p>
-<p>不同协议中，与直接扫描协议时发现的主机相比，发送错误L7数据会导致30%的后续握手失败。有些即使指纹识别成功，但后续握手无法完成。如向telnet服务器发送非telnet数据会导致17%的后续握手失败，65%返回TCP RST，35%不返回SYN-ACK。向TLS服务器发送HTTP GET会导致29%后续TLS握手失败，这种行为类似于Cisco IOS的Login Block功能，允许管理员在登陆失败后临时阻止与L7服务的连接。</p>
+<p>不同协议中，与直接扫描协议时发现的主机相比，发送错误L7数据会导致30%的后续握手失败。有些即使指纹识别成功，但后续握手无法完成。如向Telnet服务器发送非Telnet数据会导致17%的后续握手失败，65%返回TCP RST，35%不返回SYN-ACK。向TLS服务器发送HTTP GET会导致29%后续TLS握手失败，这种行为类似于Cisco IOS的Login Block功能，允许管理员在登陆失败后临时阻止与L7服务的连接。</p>
 <p>这种现象往往出现在主机发送协议识别数据后，可能是因为这是主机第一次存储有关连接的服务器端的应用层状态，不会阻止指纹识别，仅在识别的数据发送到扫描器后，阻止后续握手。在指纹识别后等待一段时间再进行后续握手能大幅提高握手成功率，99%的主机能在2分钟内进行指纹识别后完成后续握手。</p>
 <p>发送错误的握手数据会导致一些服务无法完成后续握手，即使能完成指纹识别。</p>
 <h2 id="总结-2"><a href="#总结-2" class="headerlink" title="总结"></a>总结</h2><p>L7扫描的限制是服务需要特定握手选项来响应。结果表明，许多主机响应错误的L7握手，发送有助于识别服务的数据，单个HTTP GET请求能检测到30种协议中的16个，99%意外服务在5次握手（<em>指的是五种不同的握手</em>）中识别，以此构建LZR。</p>
 <h1 id="LZR"><a href="#LZR" class="headerlink" title="LZR"></a>LZR</h1><p>介绍LZR系统，有效识别互联网服务的扫描仪。可以与ZMap一起使用，或作为ZMap和应用层扫描仪（ZGrab）之间的插件，指示执行什么后续握手。</p>
-<p>LZR优势在于，扫描中“快速失效“方法和识别协议的”一切指纹“方法，主要依赖于以下思路：</p>
+<p>LZR优势在于，扫描中“快速失效”方法和识别协议的“一切指纹”方法，主要依赖于以下思路：</p>
 <ul>
-<li><p>忽略non-acknowledge的主机。</p>
-<p>  40%的发送SYN-ACK的服务从不到达acknowledge data状态，这些服务不能完成L7握手，扫描期间可以忽略。Non-acknowledge的服务迫使状态扫描器打开操作系统套接字并等待超时。通过发送带有TCP握手的ACK应用层数据包来过滤出non-acknowledge的主机，类似ZMap的无状态SYN扫描。</p>
+<li><p><strong>忽略non-acknowledge的主机</strong>：<br>  40%的发送SYN-ACK的服务从不到达acknowledge data状态，这些服务不能完成L7握手，扫描期间可以忽略。Non-acknowledge的服务迫使状态扫描器打开操作系统套接字并等待超时。通过发送带有TCP握手的ACK应用层数据包来过滤出non-acknowledge的主机，类似ZMap的无状态SYN扫描。</p>
 <p>  <em>附两个防端口扫描工具的原理：</em><br>  <em>1. 使用动态服务签名数据库生成假banner，基于服务签名正则表达式数据库动态生成有效服务签名来响应服务探测（如nmap -F -sV）</em></p>
-<p>  <em>识别服务是否被模拟的方法只有通过协议探测（protocol probe）</em><br>  <img src="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260110233144077.png" srcset="/img/loading.gif" lazyload alt="image-20260110233144043"><br>  <small>图5 portspoof</small></p>
-<p>  <em>2. <a target="_blank" rel="noopener" href="https://qinqianshan.com/web/web_basic/tcp-scan/">防止使用TCP协议扫描端口</a></em><br>  <img src="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260110233228457.png" srcset="/img/loading.gif" lazyload alt="image-20260110233228412">        <img src="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260110233237565.png" srcset="/img/loading.gif" lazyload><br>  <em>判断non-acknowledge状态 我的总结：</em><br>  <em>1. 某IP响应了SYN-ACK，但只要有一个端口返零窗口，那么其他端口都返零窗口的概率极大。是防护策略。</em></p>
+<p>  <em>识别服务是否被模拟的方法只有通过协议探测（protocol probe）</em></p>
+<p>  <img src="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260115201108438.png" srcset="/img/loading.gif" lazyload alt="Portspoof"></p>
+<p>  <em>2. <a target="_blank" rel="noopener" href="https://qinqianshan.com/web/web_basic/tcp-scan/">防止使用TCP协议扫描端口</a></em></p>
+<p>  <img src="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260115201148779.png" srcset="/img/loading.gif" lazyload alt="防火墙拦截-1"></p>
+<p>  <img src="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260110233237565.png" srcset="/img/loading.gif" lazyload alt="防火墙拦截-2"></p>
+<p>  <em>判断non-acknowledge状态 我的总结：</em><br>  <em>1. 某IP响应了SYN-ACK，但只要有一个端口返零窗口，那么其他端口都返零窗口的概率极大。是防护策略。</em></p>
 <p>  <em>2. 返回SYN-ACK但不确认随后发送数据的，是中间件（防火墙）代发的ACK，没有提供真实服务。</em></p>
 </li>
-<li><p>多listen<br>  每个端口多达96%的服务运行意外协议。在扫描的30个协议中，有8个协议是服务器首先发送数据，10个协议在发送错误的L7握手时发送指纹数据。</p>
+<li><p>多listen。<br>  每个端口多达96%的服务运行意外协议。在扫描的30个协议中，有8个协议是服务器首先发送数据，10个协议在发送错误的L7握手时发送指纹数据。</p>
 <p>  通过始终等待然后对无效的服务器响应进行指纹识别，我们可以通过发送单个数据包来识别30个协议中的16个。扫描器只需执行最小的计算即可对服务进行指纹识别：来自服务器的第一个数据包识别正在运行的协议，该协议不需要完整的TCP&#x2F;IP堆栈。</p>
 </li>
 </ul>
-<h2 id="5-1-扫描算法"><a href="#5-1-扫描算法" class="headerlink" title="5.1 扫描算法"></a>5.1 扫描算法</h2><p>LZR接收来自ZMap或(IP,port)元组的SYN-ACK数据包流进行扫描，在获得完整连接细节后，LZR首先过滤发送带有零窗口的主机（<em>按前面的研究，发现响应SYN-ACK的主机中，有99%只要在一个端口上返回零窗口，在其他端口上也返回零窗口</em>）。对于非零窗口，LZR将发送包含预期协议的第一个数据包握手数据的ACK包来继续连接，如果接收到任何类型的数据作为响应，将对数据进行指纹识别并关闭连接。</p>
+<h2 id="扫描算法"><a href="#扫描算法" class="headerlink" title="扫描算法"></a>扫描算法</h2><p>LZR接收来自ZMap或(IP,port)元组的SYN-ACK数据包流进行扫描，在获得完整连接细节后，LZR首先过滤发送带有零窗口的主机（<em>按前面的研究，发现响应SYN-ACK的主机中，有99%只要在一个端口上返回零窗口，在其他端口上也返回零窗口</em>）。对于非零窗口，LZR将发送包含预期协议的第一个数据包握手数据的ACK包来继续连接，如果接收到任何类型的数据作为响应，将对数据进行指纹识别并关闭连接。</p>
 <p>如果主机既不确认数据也不关闭连接，LZR将使用PUSH标志并重新传输数据（详见5.3）。如果主机不确认数据（<em>如在不确认的情况下从不响应或rst重置连接</em>），LZR会将主机标记为可能没有托管真正的服务，并不会继续进一步的连接尝试。</p>
-<p><em>我部署了一个简单的接收到SYN就返SYN-ACK包的规则，使用nmap服务检测时也将PSH位置1，发了5次之后就断开连接，重新开启连接发下一个探针，很拖时间，最后得到结果是open，提供的服务不确定，打了个问号</em></p>
+<p><em>我部署了一个简单的接收到SYN就返SYN-ACK包的规则，使用nmap服务检测时也将PSH位置1，发了5次之后就断开连接，重新开启连接发下一个探针，很拖时间，最后得到结果是open，提供的服务不确定，打了个问号。</em></p>
 <p>如果主机确认了数据，但没有发送任何数据作为响应（<em>即服务器没有响应或之后立即关闭连接</em>），LZR会关闭连接，启动新连接，并发送下一个握手。</p>
 <p>以上过程会持续进行，直到识别出正在运行的协议或没有其他握手能尝试。LZR还能通过同时向用户指定数量的随机临时端口发送SYN包，并检查SYN-ACK来选择性过滤几乎每个端口都响应的IP（见3.1）。</p>
-<p><img src="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260110233427249.png" srcset="/img/loading.gif" lazyload alt="image-20260110233427209"><br><small>图6 算法图示</small></p>
-<h2 id="架构"><a href="#架构" class="headerlink" title="架构"></a>架构</h2><p>LZR使用go语言开发，提供附录A中的所有协议握手，使用libpcap发送接收原始以太网数据包。能提供高效指纹服务，在扫描期间使用单个套接字，采用并继续无状态扫描器启动的连接，只需要发送和接收单个数据包来完成指纹服务，不需要完整TCP栈。</p>
+<p><img src="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260115201412632.png" srcset="/img/loading.gif" lazyload alt="LZR服务识别与指纹提取算法流程图"></p>
+<h2 id="架构"><a href="#架构" class="headerlink" title="架构"></a>架构</h2><p>LZR使用Go语言开发，提供附录A中的所有协议握手，使用libpcap发送接收原始以太网数据包。能提供高效指纹服务，在扫描期间使用单个套接字，采用并继续无状态扫描器启动的连接，只需要发送和接收单个数据包来完成指纹服务，不需要完整TCP栈。</p>
 <p>LZR将要测试的协议的命令行参数列表和来自ZMap或IP&#x2F;端口的SYN ACK流作为输入进行扫描。一部分例程发送包含握手消息的后续ACK包，并对响应进行指纹识别。容易向LZR中开始新的协议&#x2F;握手，每次握手都产生一个握手接口，指定要附加到ACK数据包的数据和在响应数据包中搜索什么来对协议进行指纹识别。</p>
-<p>一旦接收到指纹数据，先检查数据是否与尝试协议的指纹匹配（在握手接口中指定）。如果不匹配，就会检查所有剩余的指纹是否匹配。使用LZR时要设置iptables规则防止Linux内核发送RST数据包以响应其接收的SYN-ack。否则，LZR无法采用并继续这些连接。</p>
-<h2 id="评估"><a href="#评估" class="headerlink" title="评估"></a>评估</h2><ul>
-<li><p>性能评估。<br>  1）比较ZMap和LZR识别ZMap找到的端口上运行的服务。<br>  2）使用LZR作为ZMap和ZGrab之间的插件，指示ZGrab为ZMap找到的主机完成怎样的L7握手。<br>  LZR能比ZMap更快地过滤主机，在低命中率的临时端口上尤显优势。<br>  3）ZMap&#x2F;LZR+ZGrab离线扫描。首先，我们使用ZMap和LZR来识别使用已知协议的互联网主机，并将此阶段从我们的基准测试中排除。然后，在第二阶段，我们允许ZGrab全速处理服务。<br>  4）ZMap+LZR离线扫描。首先，我们使用ZMap找到候选服务，并将此阶段从我们的基准测试中排除。在第二阶段，我们测试了LZR能够以多快的速度全速运行指纹服务。<br>  我们使用每秒CPU周期计算ZGrab和LZR的运行时性能，因为这两种工具都受到CPU的限制：ZGrab完成完全握手（例如TLS的加密&#x2F;解密）和LZR的指纹（例如模式匹配）为每种工具创建了最大的性能瓶颈。</p>
-</li>
-<li><p>发现意外服务数量。<br>  可以识别意外服务，同时分析对ACK数据包中包含的数据响应来过滤出无响应的服务。LZR使用关键字指纹策略，通过仅使用预期的1-2次握手跨端口平均识别12个意外的唯一协议；仅通过一次预期握手，就可以发现在端口443上托管16个意外协议的130万个IP和在端口80上托管18个意外协议的238000个IP。</p>
-</li>
-<li><p>LZR在主机筛选上与仅使用ZMap和ZGrab相似。</p>
-</li>
-<li><p>LZR能在不完成L7握手下识别服务，提速。</p>
-</li>
-<li><p>对于很多服务都返回零窗口或不确认数据时，使用LZR检测服务比ZGrab速度显著提高。</p>
-</li>
-<li><p>节省带宽。<br>  原因：<br>  （1）LZR不尝试向零窗口主机重新传输ACK以检查窗口大小的增加</p>
-<p>  （2）LZR不需要完成完整的L7握手。然而，使用ZGrab+LZR扫描，当大多数TCP响应主机服务于预期协议的端口时，由于LZR在重新尝试握手之前会为得到指纹发送至少一个额外的ACK（例如，对于80&#x2F;HTTP，LZR+ZGrab总共比ZMap+ZGrab多发送28%的数据包，即使LZR+ZGrab的运行速度比ZMap+ZGrab快1.2倍），因此发送的总数据包数也存在开销。</p>
-</li>
-</ul>
-<h1 id="相关工作"><a href="#相关工作" class="headerlink" title="相关工作"></a>相关工作</h1><p>有几项研究指出L4和L7响应之间存在很大差异</p>
+<p>一旦接收到指纹数据，先检查数据是否与尝试协议的指纹匹配（在握手接口中指定）。如果不匹配，就会检查所有剩余的指纹是否匹配。使用LZR时要设置iptables规则防止Linux内核发送RST数据包以响应其接收的SYN-ACK。否则，LZR无法采用并继续这些连接。</p>
+<h2 id="评估"><a href="#评估" class="headerlink" title="评估"></a>评估</h2><h3 id="性能评估"><a href="#性能评估" class="headerlink" title="性能评估"></a>性能评估</h3><ol>
+<li>比较ZMap和LZR识别ZMap找到的端口上运行的服务。</li>
+<li>使用LZR作为ZMap和ZGrab之间的插件，指示ZGrab为ZMap找到的主机完成怎样的L7握手。LZR能比ZMap更快地过滤主机，在低命中率的临时端口上尤显优势。</li>
+<li>ZMap&#x2F;LZR+ZGrab离线扫描。首先，我们使用ZMap和LZR来识别使用已知协议的互联网主机，并将此阶段从我们的基准测试中排除。然后，在第二阶段，我们允许ZGrab全速处理服务。</li>
+<li>ZMap+LZR离线扫描。首先，我们使用ZMap找到候选服务，并将此阶段从我们的基准测试中排除。在第二阶段，我们测试了LZR能够以多快的速度全速运行指纹服务。<br>我们使用每秒CPU周期计算ZGrab和LZR的运行时性能，因为这两种工具都受到CPU的限制：ZGrab完成完全握手（例如TLS的加密&#x2F;解密）和LZR的指纹（例如模式匹配）为每种工具创建了最大的性能瓶颈。</li>
+</ol>
+<h3 id="发现意外服务数量"><a href="#发现意外服务数量" class="headerlink" title="发现意外服务数量"></a>发现意外服务数量</h3><p>可以识别意外服务，同时分析对ACK数据包中包含的数据响应来过滤出无响应的服务。LZR使用关键字指纹策略，通过仅使用预期的1-2次握手跨端口平均识别12个意外的唯一协议；仅通过一次预期握手，就可以发现在端口443上托管16个意外协议的130万个IP和在端口80上托管18个意外协议的238000个IP。</p>
+<h3 id="主机筛选"><a href="#主机筛选" class="headerlink" title="主机筛选"></a>主机筛选</h3><p>LZR在主机筛选上与仅使用ZMap和ZGrab相似。</p>
+<h3 id="检测速度"><a href="#检测速度" class="headerlink" title="检测速度"></a>检测速度</h3><p>LZR能在不完成L7握手下识别服务。<br>对于很多服务都返回零窗口或不确认数据时，使用LZR检测服务比ZGrab速度显著提高。</p>
+<h3 id="节省带宽"><a href="#节省带宽" class="headerlink" title="节省带宽"></a>节省带宽</h3><p>原因：<br>（1）LZR不尝试向零窗口主机重新传输ACK以检查窗口大小的增加。<br>（2）LZR不需要完成完整的L7握手。然而，使用ZGrab+LZR扫描，当大多数TCP响应主机服务于预期协议的端口时，由于LZR在重新尝试握手之前会为得到指纹发送至少一个额外的ACK（例如，对于80&#x2F;HTTP，LZR+ZGrab总共比ZMap+ZGrab多发送28%的数据包，即使LZR+ZGrab的运行速度比ZMap+ZGrab快1.2倍），因此发送的总数据包数也存在开销。</p>
+<h1 id="相关工作"><a href="#相关工作" class="headerlink" title="相关工作"></a>相关工作</h1><p>有几项研究指出L4和L7响应之间存在很大差异：</p>
 <ul>
-<li><p>“tarpits“——试图欺骗网络扫描器的虚假服务，使用一些在连接开始时看到的中间件的相同技术。L. Alt, R. Beverly, and A. Dainotti. Uncovering network tarpits with degreaser. In 30th Annual Computer Security Applications Conf., 2014.<br>  与本文工作类似，他们考虑了不同点上的实时服务之间的关系，表明流行端口上的响应彼此相关。</p>
+<li><p>“tarpits”——试图欺骗网络扫描器的虚假服务，使用一些在连接开始时看到的中间件的相同技术。<br>  <em>L. Alt, R. Beverly, and A. Dainotti. Uncovering network tarpits with degreaser. In 30th Annual Computer Security Applications Conf., 2014.</em><br>  与本文工作类似，他们考虑了不同点上的实时服务之间的关系，表明流行端口上的响应彼此相关。</p>
 </li>
-<li><p>S. Bano, P . Richter, M. Javed, S. Sundaresan, Z. Durumeric, S. J. Mur-<br>  doch, R. Mortier, and V . Paxson. Scanning the Internet for liveness.<br>  ACM SIGCOMM Computer Communication Review, 2018.<br>  LZR努力使用单个数据包来识别服务，减少了扫描稀有端口所需时间。</p>
+<li><p><em>S. Bano, P. Richter, M. Javed, S. Sundaresan, Z. Durumeric, S. J. Murdoch, R. Mortier, and V. Paxson. Scanning the Internet for liveness. ACM SIGCOMM Computer Communication Review, 2018.</em><br>  LZR努力使用单个数据包来识别服务，减少了扫描稀有端口所需时间。</p>
 </li>
-<li><p>Klick等人（J. Klick, S. Lau, M. Wählisch, and V . Roth. Towards better Internet citizenship: Reducing the footprint of Internet-wide scans by topology aware prefix selection. In ACM Internet Measurement Conf., 2016.）<br>表明，许多IP地址空间不需要像<strong>Censys</strong>（Z. Durumeric, D. Adrian, A. Mirian, M. Bailey, and J. A. Halderman. A search engine backed by Internet-wide scanning. In ACM Conference on Computer and Communications Security, 2015.）]这样的服务持续扫描。</p>
+<li><p>Klick等人表明，许多IP地址空间不需要像 <strong>Censys</strong> 这样的服务持续扫描。<br>  <em>J. Klick, S. Lau, M. Wählisch, and V. Roth. Towards better Internet citizenship: Reducing the footprint of Internet-wide scans by topology aware prefix selection. In ACM Internet Measurement Conf., 2016.</em><br>  <em>(Censys: Z. Durumeric, D. Adrian, A. Mirian, M. Bailey, and J. A. Halderman. A search engine backed by Internet-wide scanning. In ACM Conference on Computer and Communications Security, 2015.)</em></p>
 </li>
-<li><p><strong>ZMap</strong>： Z. Durumeric, E. Wustrow, and J. A. Halderman. ZMap: Fast Internet-wide scanning and its security applications. In 22nd USENIX Security Symposium, 2013. 快速互联网扫描及其安全应用。</p>
+<li><p><strong>ZMap</strong>：快速互联网扫描及其安全应用。<br>  <em>Z. Durumeric, E. Wustrow, and J. A. Halderman. ZMap: Fast Internet-wide scanning and its security applications. In 22nd USENIX Security Symposium, 2013.</em></p>
 </li>
 </ul>
-<h1 id="总结-3"><a href="#总结-3" class="headerlink" title="总结"></a>总结</h1><p>很多响应syn扫描的主机有相当一部分从不完成应用层握手，在没有真正服务的情况下，大多数回复由中间件负责。且很多服务也处于意外端口上，与标准端口上的服务相比，意外端口上的服务安全性较弱。</p>
+<h1 id="总结-3"><a href="#总结-3" class="headerlink" title="总结"></a>总结</h1><p>很多响应SYN扫描的主机有相当一部分从不完成应用层握手，在没有真正服务的情况下，大多数回复由中间件负责。且很多服务也处于意外端口上，与标准端口上的服务相比，意外端口上的服务安全性较弱。</p>
 <p>LZR减少在稀有端口上执行应用层扫描所需时间，识别端口上运行的意外服务。用一个数据包识别16种协议和88%的可识别服务（指本系统能识别的服务），五次握手（最多传5种握手包）识别99%可识别服务。</p>
 <p>仅仅使用前n个最流行的端口不足以评估哪些端口最有可能承载特定服务，因为HTTP和TLS的使用都比大多数协议广泛。</p>
 
@@ -441,7 +440,7 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>《LZR: Identifying Unexpected Internet Services》笔记与思考</div>
+      <div>【论文阅读】《LZR: Identifying Unexpected Internet Services》笔记与思考</div>
       <div>http://q1uki.github.io/2024/12/09/lzr/</div>
     </div>
     <div class="license-meta">
@@ -486,9 +485,9 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2024/12/09/obfs4_bridge_scan/" title="《Detecting probe resistant proxy》实验验证与分析">
+                      <a href="/2024/12/09/obfs4_bridge_scan/" title="【论文阅读】《Detecting probe resistant proxy》实验验证与分析">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">《Detecting probe resistant proxy》实验验证与分析</span>
+                        <span class="hidden-mobile">【论文阅读】《Detecting probe resistant proxy》实验验证与分析</span>
                         <span class="visible-mobile">Previous</span>
                       </a>
                     
@@ -549,6 +548,21 @@
 
   
 
+
+
+  <script>
+  Fluid.utils.createScript('https://lib.baomitu.com/mermaid/8.14.0/mermaid.min.js', function() {
+    mermaid.initialize({"theme":"default"});
+
+    Fluid.utils.listenDOMLoaded(function() {
+      Fluid.events.registerRefreshCallback(function() {
+        if ('mermaid' in window) {
+          mermaid.init();
+        }
+      });
+    });
+  });
+</script>
 
 
 
