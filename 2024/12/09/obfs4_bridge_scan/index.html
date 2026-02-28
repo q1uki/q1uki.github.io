@@ -28,7 +28,7 @@
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260110231135876.png">
 <meta property="article:published_time" content="2024-12-09T11:29:51.000Z">
-<meta property="article:modified_time" content="2026-01-15T19:45:18.627Z">
+<meta property="article:modified_time" content="2026-02-28T01:00:51.871Z">
 <meta property="article:author" content="q1uki">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260110231135876.png">
@@ -281,8 +281,8 @@
             
               <div class="markdown-body">
                 
-                <h1 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h1><p>当时看到这篇对代理检测的论文，对它的中文讨论较少，整理了自己阅读和实验后的笔记（关注于tor的obfs4），方便有需要的同学一起学习讨论。<br>（现在obfs4将要过时，推出了新的WebTunnels，但升级迭代仍需时间）</p>
-<h1 id="论文阅读"><a href="#论文阅读" class="headerlink" title="论文阅读"></a>论文阅读</h1><h2 id="探针选择"><a href="#探针选择" class="headerlink" title="探针选择"></a>探针选择</h2><p>我们的攻击集中在这样一个观察上，即从不使用数据进行响应是互联网上的异常行为。通过发送由流行协议和随机数据组成的探针，我们可以从超过400k IP&#x2F;端口对的Tap数据集中的几乎所有端点（94%）获得响应。<br>对于不响应的端点，代理特有的TCP行为（如超时和数据阈值）与其他服务器相比存在不同。  </p>
+                <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>当时看到这篇对代理检测的论文，对它的中文讨论较少，整理了自己阅读和实验后的笔记（关注于tor的obfs4），方便有需要的同学一起学习讨论。<br>（现在obfs4将要过时，推出了新的WebTunnels，但升级迭代仍需时间）</p>
+<h2 id="论文阅读"><a href="#论文阅读" class="headerlink" title="论文阅读"></a>论文阅读</h2><h3 id="探针选择"><a href="#探针选择" class="headerlink" title="探针选择"></a>探针选择</h3><p>我们的攻击集中在这样一个观察上，即从不使用数据进行响应是互联网上的异常行为。通过发送由流行协议和随机数据组成的探针，我们可以从超过400k IP&#x2F;端口对的Tap数据集中的几乎所有端点（94%）获得响应。<br>对于不响应的端点，代理特有的TCP行为（如超时和数据阈值）与其他服务器相比存在不同。  </p>
 <p>从6个基本探测开始：HTTP、TLS、MODBUS、S7、随机字节，以及连接后不发送数据的空探测。对于每个探测，我们都会记录服务器如何响应其响应的数据（如果有）、关闭连接的时间（如果有）以及如何关闭连接（TCP FIN或RST）。</p>
 <ul>
 <li><p>HTTP：对于HTTP，我们发送一个简单的HTTP&#x2F;1.1 GET请求，主机头为example.com。大部分服务器将响应重定向或错误页面进行响应。即使不是HTTP的服务器也可能使用其协议固有的错误消息对此探测作出响应。</p>
@@ -302,16 +302,16 @@
 <li><p>STUN: 实现了一个基于ZGrab-Golang库的STUN探测，用于探测Cisco WebEx设备</p>
 </li>
 </ul>
-<h2 id="实验数据"><a href="#实验数据" class="headerlink" title="实验数据"></a>实验数据</h2><ul>
+<h3 id="实验数据"><a href="#实验数据" class="headerlink" title="实验数据"></a>实验数据</h3><ul>
 <li><p>代理端点<br>从Tor的BridgeDB收集了20多个obfs4代理端点</p>
 </li>
 <li><p>非代理端点<br>使用ZMap的主动网络扫描和网络流数据的被动收集。<br>我们使用ZMap向每个TCP端口（0-65535）上的20000个主机发送一个SYN数据包，总共有13亿次探测。发现了150万个响应SYN ACK的端点，我们将其标记为ZMap数据集。<br>科罗拉多大学的10 Gbps网关中采样netflow数据来收集端点。在无网络审查国家中，绝大多数流量不包含代理，所以收集到的端点主要是其他服务。在3天的时间跨度内，从ISP收集了超过550000个服务器IP&#x2F;端口 的节点。其中，433286（79%）个主机接受了连接（使用一个TCP SYN-ACK响应），其余的大多数在尝试连接时只是超时。<br>后续扫描是在观察到连接后的几天内进行的，一些服务器可能在这段时间内移动了IP或离线。其次，服务器可能配置了防火墙，只允许从某些IP进行访问，可能会阻塞ZMap扫描主机。最终在这个数据集中捕获超过40万个发送数据的服务器。</p>
 </li>
 </ul>
-<h2 id="实验结果"><a href="#实验结果" class="headerlink" title="实验结果"></a>实验结果</h2><p>我们向190万个节点发送13个探测（第III-A节中的7个探测和6个随机数据范围为4KB-40KB的探测），并记录服务器是否和何时响应数据或关闭连接。如果服务器关闭，我们将记录它是否使用FIN或RST。如果服务器没有响应或关闭连接，我们将在300秒后超时，并将结果标记为超时。记录他们的关闭阈值。</p>
+<h3 id="实验结果"><a href="#实验结果" class="headerlink" title="实验结果"></a>实验结果</h3><p>我们向190万个节点发送13个探测（第III-A节中的7个探测和6个随机数据范围为4KB-40KB的探测），并记录服务器是否和何时响应数据或关闭连接。如果服务器关闭，我们将记录它是否使用FIN或RST。如果服务器没有响应或关闭连接，我们将在300秒后超时，并将结果标记为超时。记录他们的关闭阈值。</p>
 <p>由于抗探测代理从不响应数据，因此可以将响应的端点丢弃。在被动Tap数据集中，这排除了94%的主机，只留下26021个潜在代理。在ZMap数据集中，绝大多数主机对任何探测都没有数据响应，仅丢弃1.16%的端点 。</p>
 <p>原因是ZMap识别的节点中，防火墙使用了chaff策略，仅在特定的子网上对SYN做出响应。42%的节点行为相同，不发送数据也不关闭与探测器的连接。将响应数据聚类（响应类型、响应字节数、连接关闭时间或超时时间） 在Tap数据集中，最流行的响应组包含3%的端点，似乎是Cloudflare网络中的TLS服务器（99.9％在具有端口443的端点上）。图2显示了ZMap和Tap数据集的不同响应集（按流行程度排序）的CDF，说明Tap数据集中有更大的多样性。前10个响应集占ZMap数据集中超过80%的端点，但只有13%的端点是在Tap中收集的。</p>
-<h2 id="检测方法"><a href="#检测方法" class="headerlink" title="检测方法"></a>检测方法</h2><ol>
+<h3 id="检测方法"><a href="#检测方法" class="headerlink" title="检测方法"></a>检测方法</h3><ol>
 <li><p>缓冲阈值<br> 服务器将在接收到一定数量的字节后使用FIN关闭，并可能在接收到更高数量的字节之后使用RST关闭。代理服务的关闭阈值大多数是唯一的。<br> 考虑一个从客户端读取N个字节并尝试将其解析为协议头的服务器。如果解析失败（例如无效字段、校验和或MAC），服务器可以简单地关闭连接。<br> 如果客户端仅发送N−1字节，服务器可能会保持连接打开，并在尝试解析之前等待其他数据。  </p>
 <p> obfs4握手长度可达8192字节，因此服务器在确定客户端无效并进入closeAfterDelay函数之前读取了这么多字节。此函数在随机延迟（30-90秒）后关闭连接，或在服务器启动时读取额外的N个字节（在0和8192之间随机选择的N个）后关闭。然而，这些读取都是使用1448字节的缓冲区完成的。这意味着，如果发送了$8192+N$字节，obfs4服务器将发送FIN，如果发送$8192 + N − ((8192 + N)mod 1448) + 1448$字节，则返回rst。是obfs4独有行为。  </p>
 <p> <strong>论文作者与torproject交流研究成果后，obfs4proxy已于0.0.11版本修复关闭阈值的行为。</strong></p>
@@ -322,13 +322,13 @@
 <li><p>不响应任何探测是罕见的。</p>
 </li>
 </ol>
-<h1 id="obfs4proxy分析"><a href="#obfs4proxy分析" class="headerlink" title="obfs4proxy分析"></a>obfs4proxy分析</h1><h2 id="obfs4协议验证逻辑"><a href="#obfs4协议验证逻辑" class="headerlink" title="obfs4协议验证逻辑"></a>obfs4协议验证逻辑</h2><h3 id="握手过程"><a href="#握手过程" class="headerlink" title="握手过程"></a>握手过程</h3><pre><code class=" mermaid">sequenceDiagram
+<h2 id="obfs4proxy分析"><a href="#obfs4proxy分析" class="headerlink" title="obfs4proxy分析"></a>obfs4proxy分析</h2><h3 id="obfs4协议验证逻辑"><a href="#obfs4协议验证逻辑" class="headerlink" title="obfs4协议验证逻辑"></a>obfs4协议验证逻辑</h3><h4 id="握手过程"><a href="#握手过程" class="headerlink" title="握手过程"></a>握手过程</h4><pre><code class=" mermaid">sequenceDiagram
     Client-&gt;&gt;Server: SYN+ECN+CWR
     Server--&gt;&gt;Client: SYN+ACK 
     Client-&gt;&gt;Server: ACK
     Client-&gt;&gt;Server: PSH+ACK+data
 </code></pre>
-<h3 id="data内容"><a href="#data内容" class="headerlink" title="data内容"></a>data内容</h3><p>涉及算法：curve25519</p>
+<h4 id="data内容"><a href="#data内容" class="headerlink" title="data内容"></a>data内容</h4><p>涉及算法：curve25519</p>
 <p>客户端及服务端都必须有自己的Keypair实例。根据curve25519包中的定义，PrivateKey在一定范围内随机生成。根据ECC算法，PublicKey可以通过调用curve25519.ScalarBaseMult()从私钥生成。  </p>
 <p>Representative秘钥根据公钥生成，在需要的时候可以调用extra25519.RepresentativeToPublicKey()函数再次转换为公钥。Keypair的定义及初始化代码位于NewKeypair()函数中，该函数在ntor.go文件中定义。</p>
 <p>用extra25519.go里的ScalarBaseMult()，根据privatekey生成public和representative。representative通过Elligator 2映射完成混淆，避免收集到相当数量的公钥后推断出加密算法。<br><a target="_blank" rel="noopener" href="http://elligator.cr.yp.to/elligator-20130828.pdf">算法详细说明</a></p>
@@ -340,10 +340,10 @@
 <li>第一部分Keypair.representative的HMAC值。Obfs4使用SHA-256生成HMAC，长度为20h字节。Obfs4仅将前10h字节保留为HMAC，其余10h字节将被丢弃。  </li>
 <li>Obfs4使用当前系统时间来计算UNIX Epoch时间（从UTC时间1970年1月1日星期四00:00:00开始）的小时值。计算数据包中前三个部分的HMAC值，加上（指拼接起来）字符串中的小时值。同样，其结果长度为20h字节，前10h字节作为数据包的第四部分。（防重放）</li>
 </ol>
-<h2 id="obfs4proxy源代码部分结构"><a href="#obfs4proxy源代码部分结构" class="headerlink" title="obfs4proxy源代码部分结构"></a>obfs4proxy源代码部分结构</h2><h3 id="common"><a href="#common" class="headerlink" title="common&#x2F;"></a>common&#x2F;</h3><p>  密码学、socks5等组件    </p>
-<h3 id="internal"><a href="#internal" class="headerlink" title="internal&#x2F;"></a>internal&#x2F;</h3><p>  更新的混淆算法  </p>
-<h3 id="obfs4proxy"><a href="#obfs4proxy" class="headerlink" title="obfs4proxy&#x2F;"></a><strong>obfs4proxy&#x2F;</strong></h3><p>obfs4proxy.go  主函数  </p>
-<h3 id="transports"><a href="#transports" class="headerlink" title="transports&#x2F;"></a><strong>transports&#x2F;</strong></h3><p>包含meeklite、obfs2、3、4、 scramblesuit传输协议的实现   </p>
+<h3 id="obfs4proxy源代码部分结构"><a href="#obfs4proxy源代码部分结构" class="headerlink" title="obfs4proxy源代码部分结构"></a>obfs4proxy源代码部分结构</h3><h4 id="common"><a href="#common" class="headerlink" title="common&#x2F;"></a>common&#x2F;</h4><p>  密码学、socks5等组件    </p>
+<h4 id="internal"><a href="#internal" class="headerlink" title="internal&#x2F;"></a>internal&#x2F;</h4><p>  更新的混淆算法  </p>
+<h4 id="obfs4proxy"><a href="#obfs4proxy" class="headerlink" title="obfs4proxy&#x2F;"></a><strong>obfs4proxy&#x2F;</strong></h4><p>obfs4proxy.go  主函数  </p>
+<h4 id="transports"><a href="#transports" class="headerlink" title="transports&#x2F;"></a><strong>transports&#x2F;</strong></h4><p>包含meeklite、obfs2、3、4、 scramblesuit传输协议的实现   </p>
 <ul>
 <li><strong>obfs4&#x2F;</strong>  <ul>
 <li>framing&#x2F; 数据帧的处理  <ul>
@@ -354,13 +354,13 @@
 </ul>
 </li>
 </ul>
-<h2 id="obfs4proxy源代码部分函数"><a href="#obfs4proxy源代码部分函数" class="headerlink" title="obfs4proxy源代码部分函数"></a>obfs4proxy源代码部分函数</h2><h3 id="obfs4-go"><a href="#obfs4-go" class="headerlink" title="obfs4.go"></a>obfs4.go</h3><ul>
+<h3 id="obfs4proxy源代码部分函数"><a href="#obfs4proxy源代码部分函数" class="headerlink" title="obfs4proxy源代码部分函数"></a>obfs4proxy源代码部分函数</h3><h4 id="obfs4-go"><a href="#obfs4-go" class="headerlink" title="obfs4.go"></a>obfs4.go</h4><ul>
 <li><p>WrapConn()<br>调用了serverHandshake()，不管返回什么错，都closeAfterDelay()。  </p>
 </li>
 <li><p>serverHandshake()<br>新建服务端握手，设置基准超时时间。<br>然后按能读取的最大长度（8192）设置缓冲区，读取收包，保存收包内容，接下来parseClientHandshake()解析内容。<br>如果解析错误是ErrMarkNotFoundYet，继续读包，其他错误则函数返回错误。<br>解析正常则清空缓冲区。</p>
 </li>
 </ul>
-<h3 id="handshake-ntor-go"><a href="#handshake-ntor-go" class="headerlink" title="handshake_ntor.go"></a>handshake_ntor.go</h3><ul>
+<h4 id="handshake-ntor-go"><a href="#handshake-ntor-go" class="headerlink" title="handshake_ntor.go"></a>handshake_ntor.go</h4><ul>
 <li><p>parseClientHandshake()<br>对于接收内容过少&#x2F;接收内容长度未达上限时，或找不到MarkMAC，准备了ErrMarkNotFoundYet的错误处理，可以返回继续读。<br>其他错误都关闭连接。找不到markMAC&#x2F;HMAC&#x2F;包长度不合规（有握手中不需要的数据），返ErrInvalidHandshake。<br>重放，返ErrReplayedHandshake。<br>计算验证不通过，返ErrNtorFailed。  </p>
 </li>
 <li><p>closeAfterDelay()<br><a target="_blank" rel="noopener" href="https://gitlab.com/yawning/obfs4/-/commit/1a6129b66ff3e66c347b54fbae203c1c61d12d74">closeAfterDelay()被修改</a>，修复了因阈值产生FIN和RST的漏洞。旧版本会在延迟30s&#x2F;接收一定长度数据后终止连接，新版本都是延迟30s终止连接。  </p>
@@ -368,7 +368,7 @@
 <li><p>SetReadDeadline()<br>开始读数据30s后，再有数据进入也返回超时错误，并终止连接。（论文里说有随机延迟，我没找到）</p>
 </li>
 </ul>
-<h3 id="obfs4proxy-go"><a href="#obfs4proxy-go" class="headerlink" title="obfs4proxy.go"></a>obfs4proxy.go</h3><ul>
+<h4 id="obfs4proxy-go"><a href="#obfs4proxy-go" class="headerlink" title="obfs4proxy.go"></a>obfs4proxy.go</h4><ul>
 <li><p>parseClientHandshake()<br>对于接收内容过少&#x2F;接收内容长度未达上限时，或找不到MarkMAC，准备了ErrMarkNotFoundYet的错误处理，可以返回继续读。<br>其他错误都关闭连接。找不到markMAC&#x2F;HMAC&#x2F;包长度不合规（有握手中不需要的数据），返ErrInvalidHandshake。<br>重放，返ErrReplayedHandshake。<br>计算验证不通过，返ErrNtorFailed。  </p>
 </li>
 <li><p>closeAfterDelay()<br><a target="_blank" rel="noopener" href="https://gitlab.com/yawning/obfs4/-/commit/1a6129b66ff3e66c347b54fbae203c1c61d12d74">closeAfterDelay()被修改</a>，修复了因阈值产生FIN和RST的漏洞。旧版本会在延迟30s&#x2F;接收一定长度数据后终止连接，新版本都是延迟30s终止连接。  </p>
@@ -376,10 +376,10 @@
 <li><p>SetReadDeadline()<br>开始读数据30s后，再有数据进入也返回超时错误，并终止连接。（论文里说有随机延迟，我没找到）</p>
 </li>
 </ul>
-<h1 id="分析与实验"><a href="#分析与实验" class="headerlink" title="分析与实验"></a>分析与实验</h1><h2 id="论文简析"><a href="#论文简析" class="headerlink" title="论文简析"></a>论文简析</h2><p>论文人工构造的obfs4决策树中，首先随机发送17k的数据，2s内返回RST则进入下一步，发送其他探针，30s–90s之内返回FIN，则为obfs4。17k数据是为了引发阈值问题，已被修复，但延时FIN的情况仍然存在。</p>
+<h2 id="分析与实验"><a href="#分析与实验" class="headerlink" title="分析与实验"></a>分析与实验</h2><h3 id="论文简析"><a href="#论文简析" class="headerlink" title="论文简析"></a>论文简析</h3><p>论文人工构造的obfs4决策树中，首先随机发送17k的数据，2s内返回RST则进入下一步，发送其他探针，30s–90s之内返回FIN，则为obfs4。17k数据是为了引发阈值问题，已被修复，但延时FIN的情况仍然存在。</p>
 <p>论文中针对obfs4 bridge的实验数据过少，我决定自己实验验证。在测试了几个已知obfs4 bridge后，我发现巧合的，每一个bridge都有固定的超时时间。</p>
 <p>猜想：每一个bridge都有固定的超时时间。（有可能bridge在重启服务后会改变？随机延时时间只生成一次？）<br>对6个已知obfs4 bridge进行测试，发送同样的data（重放tor浏览器发起的成功握手中的data），命中了验证不通过的错误，进入closeAfterDelay()。<br>对每个bridge发起两次握手。对于同一bridge，在两个不同ip客户端上，发起的两次握手均经过相同时间后返回FIN，时间均落在[30,90]s。 </p>
-<h2 id="实验验证"><a href="#实验验证" class="headerlink" title="实验验证"></a>实验验证</h2><ol>
+<h3 id="实验验证"><a href="#实验验证" class="headerlink" title="实验验证"></a>实验验证</h3><ol>
 <li><p>测试集：对<a target="_blank" rel="noopener" href="https://github.com/scriptzteam/Tor-Bridges-Collector">测试集</a>进行验证过滤后，得到四百余存活服务。</p>
 </li>
 <li><p>判断条件：TLS和HTTP探针无响应，17k字节返回RST或超时时间（返回FIN）为[30,90]s。</p>
@@ -388,17 +388,17 @@
 <p>① 80%服务判断为obfs4 bridge。其中，50%返回RST，50%超时时间在范围内。<br>② 6%服务判断不为obfs4 bridge。<br>③ 10%服务无法确定，发17k字节立刻收到FIN，TLS和HTTP均超时。</p>
 </li>
 </ol>
-<h2 id="实验分析"><a href="#实验分析" class="headerlink" title="实验分析"></a>实验分析</h2><ol>
+<h3 id="实验分析"><a href="#实验分析" class="headerlink" title="实验分析"></a>实验分析</h3><ol>
 <li>80%bridge服务命中判断条件，验证了判断条件可行。</li>
 <li>6%服务中，发送TLS和HTTP均有回应，可探测出其他服务，应是提供的服务发生了变化，符合预期。</li>
 <li>剩下10%服务，未命中判断条件，但是挑了几个，在tor浏览器中设置配置行后，可以作为bridge使用。发送20k字节后，50%返回RST。重放obfs4握手data之后，全部在[30,90]s内FIN。<br>猜测这些是已升级至新版本的bridge服务，重放握手数据后，则检验失败，进入延迟FIN函数。但是20k已经超过了论文所观察到的RST阈值，后来再发了30k，只有少数个响应RST。</li>
 </ol>
-<h2 id="实验结论"><a href="#实验结论" class="headerlink" title="实验结论"></a>实验结论</h2><ol>
+<h3 id="实验结论"><a href="#实验结论" class="headerlink" title="实验结论"></a>实验结论</h3><ol>
 <li>发送足够大的随机数据，马上返回RST（obfs4proxy 0.0.11版本已修复）  </li>
 <li>发送符合握手长度数据，[30,90]s内返回FIN</li>
 </ol>
-<h1 id="后续"><a href="#后续" class="headerlink" title="后续"></a>后续</h1><p>结合其他特征后，已实现主动收集方案。</p>
-<h1 id="相关资料"><a href="#相关资料" class="headerlink" title="相关资料"></a>相关资料</h1><p><a target="_blank" rel="noopener" href="https://gitlab.torproject.org/legacy/trac/-/issues/7349">torproject对于ORPort的讨论</a>(<a target="_blank" rel="noopener" href="https://gitlab.torproject.org/tpo/core/tor/-/issues/7349">move to here</a>)<br><a target="_blank" rel="noopener" href="https://jiangph2016.github.io/2020/04/07/detect-probe/">论文精读</a><br><a target="_blank" rel="noopener" href="https://github.com/net4people/bbs/issues/26">论文讨论issue</a><br><a target="_blank" rel="noopener" href="http://meetbot.debian.net/tor-meeting/2020/tor-meeting.2020-04-02-17.59.html">torproject会议记录</a><br><a target="_blank" rel="noopener" href="http://meetbot.debian.net/tor-meeting/2020/tor-meeting.2020-04-02-17.59.log.html">torproject聊天记录</a>  </p>
+<h2 id="后续"><a href="#后续" class="headerlink" title="后续"></a>后续</h2><p>结合其他特征后，已实现主动收集方案。</p>
+<h2 id="相关资料"><a href="#相关资料" class="headerlink" title="相关资料"></a>相关资料</h2><p><a target="_blank" rel="noopener" href="https://gitlab.torproject.org/legacy/trac/-/issues/7349">torproject对于ORPort的讨论</a>(<a target="_blank" rel="noopener" href="https://gitlab.torproject.org/tpo/core/tor/-/issues/7349">move to here</a>)<br><a target="_blank" rel="noopener" href="https://jiangph2016.github.io/2020/04/07/detect-probe/">论文精读</a><br><a target="_blank" rel="noopener" href="https://github.com/net4people/bbs/issues/26">论文讨论issue</a><br><a target="_blank" rel="noopener" href="http://meetbot.debian.net/tor-meeting/2020/tor-meeting.2020-04-02-17.59.html">torproject会议记录</a><br><a target="_blank" rel="noopener" href="http://meetbot.debian.net/tor-meeting/2020/tor-meeting.2020-04-02-17.59.log.html">torproject聊天记录</a>  </p>
 
                 
               </div>
