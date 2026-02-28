@@ -26,10 +26,28 @@
 <meta property="og:site_name" content="q1uki的博客">
 <meta property="og:description" content="一次课程设计是用gns3设计模拟一个中小型企业网络，要求含有基本安全防护功能、多个三层交换机、DMZ和邮箱&#x2F;web&#x2F;DNS服务器、VPN、DHCP。在这里记录设计思路、配置过程和坑点。">
 <meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260225220919357.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260226151940487.jpeg">
+<meta property="og:image" content="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260226154432736.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260226172820791.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260226195830295.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260226195854874.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260226200040629.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260226195919420.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260226203626756.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260226215100700.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260227221911671.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260227225105959.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260228001129312.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260226171820243.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260227225854548.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260227232319594.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260227230500084.png">
 <meta property="article:published_time" content="2026-02-28T00:06:00.000Z">
-<meta property="article:modified_time" content="2026-02-28T00:26:28.466Z">
+<meta property="article:modified_time" content="2026-02-28T00:57:47.421Z">
 <meta property="article:author" content="q1uki">
 <meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260225220919357.png">
   
   
   
@@ -226,7 +244,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          3k words
+          2.7k words
         
       </span>
     
@@ -237,7 +255,7 @@
         
         
         
-          25 mins
+          23 mins
         
       </span>
     
@@ -279,7 +297,7 @@
             
               <div class="markdown-body">
                 
-                <h1 id="安装GNS3"><a href="#安装GNS3" class="headerlink" title="安装GNS3"></a>安装GNS3</h1><ul>
+                <h2 id="安装GNS3"><a href="#安装GNS3" class="headerlink" title="安装GNS3"></a>安装GNS3</h2><ul>
 <li><p>安装教程：<a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_63855540/article/details/147834429">https://blog.csdn.net/qq_63855540/article/details/147834429</a></p>
 <p>（gns3默认的终端难看，建议换个自己习惯的，比如mobaxterm）</p>
 </li>
@@ -293,35 +311,35 @@
 <li><p>思科镜像2：<a target="_blank" rel="noopener" href="https://zhaokaifeng.com/6069/">https://zhaokaifeng.com/6069/</a></p>
 </li>
 </ul>
-<h1 id="要求"><a href="#要求" class="headerlink" title="要求"></a>要求</h1><p>题目要求为200名员工的中型企业设计一个具有安全防护功能的网络架构，公司有销售、开发、管理三个部门，需要提供内网远程访问，DMZ托管web、邮箱、DNS服务器。网络架构使用三层结构：核心（core），汇聚（distribute），接入（access），使用两个及以上三层交换机。设计适当的VLAN、IP范围。内&#x2F;外部防火墙，路由器，交换机做安全配置和访问控制。接入端包括员工设备和访客AP。用虚拟机网络配置模拟云端，使用kali接入模拟公网攻击者，进行安全测试。</p>
-<h1 id="网络设计"><a href="#网络设计" class="headerlink" title="网络设计"></a>网络设计</h1><p>![网络拓扑](<a target="_blank" rel="noopener" href="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260225220919357.png#pic_center">https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260225220919357.png#pic_center</a> &#x3D;80%x)</p>
+<h2 id="要求"><a href="#要求" class="headerlink" title="要求"></a>要求</h2><p>题目要求为200名员工的中型企业设计一个具有安全防护功能的网络架构，公司有销售、开发、管理三个部门，需要提供内网远程访问，DMZ托管web、邮箱、DNS服务器。网络架构使用三层结构：核心（core），汇聚（distribute），接入（access），使用两个及以上三层交换机。设计适当的VLAN、IP范围。内&#x2F;外部防火墙，路由器，交换机做安全配置和访问控制。接入端包括员工设备和访客AP。用虚拟机网络配置模拟云端，使用kali接入模拟公网攻击者，进行安全测试。</p>
+<h2 id="网络设计"><a href="#网络设计" class="headerlink" title="网络设计"></a>网络设计</h2><p><img src="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260225220919357.png" srcset="/img/loading.gif" lazyload alt="网络拓扑"></p>
 <p>其实用冗余设计来满足题目要求更好，但由于时间限制，这里只设计并实现了由两个三层交换机分别作为核心、汇聚层的结构。虽然一个三层交换机也能同时承担核心和汇聚功能，但分开来能提高处理效率，也更符合现实需求。核心层专注于高速、可靠地转发数据，部署在中心机房（比如学校网络中心），而汇聚层负责汇聚多台二层交换机（接入层）的流量，给VLAN做路由，能启用ACL（Access Control List，访问控制）控制VLAN的访问权限，部署在分属的机房（比如宿舍楼的总机房）。</p>
 <p>三层解析参考：<a target="_blank" rel="noopener" href="https://libai.blog.csdn.net/article/details/151764710">https://libai.blog.csdn.net/article/details/151764710</a></p>
 <p>在安全设计上，这里使用三脚防火墙<strong>three-legged firewall</strong>的架构，DMZ交换机直接连接在防火墙上，使得内网与DMZ之间的通信被防火墙保护。但会使得内部主机访问DMZ 服务性能下降，因为要经过防火墙才能访问。此外还有双防火墙方案，外部防火墙用于过滤从公网进入的流量，内部防火墙保护DMZ和内部网络之间的通信。</p>
-<p>![双防火墙](<a target="_blank" rel="noopener" href="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260226151940487.jpeg#pic_center">https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260226151940487.jpeg#pic_center</a> &#x3D;80%x)</p>
+<p><img src="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260226151940487.jpeg" srcset="/img/loading.gif" lazyload alt="双防火墙"></p>
 <p>防火墙结构设计参考：<a target="_blank" rel="noopener" href="https://www.firewall.cx/networking/network-fundamentals/firewall-topologies-dmz-zone.html">https://www.firewall.cx/networking/network-fundamentals/firewall-topologies-dmz-zone.html</a></p>
 <p><strong>DMZ</strong>，Demilitarized Zone，是一个用来部署供内外网访问的服务器的隔离区，因为部署的服务要面对外部不可信流量，所以它也受到“污染”，变得不可信，而同时它也要为内部网络提供服务。为了将内外网流量安全隔离开来，外网流量无法直接穿透服务器抵达内网，就需要使用DMZ，即使DMZ中的服务器被攻破，也无法直接横向移动到内网。</p>
-<p>![DMZ位置-流量不能穿透DMZ](<a target="_blank" rel="noopener" href="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260226154432736.png#pic_center">https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260226154432736.png#pic_center</a> &#x3D;80%x)</p>
-<h1 id="设备选择（镜像坑）"><a href="#设备选择（镜像坑）" class="headerlink" title="设备选择（镜像坑）"></a>设备选择（镜像坑）</h1><ul>
+<p><img src="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260226154432736.png" srcset="/img/loading.gif" lazyload alt="DMZ位置-流量不能穿透DMZ"></p>
+<h2 id="设备选择（镜像坑）"><a href="#设备选择（镜像坑）" class="headerlink" title="设备选择（镜像坑）"></a>设备选择（镜像坑）</h2><ul>
 <li><p>Cloud</p>
 <p>我这里在本机上模拟公网，实际上并不与真实互联网互通。在vmware的虚拟网络编辑器里选择一个vmnet，设置为仅主机模式，自己设置一个子网ip给它。给gns3 vm添加一个网卡，接入这个vmnet，我还使用kali模拟公网的入侵者，所以给kali也接入这个vmnet。</p>
 </li>
 <li><p>外部防火墙</p>
 <p>pfsense同时满足外部路由器和防火墙的功能，VPN配置方便。在<a target="_blank" rel="noopener" href="https://www.pfsense.org/download/">官网</a>上下载pfsense镜像，从edit&gt;preferences&gt;Qemu VMs中新建一个虚拟机，将下载的镜像导入，没有截图的部分默认即可。</p>
-<p>![image-20260226172820597](<a target="_blank" rel="noopener" href="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260226172820791.png#pic_center">https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260226172820791.png#pic_center</a> &#x3D;80%x)</p>
-<p>![image-20260226195830148](<a target="_blank" rel="noopener" href="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260226195830295.png#pic_center">https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260226195830295.png#pic_center</a> &#x3D;80%x)</p>
-<p>![image-20260226195854827](<a target="_blank" rel="noopener" href="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260226195854874.png#pic_center">https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260226195854874.png#pic_center</a> &#x3D;80%x)</p>
+<p><img src="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260226172820791.png" srcset="/img/loading.gif" lazyload alt="image-20260226172820597"></p>
+<p><img src="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260226195830295.png" srcset="/img/loading.gif" lazyload alt="image-20260226195830148"></p>
+<p><img src="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260226195854874.png" srcset="/img/loading.gif" lazyload alt="image-20260226195854827"></p>
 <p>给2G RAM，否则运行不了。</p>
-<p>![image-20260226200040540](<a target="_blank" rel="noopener" href="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260226200040629.png#pic_center">https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260226200040629.png#pic_center</a> &#x3D;80%x)</p>
+<p><img src="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260226200040629.png" srcset="/img/loading.gif" lazyload alt="image-20260226200040540"></p>
 <p>选择下载的镜像。</p>
-<p>![image-20260226195919337](<a target="_blank" rel="noopener" href="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260226195919420.png#pic_center">https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260226195919420.png#pic_center</a> &#x3D;80%x)</p>
+<p><img src="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260226195919420.png" srcset="/img/loading.gif" lazyload alt="image-20260226195919337"></p>
 <p>根据自己需要修改接口数量：</p>
-<p>![image-20260226203626568](<a target="_blank" rel="noopener" href="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260226203626756.png#pic_center">https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260226203626756.png#pic_center</a> &#x3D;80%x)</p>
+<p><img src="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260226203626756.png" srcset="/img/loading.gif" lazyload alt="image-20260226203626568"></p>
 </li>
 <li><p>L3交换机（core、distribution-switch）</p>
 <p>选择<a target="_blank" rel="noopener" href="https://mega.nz/#!oFsgQQqT!teTimFspl4JyQxpki-7BKfCGccpO7pmvHTJNHxVMAo4">c3725-adventerprisek9- mz.124-15.T14</a>镜像，在IOS routers导入。</p>
 <p>因为要求启用安全防护功能，找了很多L3交换机都没有这个功能，所以用c3725路由器来模拟L3交换机。参考：<a target="_blank" rel="noopener" href="https://blog.csdn.net/woay2008/article/details/124045710">https://blog.csdn.net/woay2008/article/details/124045710</a></p>
-<p>![image-20260226215100488](<a target="_blank" rel="noopener" href="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260226215100700.png#pic_center">https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260226215100700.png#pic_center</a> &#x3D;80%x)</p>
+<p><img src="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260226215100700.png" srcset="/img/loading.gif" lazyload alt="image-20260226215100488"></p>
 </li>
 <li><p>L2交换机（DMZ交换机、sales&#x2F;dev&#x2F;mgmt&#x2F;guest-switch、访客AP）</p>
 <p>选择<a target="_blank" rel="noopener" href="https://drive.google.com/uc?export=download&id=1lgdL0muj12c0zr4p6ZAQXRq9OZh49sPc">viosl2-adventerprisek9-m.ssa.high-iron-20200929</a>镜像，跟pfsense类似，在QEMU VM中导入，设置全都默认。</p>
@@ -331,18 +349,18 @@
 <p>DMZ中的服务器全都使用docker：python:3-alpine。</p>
 <p>（因为我用各个服务的docker镜像都遇到各种问题）</p>
 <p>在docker containers里new，选择new image，输入上述docker名即可。</p>
-<p>![image-20260227221904540](<a target="_blank" rel="noopener" href="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260227221911671.png#pic_center">https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260227221911671.png#pic_center</a> &#x3D;80%x)</p>
+<p><img src="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260227221911671.png" srcset="/img/loading.gif" lazyload alt="image-20260227221904540"></p>
 </li>
 <li><p>用户PC</p>
 <p>因为要测试网络连通性和调用DMZ服务，用了一个有网络工具的docker。docker：praqma&#x2F;network-multitool</p>
 </li>
 <li><p>配置pfsense的浏览器</p>
 <p>pfsense有web端，为了方便配置，拉一台机器出来连上pfsense。选docker：jlesage&#x2F;firefox</p>
-<p>![image-20260227225105902](<a target="_blank" rel="noopener" href="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260227225105959.png#pic_center">https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260227225105959.png#pic_center</a> &#x3D;80%x)</p>
+<p><img src="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260227225105959.png" srcset="/img/loading.gif" lazyload alt="image-20260227225105902"></p>
 </li>
 </ul>
 <p><em>注意项：镜像不一定有你想要的功能，多换几个试试</em></p>
-<h1 id="网段划分"><a href="#网段划分" class="headerlink" title="网段划分"></a>网段划分</h1><ul>
+<h2 id="网段划分"><a href="#网段划分" class="headerlink" title="网段划分"></a>网段划分</h2><ul>
 <li><p>关键IP</p>
 <p>pfsense：10.0.254.1</p>
 <p>核心L3 f1&#x2F;1：10.0.254.2</p>
@@ -389,16 +407,16 @@
 <p>子网：10.0.8.0&#x2F;24</p>
 </li>
 </ul>
-<h1 id="配置二层交换机（L2）"><a href="#配置二层交换机（L2）" class="headerlink" title="配置二层交换机（L2）"></a>配置二层交换机（L2）</h1><p>分配vlan，连通三层交换机和用户终端：</p>
+<h2 id="配置二层交换机（L2）"><a href="#配置二层交换机（L2）" class="headerlink" title="配置二层交换机（L2）"></a>配置二层交换机（L2）</h2><p>分配vlan，连通三层交换机和用户终端：</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs shell">enable<br>conf t<br>vlan xx<br>exit<br><br>interface 上级接口<br>switchport trunk encapsulation dot1q<br> switchport mode trunk<br> switchport trunk allowed vlan xx<br> no shut<br>exit<br><br>interface 下级接口<br> switchport mode access<br> switchport access vlan xx<br> no shut<br>end<br><br>wr mem<br></code></pre></td></tr></table></figure>
 
 <p>若二层要加上arp防护：（先关闭option 82）</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><code class="hljs shell">enable<br>conf t<br>vlan xx<br>exit<br><br>(no ip dhcp snooping information option)<br>ip dhcp snooping<br>ip dhcp snooping vlan xx<br>ip arp inspection vlan xx<br><br>interface 上级接口<br>switchport trunk encapsulation dot1q<br> switchport mode trunk<br> switchport trunk allowed vlan xx<br> ip dhcp snooping trust<br> ip arp inspection trust<br> no shut<br>exit<br><br>interface 下级接口<br> switchport mode access<br> switchport access vlan xx<br> no shut<br>end<br><br>wr mem<br></code></pre></td></tr></table></figure>
 
 <p>检查arp防护设置，设置正确会类似下图：</p>
-<p>![arp防护设置1](<a target="_blank" rel="noopener" href="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260228001129312.png#pic_center">https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260228001129312.png#pic_center</a> &#x3D;80%x)</p>
-<p>![arp防护设置2](<a target="_blank" rel="noopener" href="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260226171820243.png#pic_center">https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260226171820243.png#pic_center</a> &#x3D;80%x)</p>
-<h1 id="配置汇聚三层交换机（distribution-L3）"><a href="#配置汇聚三层交换机（distribution-L3）" class="headerlink" title="配置汇聚三层交换机（distribution L3）"></a>配置汇聚三层交换机（distribution L3）</h1><p>配置与核心L3的连接：</p>
+<p><img src="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260228001129312.png" srcset="/img/loading.gif" lazyload alt="arp防护设置1"></p>
+<p><img src="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260226171820243.png" srcset="/img/loading.gif" lazyload alt="arp防护设置2"></p>
+<h2 id="配置汇聚三层交换机（distribution-L3）"><a href="#配置汇聚三层交换机（distribution-L3）" class="headerlink" title="配置汇聚三层交换机（distribution L3）"></a>配置汇聚三层交换机（distribution L3）</h2><p>配置与核心L3的连接：</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs cli">conf t<br>interface f1/0<br> no switchport<br> ip address 10.0.253.1 255.255.255.0<br> no shutdown<br>exit<br><br>! 默认路由指向核心交换机<br>ip route 0.0.0.0 0.0.0.0 10.0.253.2<br></code></pre></td></tr></table></figure>
 
 <p>创建vlan：</p>
@@ -409,29 +427,29 @@
 <p>ACL：</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs SHELL">ip access-list extended GUEST_IN<br> ! DNS<br> permit udp 10.0.50.0 0.0.0.255 host 10.0.99.20 eq 53<br> permit tcp 10.0.50.0 0.0.0.255 host 10.0.99.20 eq 53<br> ! Web<br> permit tcp 10.0.50.0 0.0.0.255 host 10.0.99.80 eq 80<br>! Mailhog（按实际端口）<br> permit tcp 10.0.50.0 0.0.0.255 host 10.0.99.30 eq 1025<br> permit tcp 10.0.50.0 0.0.0.255 host 10.0.99.30 eq 8025<br><br> ! 禁止访问其它10/8内部网段<br> deny ip 10.0.50.0 0.0.0.255 10.0.0.0 0.255.255.255<br><br> ! 允许出网<br> permit ip 10.0.50.0 0.0.0.255 any<br> <br> interface vlan 50<br> ip access-group GUEST_IN in<br></code></pre></td></tr></table></figure>
 
-<h1 id="配置核心三层交换机（core-L3）"><a href="#配置核心三层交换机（core-L3）" class="headerlink" title="配置核心三层交换机（core L3）"></a>配置核心三层交换机（core L3）</h1><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs cli">enable<br>conf t<br><br>! 开启路由功能<br>ip routing<br><br>! 配置连接 pfSense 的接口 (f1/1)<br>interface f1/1<br> no switchport<br> ip address 10.0.254.2 255.255.255.0<br> no shutdown<br>exit<br><br>! 配置连接 汇聚L3 的接口 (f1/0)<br>interface f1/0<br> no switchport<br> ip address 10.0.253.2 255.255.255.0<br> no shutdown<br>exit<br></code></pre></td></tr></table></figure>
+<h2 id="配置核心三层交换机（core-L3）"><a href="#配置核心三层交换机（core-L3）" class="headerlink" title="配置核心三层交换机（core L3）"></a>配置核心三层交换机（core L3）</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs cli">enable<br>conf t<br><br>! 开启路由功能<br>ip routing<br><br>! 配置连接 pfSense 的接口 (f1/1)<br>interface f1/1<br> no switchport<br> ip address 10.0.254.2 255.255.255.0<br> no shutdown<br>exit<br><br>! 配置连接 汇聚L3 的接口 (f1/0)<br>interface f1/0<br> no switchport<br> ip address 10.0.253.2 255.255.255.0<br> no shutdown<br>exit<br></code></pre></td></tr></table></figure>
 
 <p>配置静态路由：</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs cli">! 默认路由，所有去往外部的数据包都给pfSense<br>ip route 0.0.0.0 0.0.0.0 10.0.254.1<br><br>! 回程路由，所有去往内网的数据包都给汇聚L3<br>ip route 10.0.10.0 255.255.255.0 10.0.253.1<br>ip route 10.0.20.0 255.255.255.0 10.0.253.1<br>ip route 10.0.30.0 255.255.255.0 10.0.253.1<br>ip route 10.0.50.0 255.255.255.0 10.0.253.1<br><br>end<br>wr mem<br></code></pre></td></tr></table></figure>
 
-<h1 id="内网连通测试"><a href="#内网连通测试" class="headerlink" title="内网连通测试"></a>内网连通测试</h1><p>用户PC获取ip：</p>
+<h2 id="内网连通测试"><a href="#内网连通测试" class="headerlink" title="内网连通测试"></a>内网连通测试</h2><p>用户PC获取ip：</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs shell">ip link set eth0 up<br>udhcpc -i eth0 -v<br></code></pre></td></tr></table></figure>
 
 <p>成功拿到ip示例：</p>
-<p>![通过dhcp获取ip](<a target="_blank" rel="noopener" href="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260227225854548.png#pic_center">https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260227225854548.png#pic_center</a> &#x3D;80%x)</p>
+<p><img src="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260227225854548.png" srcset="/img/loading.gif" lazyload alt="通过dhcp获取ip"></p>
 <p>都获取了ip之后互相ping一下测试能否连通。</p>
 <p><em>在交换机上ping其他设备，显示“!”才是通了</em></p>
-<h1 id="配置pfsense"><a href="#配置pfsense" class="headerlink" title="配置pfsense"></a>配置pfsense</h1><p>拉一个firefox镜像出来连上pfsense，如果关闭这个firefox设备再开启它，端口会被占用没法打开网页，需要删掉这个设备重新拉出来连接。</p>
+<h2 id="配置pfsense"><a href="#配置pfsense" class="headerlink" title="配置pfsense"></a>配置pfsense</h2><p>拉一个firefox镜像出来连上pfsense，如果关闭这个firefox设备再开启它，端口会被占用没法打开网页，需要删掉这个设备重新拉出来连接。</p>
 <p>firefox拉出来之后是没有ip的，要在VMware的gns3 vm里，进入firefox docker的shell设置：</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs shell">docker ps<br>docker exec -it &lt;容器ID或名字&gt; sh<br>ip addr add 192.168.1.10/24 dev eth0<br>ip route add default via 192.168.1.1<br></code></pre></td></tr></table></figure>
 
-<p>![gns3 vm进入firefox docker shell](<a target="_blank" rel="noopener" href="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260227232319594.png#pic_center">https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260227232319594.png#pic_center</a> &#x3D;80%x)</p>
+<p><img src="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260227232319594.png" srcset="/img/loading.gif" lazyload alt="gns3 vm进入firefox docker shell"></p>
 <p><strong>System -&gt; Routing -&gt; Static Routes</strong>：添加一条静态路由：将内网网段 10.0.0.0&#x2F;16的下一跳（Gateway）指向核心交换机的接口 IP：10.0.254.2</p>
-<h1 id="配置DMZ服务器"><a href="#配置DMZ服务器" class="headerlink" title="配置DMZ服务器"></a>配置DMZ服务器</h1><ul>
+<h2 id="配置DMZ服务器"><a href="#配置DMZ服务器" class="headerlink" title="配置DMZ服务器"></a>配置DMZ服务器</h2><ul>
 <li><p>web服务器</p>
 <p>拖出来之后双击进设置，填start command，启动设备时web服务也随之启动。</p>
 <p><code>sh -lc &quot;ip addr add 10.0.99.10/24 dev eth0; ip link set eth0 up; ip route replace default via 10.0.99.1; mkdir -p /srv/www; echo &#39;DMZ WEB OK&#39; &gt; /srv/www/index.html; cd /srv/www; exec python3 -m http.server 80 --bind 0.0.0.0&quot;</code></p>
-<p>![image-20260227230459947](<a target="_blank" rel="noopener" href="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260227230500084.png#pic_center">https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260227230500084.png#pic_center</a> &#x3D;80%x)</p>
+<p><img src="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260227230500084.png" srcset="/img/loading.gif" lazyload alt="image-20260227230459947"></p>
 </li>
 <li><p>DNS服务器</p>
 <p>接Cloud上一个能访问公网的接口下载</p>
@@ -451,8 +469,8 @@
 <p>测试：</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs shell">nc -vz 10.0.99.30 1025<br>nc -vz 10.0.99.30 8025<br></code></pre></td></tr></table></figure></li>
 </ul>
-<h1 id="奇怪的错误"><a href="#奇怪的错误" class="headerlink" title="奇怪的错误"></a>奇怪的错误</h1><p>gns3开久了会出现明明配置没错，却死活打不通的情况，可以在连线上右键抓包检查。有时候网线（两个设备间连的线）连着但实际上断了，设备网口抽风了，等等。遇事不决重启一下gns3，节省很多时间。<em>（调DHCP时调了大半天最后重启好了，气疯了）</em></p>
-<h1 id="改进"><a href="#改进" class="headerlink" title="改进"></a>改进</h1><ol>
+<h2 id="奇怪的错误"><a href="#奇怪的错误" class="headerlink" title="奇怪的错误"></a>奇怪的错误</h2><p>gns3开久了会出现明明配置没错，却死活打不通的情况，可以在连线上右键抓包检查。有时候网线（两个设备间连的线）连着但实际上断了，设备网口抽风了，等等。遇事不决重启一下gns3，节省很多时间。<em>（调DHCP时调了大半天最后重启好了，气疯了）</em></p>
+<h2 id="改进"><a href="#改进" class="headerlink" title="改进"></a>改进</h2><ol>
 <li>汇聚和分发交换机只有一个，流量都通过一个三层交换机转发，性能上受限制，存在单点故障风险（一个坏了全都宕机），如果时间足够的话，应该实现一个冗余结构。在真实的冗余架构中，汇聚层通常会有两台三层交换机，通过配置 HSRP（热备份路由器协议） 或 VRRP（虚拟路由器冗余协议） 虚拟出一个统一的网关 IP（如 10.0.10.1）。这样当一台汇聚交换机宕机时，另一台会瞬间接管网关，用户端完全无感知。</li>
 <li>虽然实现了一些安全设置，但非常基本，只能满足学习和实验的需要，实际应用中要采用IDS等高级检测防御系统。</li>
 </ol>
