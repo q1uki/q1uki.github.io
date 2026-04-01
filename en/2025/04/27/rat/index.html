@@ -1,0 +1,1013 @@
+
+
+<!DOCTYPE html>
+<html lang="zh,en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/tab.png">
+  <link rel="icon" href="/img/tab.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#CE6D39">
+  <meta name="author" content="q1uki">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="Summary of communication protocols and characteristics of six remote access trojans: Gh0st, darkcomet, XtremeRAT, QuasarRAT, GraemeRAT, and njRAT.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【Learning Notes】Communication Characteristics of Six RAT (Remote Access Trojan) Protocols">
+<meta property="og:url" content="https://q1uki.xyz/en/2025/04/27/rat/index.html">
+<meta property="og:site_name" content="q1uki&#39;s blog">
+<meta property="og:description" content="Summary of communication protocols and characteristics of six remote access trojans: Gh0st, darkcomet, XtremeRAT, QuasarRAT, GraemeRAT, and njRAT.">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260110230103033.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260110230113559.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260110230127807.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260110230134647.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260110230145375.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260110230154725.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260110230207088.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260110230214398.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260110230222173.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260110230228551.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260110230237568.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260110230241588.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260110230249327.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260110230253151.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260110230359350.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260110230402790.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260110230408184.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260110230412582.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260110230415710.png">
+<meta property="article:published_time" content="2025-04-27T12:52:12.000Z">
+<meta property="article:modified_time" content="2026-04-01T19:09:08.567Z">
+<meta property="article:author" content="q1uki">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260110230103033.png">
+  
+  
+  
+  <title>【Learning Notes】Communication Characteristics of Six RAT (Remote Access Trojan) Protocols - q1uki&#39;s blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+  
+<link rel="stylesheet" href="/css/custom.css">
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"q1uki.xyz","root":"/","version":"1.9.9","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"expand_all":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"openkounter":{"server_url":"https://open-kounter.mintimate.cn","path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 8.1.1"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>q1uki</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content (desktop) -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>Home</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>Archives</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>Categories</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>Tags</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>About</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="javascript:switchLang()" target="_self">
+                <i class="iconfont icon-globe"></i>
+                <span>中/EN</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- Mobile grid menu overlay -->
+<div id="mobile-grid-menu" class="d-lg-none">
+  <div class="mobile-grid-menu-inner">
+    <div class="container">
+      <div class="row">
+        
+          
+          
+          
+          
+            <div class="col-4 mobile-grid-cell">
+              <a href="/" target="_self">
+                <div class="mobile-grid-item">
+                  <i class="iconfont icon-home-fill"></i>
+                  <span>Home</span>
+                </div>
+              </a>
+            </div>
+          
+        
+          
+          
+          
+          
+            <div class="col-4 mobile-grid-cell">
+              <a href="/archives/" target="_self">
+                <div class="mobile-grid-item">
+                  <i class="iconfont icon-archive-fill"></i>
+                  <span>Archives</span>
+                </div>
+              </a>
+            </div>
+          
+        
+          
+          
+          
+          
+            <div class="col-4 mobile-grid-cell">
+              <a href="/categories/" target="_self">
+                <div class="mobile-grid-item">
+                  <i class="iconfont icon-category-fill"></i>
+                  <span>Categories</span>
+                </div>
+              </a>
+            </div>
+          
+        
+          
+          
+          
+          
+            <div class="col-4 mobile-grid-cell">
+              <a href="/tags/" target="_self">
+                <div class="mobile-grid-item">
+                  <i class="iconfont icon-tags-fill"></i>
+                  <span>Tags</span>
+                </div>
+              </a>
+            </div>
+          
+        
+          
+          
+          
+          
+            <div class="col-4 mobile-grid-cell">
+              <a href="/about/" target="_self">
+                <div class="mobile-grid-item">
+                  <i class="iconfont icon-user-fill"></i>
+                  <span>About</span>
+                </div>
+              </a>
+            </div>
+          
+        
+          
+          
+          
+          
+            <div class="col-4 mobile-grid-cell">
+              <a href="javascript:switchLang()" target="_self">
+                <div class="mobile-grid-item">
+                  <i class="iconfont icon-globe"></i>
+                  <span>中/EN</span>
+                </div>
+              </a>
+            </div>
+          
+        
+        
+          <div class="col-4 mobile-grid-cell" id="mobile-search-btn">
+            <a href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <div class="mobile-grid-item">
+                <i class="iconfont icon-search"></i>
+                <span>Search</span>
+              </div>
+            </a>
+          </div>
+        
+        
+          <div class="col-4 mobile-grid-cell" id="mobile-color-toggle-btn"
+               data-label-light="Light"
+               data-label-dark="Dark">
+            <a href="javascript:;" aria-label="Color Toggle">
+              <div class="mobile-grid-item">
+                <i class="iconfont icon-dark" id="mobile-color-toggle-icon"></i>
+                <span id="mobile-color-toggle-label">Dark</span>
+              </div>
+            </a>
+          </div>
+        
+      </div>
+    </div>
+  </div>
+</div>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/post_background.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="【Learning Notes】Communication Characteristics of Six RAT (Remote Access Trojan) Protocols"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2025-04-27 13:52" pubdate>
+          April 27, 2025 pm
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          11k words
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          96 mins
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">【Learning Notes】Communication Characteristics of Six RAT (Remote Access Trojan) Protocols</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h2 id="1-Gh0st"><a href="#1-Gh0st" class="headerlink" title="1 Gh0st"></a>1 Gh0st</h2><h3 id="1-1-Basic-Information"><a href="#1-1-Basic-Information" class="headerlink" title="1.1 Basic Information"></a>1.1 Basic Information</h3><p>Gh0stRAT was initially developed by the C.Rufus team. The client runs as a service, can auto-start with the system, and evades antivirus detection by hiding files and processes. It primarily includes modules for file management, system information collection, process management, screen capture, and remote control. Additionally, it has the ability to steal passwords, capture network traffic, and execute remote CMD commands. It is typically spread through email attachments, malicious websites, or software vulnerabilities.</p>
+<p>The trojan was first discovered in 2009. Its 3.6 version source code was made freely available online, making it popular and leading to many modified variants, such as Damauli (Big Bad Wolf). In 2018, the Iron Tiger organization was observed using a Gh0stRAT variant in attack campaigns, and in 2021, a Gh0stRAT variant was observed planting backdoors on user computers via fake Telegram installers.</p>
+<h3 id="1-2-Basic-Characteristics"><a href="#1-2-Basic-Characteristics" class="headerlink" title="1.2 Basic Characteristics"></a>1.2 Basic Characteristics</h3><ol>
+<li>TCP transmission, default listening port 80, commonly 8000, 443, disguised as Microsoft Device Manager service.</li>
+<li>Data (payload) header displays a magic number in plaintext. E.g., Gh0st, GOLDt, HEART, Level, BeiJi.</li>
+<li>A fixed magic number exposes its version information.</li>
+<li>It also responds to some illegal requests outside of protocol specifications, such as <code>GET / HTTP/1.0\r\n\r\n</code>.</li>
+<li>Lacks effective packet validation methods.</li>
+<li>No reasonable session management mechanism.</li>
+<li>In the source code, the <code>m_iocpServer()</code> method is responsible for communication packet transmission. Although Gh0stRAT has multiple variants, this method is a core part of each kernel and is usually not modified, so all variants share a unified communication characteristic.</li>
+</ol>
+<h3 id="1-3-Communication-Characteristics"><a href="#1-3-Communication-Characteristics" class="headerlink" title="1.3 Communication Characteristics"></a>1.3 Communication Characteristics</h3><p>Environment setup reference: <a target="_blank" rel="noopener" href="https://blog.csdn.net/ll121221/article/details/80499645">gh0st3.6 + vc6.0 + windows xp compilation process</a></p>
+<p><img src="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260110230103033.png" srcset="/img/loading.gif" lazyload alt="Controlled client initiating request information"></p>
+<p>Throughout the communication process, the TCP flags of all traffic packets used for data transmission include PSH. In the Gh0stRAT handshake, the controlled client first initiates a TCP connection request. After a three-way handshake establishes the TCP connection, the controlled client sends a payload prefixed with “<code>Gh0st\xae\x00\x00\x00\xe0\x00\x00\x00\x78\x9c</code>“ and containing encoded and obfuscated system information for going online.</p>
+<p><img src="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260110230113559.png" srcset="/img/loading.gif" lazyload alt="Main controller response"></p>
+<p>Upon receiving the online information, the main controller responds with a traffic packet indicating confirmation, with the payload also prefixed with “<code>Gh0st \xae\x00\x00\x00\xe0\x00\x00\x00\x78\x9c</code>“. The 14th-15th bytes “<code>\x78\x9c</code>“ are the zlib compression header, located at a fixed position in Gh0st communication packets, see <a target="_blank" rel="noopener" href="https://www.freebuf.com/articles/paper/167917.html">Gh0st Damauli RAT Family Communication Protocol Analysis</a>.</p>
+<h2 id="2-DarkcometRAT"><a href="#2-DarkcometRAT" class="headerlink" title="2 DarkcometRAT"></a>2 DarkcometRAT</h2><h3 id="2-1-Basic-Information"><a href="#2-1-Basic-Information" class="headerlink" title="2.1 Basic Information"></a>2.1 Basic Information</h3><p>DarkcometRAT, also known as “Dark Comet,” was developed by Jean-Pierre Lesueur in 2008. In addition to common encryption and obfuscation techniques found in remote access trojans, it also includes rootkit functionality, allowing it to hide its presence in the system. In 2012, the trojan’s author ceased updating it, with the latest version being 5.4.1.</p>
+<p>Currently active trojans predominantly use dynamic domain names as server domains, with “ddns.net” and “duckdns.org” accounting for over 50%. In a recent monthly <a target="_blank" rel="noopener" href="http://221.5.97.116/dlied6.qq.com/invc/xfspeed/qqpcmgr/other/Habo-201606-ThreatIntelligence.pdf">threat intelligence report</a> by Tencent Anti-Virus Lab, Darkcomet was found to be the most used malicious network protocol that month, with a single-day peak of 3,000 instances.</p>
+<h3 id="2-2-Basic-Characteristics"><a href="#2-2-Basic-Characteristics" class="headerlink" title="2.2 Basic Characteristics"></a>2.2 Basic Characteristics</h3><ol>
+<li>TCP transmission, default listening port 1604.</li>
+<li>RC4 algorithm for encrypting and decrypting communication traffic; main controller and controlled client must use the same key to receive and send information.</li>
+<li>Uses predefined command words for communication, with parameters separated by “|”.</li>
+<li><img src="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260110230127807.png" srcset="/img/loading.gif" lazyload alt="Main controller sending &quot;IDTYPE&quot; command"></li>
+<li>The TCP flags of all traffic packets involved in data transmission include PSH.</li>
+</ol>
+<h3 id="2-3-Communication-Characteristics"><a href="#2-3-Communication-Characteristics" class="headerlink" title="2.3 Communication Characteristics"></a>2.3 Communication Characteristics</h3><p>After completing the TCP three-way handshake, the main controller sends the RC4-encrypted command word “<code>IDTYPE</code>“ using a predefined key.</p>
+<p>Default keys are version-dependent and generally in the format “<code>#KCMDDC𝑥#-8900123456789</code>“, where 𝑥 is the version number, and “<code>0123456789</code>“ is a user-modifiable field.</p>
+<p>The specific correspondences are shown in the table below:</p>
+<p><img src="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260110230134647.png" srcset="/img/loading.gif" lazyload></p>
+<p>Subsequently, the controlled client responds with the ciphertext of the command word “<code>SERVER</code>“. After the main controller receives it, it responds with the command word “<code>GetSIN</code>“ to request the controlled client’s host information and the IP address of the database receiving the information. The controlled client then responds with its own information, completing the Darkcomet handshake.</p>
+<h3 id="2-4-Platform-Comparison"><a href="#2-4-Platform-Comparison" class="headerlink" title="2.4 Platform Comparison"></a>2.4 Platform Comparison</h3><p>Shodan: Searching for darkcomet yields results mostly on the default port 1604, with matching responses typically being the ciphertext corresponding to the V5 key <code>#KCMDDC5#-890</code>.<br>360: Mostly on port 3333, all 12-digit timestamps. The next most common is port 6666, with responses mostly being “000000009002”, which should be a false positive, also including results from Shodan (all categorized under “Application: darkcomet remote control software”, this category has no false positives). There is also an “Application: darkcomet rat” category, which contains false positives matching timestamps, suggesting the matching rule is <code>^[0-9A-F]{12}$</code>.<br>Fofa: Similar to 360.<br>Nmap: The matching rule is also <code>^[0-9A-F]{12}$</code>. (Source: After the darkcomet client and main controller perform a TCP handshake, the main controller sends the RC4-encrypted command word ‘IDTYPE’ using a predefined key. The default key is version-dependent. The RC4-encrypted ciphertext is 12 characters long, consisting of 0-9 and A-F.)</p>
+<h2 id="3-njRAT"><a href="#3-njRAT" class="headerlink" title="3 njRAT"></a>3 njRAT</h2><h3 id="3-1-Basic-Information"><a href="#3-1-Basic-Information" class="headerlink" title="3.1 Basic Information"></a>3.1 Basic Information</h3><p>njRAT, also known as Bladabindi, was first discovered in 2013 and developed using the .NET framework.<br>In October 2016, Softpedia reported that a cracked version of VMware downloaded and installed njRAT via Pastebin, and terminating the process would cause the computer to crash.<br>In January 2023, a trojan virus spread in the Middle East, with attackers using .cab files for “political dialogue,” which, when opened, would launch a .vbs script to download and install njRAT locally from the cloud.</p>
+<h3 id="3-2-Basic-Characteristics"><a href="#3-2-Basic-Characteristics" class="headerlink" title="3.2 Basic Characteristics"></a>3.2 Basic Characteristics</h3><ol>
+<li>TCP transmission, default listening port 1177 for version 0.6.4, different versions have different default ports.</li>
+<li>The TCP flags of all traffic packets involved in data transmission include PSH.</li>
+<li>Parameters are separated by <code>&#39;|&#39;|&#39;|&#39;</code>.</li>
+</ol>
+<h3 id="3-3-Communication-Characteristics"><a href="#3-3-Communication-Characteristics" class="headerlink" title="3.3 Communication Characteristics"></a>3.3 Communication Characteristics</h3><p>① Client -&gt; Server: Go online<br>The controlled client actively initiates a TCP connection to the main controller. After the TCP three-way handshake is completed, it sends its own information to go online. Parameters are separated by “<code>|&#39;|&#39;|</code>“, and the suffix keyword is “<code>[endof]</code>“.</p>
+<p>“lv”: command word;<br>“SGFjS2VkXzVDNjBFQUYz”: base64 encoded controlled client name, corresponding to “Name” in the figure;<br>“WIN-GH46O995DIB”, “ win7”: controlled client system information, corresponding to PC, user in the figure;<br>“ 2023-02-21”: client installation time, corresponding to Install Date in the figure;<br>“<code>\x57\x69\x6e\x20\x37\x20\xbc\xd2\xcd\xa5\xc6\xd5\xcd\xa8\xb0\xe6\x20\x53\x50\x31\x20\x78\x36\x34</code>“: controlled client operating system name, corresponding to “Operating system” in the figure;<br>“No”: indicates camera status, none here, corresponding to “Cam” in the figure;<br>“0.6.4”: njRAT version, corresponding to “Ver.” in the figure;<br>“5q2j5Zyo5o2V6I63IEFkYXB0ZXIgZm9yIGxvb3BiYWNrIHRyYWZmaWMgY2FwdHVyZQ&#x3D;&#x3D;”: base64 encoded active window name of the controlled client, here it is “正在捕获 Adapter for loopback traffic capture” (Capturing Adapter for loopback traffic capture), which is a Wireshark window, corresponding to “Active Window” in the figure.</p>
+<p>Communication traffic capture:</p>
+<p><img src="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260110230145375.png" srcset="/img/loading.gif" lazyload alt="Communication traffic"></p>
+<p>Server console:</p>
+<p><img src="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260110230154725.png" srcset="/img/loading.gif" lazyload alt="server console"></p>
+<p>② Server -&gt; Client:<br>The main controller responds with “<code>CAP|&#39;|&#39;|</code>“, indicating to capture the victim host’s screen.</p>
+<p><img src="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260110230207088.png" srcset="/img/loading.gif" lazyload alt="Sending screen capture command"></p>
+<p>③ Client -&gt; Server:<br>The controlled client sends encoded screenshot information.</p>
+<p><img src="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260110230214398.png" srcset="/img/loading.gif" lazyload alt="Sending encoded screenshot"></p>
+<p>④ Server -&gt; Client:<br>The main controller sends the keyword “P” to maintain the connection and repeats this behavior.</p>
+<p><img src="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260110230222173.png" srcset="/img/loading.gif" lazyload alt="Heartbeat"></p>
+<p>⑤ Client -&gt; Server:<br>The controlled client responds with the base64 encoded active window name, here it is the njRAT window, and also responds with the keyword “P” to maintain the connection, repeating this behavior.</p>
+<p><img src="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260110230228551.png" srcset="/img/loading.gif" lazyload alt="Base64 active window name"></p>
+<h2 id="4-GreameRAT"><a href="#4-GreameRAT" class="headerlink" title="4 GreameRAT"></a>4 GreameRAT</h2><h3 id="4-1-Basic-Information"><a href="#4-1-Basic-Information" class="headerlink" title="4.1 Basic Information"></a>4.1 Basic Information</h3><p>GreameRAT was released in 2012, originated from Morocco, and developed using Pascal with Delphi’s Unicode version. It also features a modular architecture, allowing attackers to add or remove functionalities as needed.</p>
+<h3 id="4-2-Basic-Characteristics"><a href="#4-2-Basic-Characteristics" class="headerlink" title="4.2 Basic Characteristics"></a>4.2 Basic Characteristics</h3><p>GreameRAT uses TCP transmission. Except for version 1.9, all other versions have default listening ports of 777, 888, 999; version 1.9 only has 999. In the handshake communication between the controlled client and the main controller, traffic packets involving data exchange all include the PSH TCP flag, with the default key being “123456”.</p>
+<h3 id="4-3-Communication-Characteristics"><a href="#4-3-Communication-Characteristics" class="headerlink" title="4.3 Communication Characteristics"></a>4.3 Communication Characteristics</h3><p>In the GreameRAT handshake, the controlled client first sends a number containing the key length ‘n’. In the testing environment, 25 was found to be a fixed constant, so 25+n is the number sent, which was 31 in this handshake, with a suffix of “<code>\x7c\0a</code>“.</p>
+<p><img src="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260110230237568.png" srcset="/img/loading.gif" lazyload></p>
+<p>The controlled client immediately follows by sending key-related verification data.</p>
+<p><img src="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260110230241588.png" srcset="/img/loading.gif" lazyload></p>
+<p>Only when both pieces of data are correct will the main controller respond sequentially with “<code>\x20\x0d\x0a</code>“ to indicate receipt, followed by data with the suffix “<code>###@@@</code>“, completing the handshake.</p>
+<p><img src="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260110230249327.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260110230253151.png" srcset="/img/loading.gif" lazyload></p>
+<p>Additionally, it was found that if the controlled client sends other data besides the correct verification data, the main controller will respond with “<code>tentarnovamente|</code>“, which is Portuguese for “try again.”</p>
+<h2 id="5-QuasarRAT"><a href="#5-QuasarRAT" class="headerlink" title="5 QuasarRAT"></a>5 QuasarRAT</h2><h3 id="5-1-Basic-Information"><a href="#5-1-Basic-Information" class="headerlink" title="5.1 Basic Information"></a>5.1 Basic Information</h3><p><a target="_blank" rel="noopener" href="https://github.com/quasar/Quasar">QuasarRAT</a> was developed by GitHub user MaxXor using C#, first publicly released in July 2014, and was formerly known as “xRAT”. It primarily targets Windows operating systems and maintains persistence through scheduled tasks and registry entries.<br>In February 2018, researchers observed an attack campaign that distributed QuasarRAT as the final payload via malicious RTF files; in May 2019, enSilo observed the APT10 group using PlugX and QuasarRAT to attack government and private organizations in Southeast Asia. Furthermore, the well-known APT group “Mahakala” (摩诃草) has also long used this tool.</p>
+<h3 id="5-2-Basic-Characteristics"><a href="#5-2-Basic-Characteristics" class="headerlink" title="5.2 Basic Characteristics"></a>5.2 Basic Characteristics</h3><p>QuasarRAT uses TCP transmission, with a common listening port of 5678. In traffic packets related to data transmission, the TCP flags all include PSH.</p>
+<h3 id="5-3-Communication-Characteristics"><a href="#5-3-Communication-Characteristics" class="headerlink" title="5.3 Communication Characteristics"></a>5.3 Communication Characteristics</h3><p>The controlled client actively initiates a TCP connection. After successfully completing the TCP connection, the main controller sends two responses sequentially:</p>
+<p><img src="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260110230359350.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260110230402790.png" srcset="/img/loading.gif" lazyload></p>
+<p>“<code>RPCMethod: preinstall</code>“ is a QuasarRAT command used to pre-install the Quasar client on the target host, which is a communication characteristic of the QuasarRAT main controller distinguishing it from other port services.</p>
+<h2 id="6-XtemeRAT"><a href="#6-XtemeRAT" class="headerlink" title="6 XtemeRAT"></a>6 XtemeRAT</h2><h3 id="6-1-Basic-Information"><a href="#6-1-Basic-Information" class="headerlink" title="6.1 Basic Information"></a>6.1 Basic Information</h3><p>XtremeRAT was released in 2010, developed using Delphi’s Unicode version, and open-sourced on GitHub. Its main supported functions include file and process management, keylogging, service management, and registry management. It was once used by the North African Fox (APT-C-44) group in attacks targeting Arabic-speaking regions.</p>
+<h3 id="6-2-Basic-Characteristics"><a href="#6-2-Basic-Characteristics" class="headerlink" title="6.2 Basic Characteristics"></a>6.2 Basic Characteristics</h3><p>XtremeRAT uses TCP transmission, with default listening ports of 80, 81, 82. The default password is 1234567890.</p>
+<h3 id="6-3-Communication-Characteristics"><a href="#6-3-Communication-Characteristics" class="headerlink" title="6.3 Communication Characteristics"></a>6.3 Communication Characteristics</h3><p>The controlled client actively initiates a TCP handshake. After completing the TCP three-way handshake to establish a connection, the controlled client first sends version information “<code>myversion|3.2</code>“.</p>
+<p><img src="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260110230408184.png" srcset="/img/loading.gif" lazyload></p>
+<p>The main controller replies with the first response “<code>X\n\r</code>“ as a response prefix, which is a communication characteristic of XtremeRAT.</p>
+<p><img src="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260110230412582.png" srcset="/img/loading.gif" lazyload></p>
+<p>Next, the main controller replies with the second response. In the payload, bytes 1-8 are the key (password is 1234 in this example), bytes 9-16 are the zlib compressed file size (message length is 152 bytes in this example), both represented in little-endian. Bytes 17-18 are the zlib indicator “<code>\x78\x01</code>“, which is fixed in XtremeRAT communication.</p>
+<p><img src="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260110230415710.png" srcset="/img/loading.gif" lazyload></p>
+<h3 id="6-4-Attempted-Source-Code-Compilation-Unfinished-then-found-exe"><a href="#6-4-Attempted-Source-Code-Compilation-Unfinished-then-found-exe" class="headerlink" title="6.4 Attempted Source Code Compilation (Unfinished, then found exe)"></a>6.4 Attempted Source Code Compilation (Unfinished, then found exe)</h3><ol>
+<li><p>Install Virtual Tree View in Delphi 2010, copy the folder to <code>$(BDS)\Components\VST</code>.</p>
+</li>
+<li><p>Install KOL Unicode component in Delphi 7, or install “MirrorKOLPackageD12.dpk” in Delphi 2010. Perform a normal KOL installation, then get the Unicode version files and replace them.<br>Amazingly, deleting that garbled string allowed it to be installed.</p>
+</li>
+<li><p>Create Project:</p>
+<ul>
+<li>Open Delphi 7 and go to: File | New | Other.</li>
+<li>Select the “Wizards” option. There will be a KOL palette.</li>
+<li>I made some modifications, it can only be used as UNICODE, meaning, do not use “ansi” in the project.</li>
+<li>Open the file “XtremeRAT.rar Components” and copy the data to the folder “$（BDS）\Components&quot;.</li>
+</ul>
+</li>
+<li><p>Install TMS components in Delphi 2010.</p>
+</li>
+<li><p>Delphi 2010 || Options | Environment Options | Delphi Options | Library - Win32 |</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs c">$(BDS)\Source\Indy\indy10\System<br>$(BDS)\Source\Indy\indy10\Core<br>$(BDS)\Source\Indy\indy10\Protocol<br>$(BDS)\Components\TMS<br></code></pre></td></tr></table></figure></li>
+<li><p>Install AlphaControls.7.26 component. After installation, copy the files to the <code>$(BDS)\Components\AlphaControls\D2010</code> folder, then<br>Go to Tools Options | Options | Environment Options | Delphi Options | Library - Win32 in Delphi 2010 |<br><code>$（BDS）\Components\AlphaControls\D2010</code></p>
+</li>
+</ol>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" class="category-chain-item">学习笔记</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>【Learning Notes】Communication Characteristics of Six RAT (Remote Access Trojan) Protocols</div>
+      <div>https://q1uki.xyz/en/2025/04/27/rat/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>Author</div>
+          <div>q1uki</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Posted on</div>
+          <div>April 27, 2025</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>Licensed under</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - Attribution">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/en/2025/04/27/i2p/" title="【Learning Notes】I2P Overview">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">【Learning Notes】I2P Overview</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2025/04/27/rat/" title="【学习笔记】六个RAT（远控木马）协议的通信特征">
+                        <span class="hidden-mobile">【学习笔记】六个RAT（远控木马）协议的通信特征</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+  <div id="gitalk-container"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#gitalk-container', function() {
+      Fluid.utils.createCssLink('/css/gitalk.css')
+      Fluid.utils.createScript('https://lib.baomitu.com/gitalk/1.8.0/gitalk.min.js', function() {
+        var options = Object.assign(
+          {"clientID":"Ov23liuSYABDuZ6zWRwx","clientSecret":"8769c790613602f767e5ed67a101d7948d60ad49","repo":"blog-comments","owner":"q1uki","admin":["q1uki"],"language":"en","labels":["Gitalk"],"perPage":10,"pagerDirection":"last","distractionFreeMode":false,"createIssueManually":true,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token"},
+          {
+            id: '4045089f003a5ea24f8f82328008d0a8'
+          }
+        )
+        var gitalk = new Gitalk(options);
+        gitalk.render('gitalk-container');
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>Table of Contents</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  <script>
+  Fluid.utils.createScript('https://lib.baomitu.com/mermaid/8.14.0/mermaid.min.js', function() {
+    mermaid.initialize({"theme":"default"});
+
+    Fluid.utils.listenDOMLoaded(function() {
+      Fluid.events.registerRefreshCallback(function() {
+        if ('mermaid' in window) {
+          mermaid.init();
+        }
+      });
+    });
+  });
+</script>
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">Keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+      <div class="col-lg-7 mx-auto nopadding-x-md">
+        <div class="container custom mx-auto">
+          <script>
+  function switchLang() {
+      var path = window.location.pathname;
+      if (path.indexOf('/en/') === 0) {
+          // 如果是英文版，直接剔除开头的 /en 即可变回中文版
+          window.location.href = path.replace('/en/', '/');
+      } else {
+          // 如果是中文版，直接在开头补上 /en 即可跳往英文版
+          window.location.href = '/en' + (path === '/' ? '/' : path);
+      }
+  }
+</script>
+
+        </div>
+      </div>
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    function isExpandAllEnabled() {
+      return CONFIG.toc && CONFIG.toc.expand_all === true;
+    }
+    function expandAllToc() {
+      if (!isExpandAllEnabled()) { return; }
+      jQuery('#toc-body .tocbot-is-collapsed').removeClass('tocbot-is-collapsed');
+    }
+    function updateTocToggle($li, $childList) {
+      var $toggle = $li.children('.toc-toggle');
+      if ($toggle.length === 0) { return; }
+      var collapsed = $childList.hasClass('tocbot-is-collapsed');
+      $toggle
+        .toggleClass('toc-toggle-collapsed', collapsed)
+        .toggleClass('toc-toggle-expanded', !collapsed);
+    }
+    function bindTocToggle() {
+      if (!isExpandAllEnabled()) { return; }
+      jQuery('#toc-body .toc-list-item').each(function() {
+        var $li = jQuery(this);
+        var $childList = $li.children('ol');
+        if ($childList.length === 0) {
+          if ($li.children('.toc-toggle').length === 0) {
+            $li.prepend('<span class="toc-toggle toc-toggle-placeholder" aria-hidden="true">›</span>');
+          }
+          return;
+        }
+
+        if ($li.children('.toc-toggle').length === 0) {
+          $li.prepend('<span class="toc-toggle toc-toggle-expanded" aria-hidden="true">›</span>');
+        }
+        updateTocToggle($li, $childList);
+      });
+      jQuery('#toc-body').off('click.tocToggle').on('click.tocToggle', '.toc-toggle', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        var $li = jQuery(this).parent('.toc-list-item');
+        var $childList = $li.children('ol');
+        if ($childList.length === 0) { return; }
+        $childList.toggleClass('tocbot-is-collapsed');
+        updateTocToggle($li, $childList);
+      });
+      if (!window.__tocToggleObserver) {
+        window.__tocToggleObserver = new MutationObserver(function(mutations) {
+          mutations.forEach(function(mutation) {
+            if (mutation.type !== 'attributes' || mutation.attributeName !== 'class') { return; }
+            var $list = jQuery(mutation.target);
+            var $li = $list.parent('.toc-list-item');
+            if ($li.length === 0) { return; }
+            updateTocToggle($li, $list);
+          });
+        });
+        jQuery('#toc-body ol').each(function() {
+          window.__tocToggleObserver.observe(this, { attributes: true });
+        });
+      }
+    }
+    var tocConfig = Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc);
+    if (isExpandAllEnabled()) {
+      tocConfig.collapseDepth = 6;
+    }
+    window.tocbot.init(tocConfig);
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+    expandAllToc();
+    bindTocToggle();
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+        expandAllToc();
+        bindTocToggle();
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">Blog works best with JavaScript enabled</div>
+  </noscript>
+</body>
+</html>

@@ -1,0 +1,961 @@
+
+
+<!DOCTYPE html>
+<html lang="zh,en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/tab.png">
+  <link rel="icon" href="/img/tab.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#CE6D39">
+  <meta name="author" content="q1uki">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="I2P is a decentralized peer-to-peer (P2P) anonymous network developed using JAVA. Similar to Tor, it encrypts and transmits data through multiple network nodes, yet offers a higher level of anonymity">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【Learning Notes】I2P Overview">
+<meta property="og:url" content="https://q1uki.xyz/en/2025/04/27/i2p/index.html">
+<meta property="og:site_name" content="q1uki&#39;s blog">
+<meta property="og:description" content="I2P is a decentralized peer-to-peer (P2P) anonymous network developed using JAVA. Similar to Tor, it encrypts and transmits data through multiple network nodes, yet offers a higher level of anonymity">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260110225516044.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260110225756026.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260110225831442.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260110225922691.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260110225936782.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260110225947226.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260110230004253.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260110230018510.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260110230022761.png">
+<meta property="article:published_time" content="2025-04-27T15:00:00.000Z">
+<meta property="article:modified_time" content="2026-04-01T16:45:47.665Z">
+<meta property="article:author" content="q1uki">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260110225516044.png">
+  
+  
+  
+  <title>【Learning Notes】I2P Overview - q1uki&#39;s blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+  
+<link rel="stylesheet" href="/css/custom.css">
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"q1uki.xyz","root":"/","version":"1.9.9","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"expand_all":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"openkounter":{"server_url":"https://open-kounter.mintimate.cn","path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 8.1.1"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>q1uki</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content (desktop) -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>Home</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>Archives</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>Categories</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>Tags</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>About</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="javascript:switchLang()" target="_self">
+                <i class="iconfont icon-globe"></i>
+                <span>中/EN</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- Mobile grid menu overlay -->
+<div id="mobile-grid-menu" class="d-lg-none">
+  <div class="mobile-grid-menu-inner">
+    <div class="container">
+      <div class="row">
+        
+          
+          
+          
+          
+            <div class="col-4 mobile-grid-cell">
+              <a href="/" target="_self">
+                <div class="mobile-grid-item">
+                  <i class="iconfont icon-home-fill"></i>
+                  <span>Home</span>
+                </div>
+              </a>
+            </div>
+          
+        
+          
+          
+          
+          
+            <div class="col-4 mobile-grid-cell">
+              <a href="/archives/" target="_self">
+                <div class="mobile-grid-item">
+                  <i class="iconfont icon-archive-fill"></i>
+                  <span>Archives</span>
+                </div>
+              </a>
+            </div>
+          
+        
+          
+          
+          
+          
+            <div class="col-4 mobile-grid-cell">
+              <a href="/categories/" target="_self">
+                <div class="mobile-grid-item">
+                  <i class="iconfont icon-category-fill"></i>
+                  <span>Categories</span>
+                </div>
+              </a>
+            </div>
+          
+        
+          
+          
+          
+          
+            <div class="col-4 mobile-grid-cell">
+              <a href="/tags/" target="_self">
+                <div class="mobile-grid-item">
+                  <i class="iconfont icon-tags-fill"></i>
+                  <span>Tags</span>
+                </div>
+              </a>
+            </div>
+          
+        
+          
+          
+          
+          
+            <div class="col-4 mobile-grid-cell">
+              <a href="/about/" target="_self">
+                <div class="mobile-grid-item">
+                  <i class="iconfont icon-user-fill"></i>
+                  <span>About</span>
+                </div>
+              </a>
+            </div>
+          
+        
+          
+          
+          
+          
+            <div class="col-4 mobile-grid-cell">
+              <a href="javascript:switchLang()" target="_self">
+                <div class="mobile-grid-item">
+                  <i class="iconfont icon-globe"></i>
+                  <span>中/EN</span>
+                </div>
+              </a>
+            </div>
+          
+        
+        
+          <div class="col-4 mobile-grid-cell" id="mobile-search-btn">
+            <a href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <div class="mobile-grid-item">
+                <i class="iconfont icon-search"></i>
+                <span>Search</span>
+              </div>
+            </a>
+          </div>
+        
+        
+          <div class="col-4 mobile-grid-cell" id="mobile-color-toggle-btn"
+               data-label-light="Light"
+               data-label-dark="Dark">
+            <a href="javascript:;" aria-label="Color Toggle">
+              <div class="mobile-grid-item">
+                <i class="iconfont icon-dark" id="mobile-color-toggle-icon"></i>
+                <span id="mobile-color-toggle-label">Dark</span>
+              </div>
+            </a>
+          </div>
+        
+      </div>
+    </div>
+  </div>
+</div>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/post_background.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="【Learning Notes】I2P Overview"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2025-04-27 16:00" pubdate>
+          April 27, 2025 pm
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          7.7k words
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          65 mins
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">【Learning Notes】I2P Overview</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h2 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h2><p>I2P (Invisible Internet Project) is a decentralized peer-to-peer (P2P) anonymous network, developed in JAVA. Similar to Tor, it encrypts and transmits data through several network nodes, but offers a higher degree of anonymity than Tor.<br>Tor primarily focuses on providing users with anonymous access to external internet services and operations, addressing “anonymity” and “hidden services”, with an emphasis on application layer design, building an “overlay network”.<br>I2P attempts to migrate existing internet services to the I2P network and provide service implementations within its framework, offering anonymous file sharing and anonymous web hosting, addressing “anonymity”, “hidden services”, and “security”, with an emphasis on network layer design, building a “virtual internet”.<br>(Reference: <a target="_blank" rel="noopener" href="https://www.hanspub.org/journal/paperinformation?paperID=31299&btwaf=39457632">https://www.hanspub.org/journal/paperinformation?paperID=31299&amp;btwaf=39457632</a>)</p>
+<h2 id="Usage"><a href="#Usage" class="headerlink" title="Usage"></a>Usage</h2><ol>
+<li><p>Installation<br>JAVA version higher than 1.5 is required.<br>Installation tutorials can be found on the official website: <a target="_blank" rel="noopener" href="https://geti2p.net/en/download">https://geti2p.net/en/download</a><br>(Official note: Do not start i2p as root on Linux)</p>
+</li>
+<li><p>Connecting to the I2P Network<br>The first connection to the I2P network requires reseeding, which will be discussed in detail later.</p>
+</li>
+<li><p>Proxy Settings<br>To access websites via I2P, local proxy settings are required. The default HTTP proxy port is 4444, and HTTPS is 4445.</p>
+</li>
+</ol>
+<p>After successful startup, visiting 127.0.0.1:7657 will bring up the I2P console, including settings and various network metrics.<br><img src="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260110225516044.png" srcset="/img/loading.gif" lazyload alt="I2P Console Main Interface"></p>
+<p>Network Metrics:<br><img src="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260110225756026.png" srcset="/img/loading.gif" lazyload alt="I2P Network Operation Metrics Overview"></p>
+<h2 id="Mechanism"><a href="#Mechanism" class="headerlink" title="Mechanism"></a>Mechanism</h2><ol>
+<li>Kad Algorithm<br> Purpose: To disseminate and obtain network node information via seed nodes, and to break down raw transmission data into encrypted packets for scattered delivery through multiple cross-tunnels.</li>
+</ol>
+<p>  Features:<br>  ① Only a small fraction of the entire I2P network nodes are obtained.<br>  ② No directory servers are required.<br>  ③ Every host running I2P acts as a network relay, sharing bandwidth to forward data for others.<br>  ④ Once connected to I2P, it continuously acquires information about other nodes in the network, ensuring a sustained connection to the I2P network.</p>
+<ol start="2">
+<li>Network Database (netdb)</li>
+</ol>
+<p><img src="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260110225831442.png" srcset="/img/loading.gif" lazyload alt="Network Database NetDB"></p>
+<ol start="4">
+<li><p>Garlic Routing<br>When transmitting information, the information to be transmitted is first divided into multiple sub-messages, and then available intermediate nodes are randomly selected from the network database (netdb) to construct multiple encrypted tunnels.</p>
+<p>① Tunnels<br>When establishing a tunnel, the tunnel initiator must send requests and necessary configuration data to each hop selected by the initiator, and wait for confirmation from each hop before the tunnel can begin to be established. The tunnel establishment request sent by the initiator is encrypted, and only the tunnel creator can access the confirmation information from each hop. The maximum lifecycle of a tunnel is 10 minutes. Typically, a tunnel has 3 hops: a gateway node, intermediate nodes (adjustable quantity), and an endpoint. A complete unidirectional transmission includes an outbound tunnel and an inbound tunnel, involving at least 6 nodes.</p>
+<p>② Peer Selection<br>In selecting available intermediate nodes, I2P clients rely on previously monitored performance values and the current state of the network, without using active bandwidth probing. The I2P node selection algorithm can react very quickly to failed peers and other changes in network topology by continuously analyzing and ranking performance to select peers, rather than trusting claimed capacity.<br>(Reference: <a target="_blank" rel="noopener" href="http://www.3n1ac.com/index.php/archives/3/">http://www.3n1ac.com/index.php/archives/3/</a>)</p>
+<p>③ Tunnel Creation<br>When a router node wants to create an outbound tunnel, it first checks its netDb folder to obtain a series of RouterInfo messages (which were obtained from real-time monitoring by the router), selects several nodes based on their performance and other metrics, strictly ranks these nodes according to a specific algorithm, configures the corresponding information for each selected node, and then forwards it.</p>
+<p> For an outbound tunnel, the tunnel creator is the tunnel gateway. It forwards the tunnel creation instructions and other pre-configured information to the next hop router—the tunnel’s intermediate node—in the previously selected and ranked order. The intermediate node, upon receiving the instructions, understands that a tunnel is to be created, continues to forward the instructions, and then replaces the request record with a reply record (indicating whether it agrees to participate in the tunnel), forwarding it to the next hop. When the message is forwarded all the way to the last node of the tunnel, i.e., the endpoint, it will forward the message to the corresponding inbound tunnel according to the previous instructions, and finally return it to the corresponding tunnel creator.</p>
+<p> Since tunnel construction incurs significant time costs and bandwidth load, and each tunnel has a maximum lifecycle of 10 minutes, after which it is destroyed, to ensure efficient service operation and provide redundant bandwidth for applications, each I2P router maintains a series of tunnel pools, where tunnels in each pool are used for the same communication purpose.</p>
+<p>④ Endpoint Processing<br> After the last hop in the tunnel receives and verifies the tunnel message, how the endpoint recovers the gateway’s data also depends on whether the tunnel is an inbound or an outbound tunnel.<br> For an outbound tunnel, the endpoint, like other participants, encrypts and forwards the message using its layer key.<br> For an inbound tunnel, the endpoint is also the tunnel creator, so it can iteratively decrypt the IV key and message using the encryption key and IV (Tunnel Initialization Vector) key for each layer, in the reverse order of the tunnel node routing.</p>
+</li>
+</ol>
+<p><img src="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260110225922691.png" srcset="/img/loading.gif" lazyload alt="Garlic Routing Tunnel Establishment and Data Transfer Flowchart"></p>
+<h2 id="I2P-vs-Tor-Comparison"><a href="#I2P-vs-Tor-Comparison" class="headerlink" title="I2P vs. Tor Comparison"></a>I2P vs. Tor Comparison</h2><ol>
+<li>I2P Garlic Routing<br> ① Completely decentralized, node information is stored in each I2P node, no directory servers needed.<br> ② Multiple tunnels transmit received and sent information, and change every 10 minutes.<br> ③ Transmitted information is split into multiple sub-messages and sent to the destination via different encrypted tunnels.<br> ④ Slower speed.</li>
+<li>Tor Onion Routing<br> ① Relies on directory servers to obtain relay nodes, making it susceptible to blocking.<br> ② Single tunnel transmits received and sent information.<br> ③ Faster than I2P.</li>
+</ol>
+<h2 id="Reseeding"><a href="#Reseeding" class="headerlink" title="Reseeding"></a>Reseeding</h2><p>Due to the Kad algorithm’s need for initial seeds to discover more node information, reseeding is required when connecting to the I2P network for the first time. This involves using a certain number of known active nodes to find other nodes.<br>Once connected to I2P, you can stay online indefinitely. If not used for a period (more than three months), reseeding might be needed again because current active I2P node information is lost.<br>I2P initially has built-in seed node information, but it might become invalid, requiring other reseeding methods.<br><img src="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260110225936782.png" srcset="/img/loading.gif" lazyload alt="I2P Reseeding Page"></p>
+<ul>
+<li><p>Reseed Websites, Files<br>I2P has several reseed websites built-in, which are the default reseeding method.<br>You can also download reseed files from reseed websites; high timeliness is required.<br>You can create and share reseed files with others (node information comes from your own network database).</p>
+<p>Attached are some reseed websites:<br><a target="_blank" rel="noopener" href="https://banana.incognet.io/">https://banana.incognet.io/</a><br><a target="_blank" rel="noopener" href="https://i2p.novg.net/">https://i2p.novg.net/</a><br><a target="_blank" rel="noopener" href="https://i2pseed.creativecowpat.net:8443/">https://i2pseed.creativecowpat.net:8443/</a><br><a target="_blank" rel="noopener" href="https://reseed-fr.i2pd.xyz/">https://reseed-fr.i2pd.xyz/</a><br><a target="_blank" rel="noopener" href="https://reseed-pl.i2pd.xyz/">https://reseed-pl.i2pd.xyz/</a><br><a target="_blank" rel="noopener" href="https://reseed.diva.exchange/">https://reseed.diva.exchange/</a><br><a target="_blank" rel="noopener" href="https://reseed.i2pgit.org/">https://reseed.i2pgit.org/</a><br><a target="_blank" rel="noopener" href="https://reseed.memcpy.io/">https://reseed.memcpy.io/</a><br><a target="_blank" rel="noopener" href="https://reseed.onion.im/">https://reseed.onion.im/</a><br><a target="_blank" rel="noopener" href="https://reseed2.i2p.net/">https://reseed2.i2p.net/</a><br><a target="_blank" rel="noopener" href="https://app.box.com/s/aednqugd5zf07mlg65wjeafay3b1qqbg/folder/88436877456">https://app.box.com/s/aednqugd5zf07mlg65wjeafay3b1qqbg/folder/88436877456</a><br><a target="_blank" rel="noopener" href="https://www2.mk16.de/">https://www2.mk16.de/</a><br><a target="_blank" rel="noopener" href="https://i2phides.me/i2pseeds.su3">https://i2phides.me/i2pseeds.su3</a></p>
+</li>
+<li><p>Reseed Files<br>Importing from files can be in zip or su3 format; su3 is a compressed file with signing capabilities.<br>After unzipping, opening it with a notepad reveals I2P router information, including host, port, and key information for both NTCP and SSU protocols, which is what is displayed in the netdb of the console. The garbled part is the su3 file header information; a detailed table can be found in the official documentation.<br>(Official documentation: <a target="_blank" rel="noopener" href="https://geti2p.net/spec/updates#su3">https://geti2p.net/spec/updates#su3</a>)<br>(Based on incomplete observation, about 70 new nodes are added per hour)</p>
+</li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260110225947226.png" srcset="/img/loading.gif" lazyload alt="su3 Reseed File Internal Structure and Node Information Example"></p>
+<h2 id="Websites"><a href="#Websites" class="headerlink" title="Websites"></a>Websites</h2><p>I2P anonymous sites (eepsites) are websites within the I2P network. I2P site names end with .i2p and are found by identifying keys (i.e., encrypted base64 keys, which differ from common base64 by using ~ instead of &#x2F; and - instead of +). Known site keys are stored in the local host.txt file.</p>
+<ul>
+<li>Address Book<br>I2P website keys can be accessed by subscribing to an address book, navigating websites, or importing addresses manually.<br>For example:<br><a target="_blank" rel="noopener" href="http://tino.i2p/hosts.txt">http://tino.i2p/hosts.txt</a><br><a target="_blank" rel="noopener" href="http://stats.i2p/cgi-bin/newhosts.txt">http://stats.i2p/cgi-bin/newhosts.txt</a><br><a target="_blank" rel="noopener" href="http://i2host.i2p/cgi-bin/i2hostetag">http://i2host.i2p/cgi-bin/i2hostetag</a><br><a target="_blank" rel="noopener" href="http://no.i2p/export/alive-hosts.txt">http://no.i2p/export/alive-hosts.txt</a><br><a target="_blank" rel="noopener" href="http://notbob.i2p/hosts.txt">http://notbob.i2p/hosts.txt</a><br>Taking notbob as an example, website categories include search engines, cryptocurrencies and trading, git, video, sqbl, etc.</li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260110230004253.png" srcset="/img/loading.gif" lazyload alt="notbob Address Book Website Categories List"></p>
+<ul>
+<li>Websites<br>When visiting a website not in the address book for the first time, you can find the website’s key through a jump service.</li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260110230018510.png" srcset="/img/loading.gif" lazyload alt="I2P Address Jump Assistant Service Interface"></p>
+<h2 id="I2P-vs-Tor-Terminology-Comparison"><a href="#I2P-vs-Tor-Terminology-Comparison" class="headerlink" title="I2P vs. Tor Terminology Comparison"></a>I2P vs. Tor Terminology Comparison</h2><p><img src="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260110230022761.png" srcset="/img/loading.gif" lazyload alt="I2P and Tor Network Terminology Comparison Table"></p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" class="category-chain-item">学习笔记</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>【Learning Notes】I2P Overview</div>
+      <div>https://q1uki.xyz/en/2025/04/27/i2p/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>Author</div>
+          <div>q1uki</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Posted on</div>
+          <div>April 27, 2025</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>Licensed under</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - Attribution">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2025/04/27/i2p/" title="【学习笔记】I2P概述">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">【学习笔记】I2P概述</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/en/2025/04/27/rat/" title="【Learning Notes】Communication Characteristics of Six RAT (Remote Access Trojan) Protocols">
+                        <span class="hidden-mobile">【Learning Notes】Communication Characteristics of Six RAT (Remote Access Trojan) Protocols</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+  <div id="gitalk-container"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#gitalk-container', function() {
+      Fluid.utils.createCssLink('/css/gitalk.css')
+      Fluid.utils.createScript('https://lib.baomitu.com/gitalk/1.8.0/gitalk.min.js', function() {
+        var options = Object.assign(
+          {"clientID":"Ov23liuSYABDuZ6zWRwx","clientSecret":"8769c790613602f767e5ed67a101d7948d60ad49","repo":"blog-comments","owner":"q1uki","admin":["q1uki"],"language":"en","labels":["Gitalk"],"perPage":10,"pagerDirection":"last","distractionFreeMode":false,"createIssueManually":true,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token"},
+          {
+            id: '15ee074e75a5596096b078e3bc8f33ce'
+          }
+        )
+        var gitalk = new Gitalk(options);
+        gitalk.render('gitalk-container');
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>Table of Contents</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  <script>
+  Fluid.utils.createScript('https://lib.baomitu.com/mermaid/8.14.0/mermaid.min.js', function() {
+    mermaid.initialize({"theme":"default"});
+
+    Fluid.utils.listenDOMLoaded(function() {
+      Fluid.events.registerRefreshCallback(function() {
+        if ('mermaid' in window) {
+          mermaid.init();
+        }
+      });
+    });
+  });
+</script>
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">Keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+      <div class="col-lg-7 mx-auto nopadding-x-md">
+        <div class="container custom mx-auto">
+          <script>
+  function switchLang() {
+      var path = window.location.pathname;
+      if (path.indexOf('/en/') === 0) {
+          // 如果是英文版，直接剔除开头的 /en 即可变回中文版
+          window.location.href = path.replace('/en/', '/');
+      } else {
+          // 如果是中文版，直接在开头补上 /en 即可跳往英文版
+          window.location.href = '/en' + (path === '/' ? '/' : path);
+      }
+  }
+</script>
+
+        </div>
+      </div>
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    function isExpandAllEnabled() {
+      return CONFIG.toc && CONFIG.toc.expand_all === true;
+    }
+    function expandAllToc() {
+      if (!isExpandAllEnabled()) { return; }
+      jQuery('#toc-body .tocbot-is-collapsed').removeClass('tocbot-is-collapsed');
+    }
+    function updateTocToggle($li, $childList) {
+      var $toggle = $li.children('.toc-toggle');
+      if ($toggle.length === 0) { return; }
+      var collapsed = $childList.hasClass('tocbot-is-collapsed');
+      $toggle
+        .toggleClass('toc-toggle-collapsed', collapsed)
+        .toggleClass('toc-toggle-expanded', !collapsed);
+    }
+    function bindTocToggle() {
+      if (!isExpandAllEnabled()) { return; }
+      jQuery('#toc-body .toc-list-item').each(function() {
+        var $li = jQuery(this);
+        var $childList = $li.children('ol');
+        if ($childList.length === 0) {
+          if ($li.children('.toc-toggle').length === 0) {
+            $li.prepend('<span class="toc-toggle toc-toggle-placeholder" aria-hidden="true">›</span>');
+          }
+          return;
+        }
+
+        if ($li.children('.toc-toggle').length === 0) {
+          $li.prepend('<span class="toc-toggle toc-toggle-expanded" aria-hidden="true">›</span>');
+        }
+        updateTocToggle($li, $childList);
+      });
+      jQuery('#toc-body').off('click.tocToggle').on('click.tocToggle', '.toc-toggle', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        var $li = jQuery(this).parent('.toc-list-item');
+        var $childList = $li.children('ol');
+        if ($childList.length === 0) { return; }
+        $childList.toggleClass('tocbot-is-collapsed');
+        updateTocToggle($li, $childList);
+      });
+      if (!window.__tocToggleObserver) {
+        window.__tocToggleObserver = new MutationObserver(function(mutations) {
+          mutations.forEach(function(mutation) {
+            if (mutation.type !== 'attributes' || mutation.attributeName !== 'class') { return; }
+            var $list = jQuery(mutation.target);
+            var $li = $list.parent('.toc-list-item');
+            if ($li.length === 0) { return; }
+            updateTocToggle($li, $list);
+          });
+        });
+        jQuery('#toc-body ol').each(function() {
+          window.__tocToggleObserver.observe(this, { attributes: true });
+        });
+      }
+    }
+    var tocConfig = Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc);
+    if (isExpandAllEnabled()) {
+      tocConfig.collapseDepth = 6;
+    }
+    window.tocbot.init(tocConfig);
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+    expandAllToc();
+    bindTocToggle();
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+        expandAllToc();
+        bindTocToggle();
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">Blog works best with JavaScript enabled</div>
+  </noscript>
+</body>
+</html>

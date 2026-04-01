@@ -1,0 +1,1025 @@
+
+
+<!DOCTYPE html>
+<html lang="zh,en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/tab.png">
+  <link rel="icon" href="/img/tab.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#CE6D39">
+  <meta name="author" content="q1uki">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="Chinese-friendly reading notes for the paper *LZR: Identifying Unexpected Internet Services*. They contain a large amount of machine translation and summarization of the original text, with italicized">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【Paper Reading】Notes and Thoughts on LZR: Identifying Unexpected Internet Services">
+<meta property="og:url" content="https://q1uki.xyz/en/2024/12/09/lzr/index.html">
+<meta property="og:site_name" content="q1uki&#39;s blog">
+<meta property="og:description" content="Chinese-friendly reading notes for the paper *LZR: Identifying Unexpected Internet Services*. They contain a large amount of machine translation and summarization of the original text, with italicized">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260110233036206.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260110233045683.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260110233049700.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260110233136612.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260115201108438.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260115201148779.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260110233237565.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260115201412632.png">
+<meta property="article:published_time" content="2024-12-09T11:00:00.000Z">
+<meta property="article:modified_time" content="2026-04-01T19:08:02.552Z">
+<meta property="article:author" content="q1uki">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260110233036206.png">
+  
+  
+  
+  <title>【Paper Reading】Notes and Thoughts on LZR: Identifying Unexpected Internet Services - q1uki&#39;s blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+  
+<link rel="stylesheet" href="/css/custom.css">
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"q1uki.xyz","root":"/","version":"1.9.9","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"expand_all":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"openkounter":{"server_url":"https://open-kounter.mintimate.cn","path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 8.1.1"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>q1uki</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content (desktop) -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>Home</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>Archives</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>Categories</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>Tags</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>About</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="javascript:switchLang()" target="_self">
+                <i class="iconfont icon-globe"></i>
+                <span>中/EN</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- Mobile grid menu overlay -->
+<div id="mobile-grid-menu" class="d-lg-none">
+  <div class="mobile-grid-menu-inner">
+    <div class="container">
+      <div class="row">
+        
+          
+          
+          
+          
+            <div class="col-4 mobile-grid-cell">
+              <a href="/" target="_self">
+                <div class="mobile-grid-item">
+                  <i class="iconfont icon-home-fill"></i>
+                  <span>Home</span>
+                </div>
+              </a>
+            </div>
+          
+        
+          
+          
+          
+          
+            <div class="col-4 mobile-grid-cell">
+              <a href="/archives/" target="_self">
+                <div class="mobile-grid-item">
+                  <i class="iconfont icon-archive-fill"></i>
+                  <span>Archives</span>
+                </div>
+              </a>
+            </div>
+          
+        
+          
+          
+          
+          
+            <div class="col-4 mobile-grid-cell">
+              <a href="/categories/" target="_self">
+                <div class="mobile-grid-item">
+                  <i class="iconfont icon-category-fill"></i>
+                  <span>Categories</span>
+                </div>
+              </a>
+            </div>
+          
+        
+          
+          
+          
+          
+            <div class="col-4 mobile-grid-cell">
+              <a href="/tags/" target="_self">
+                <div class="mobile-grid-item">
+                  <i class="iconfont icon-tags-fill"></i>
+                  <span>Tags</span>
+                </div>
+              </a>
+            </div>
+          
+        
+          
+          
+          
+          
+            <div class="col-4 mobile-grid-cell">
+              <a href="/about/" target="_self">
+                <div class="mobile-grid-item">
+                  <i class="iconfont icon-user-fill"></i>
+                  <span>About</span>
+                </div>
+              </a>
+            </div>
+          
+        
+          
+          
+          
+          
+            <div class="col-4 mobile-grid-cell">
+              <a href="javascript:switchLang()" target="_self">
+                <div class="mobile-grid-item">
+                  <i class="iconfont icon-globe"></i>
+                  <span>中/EN</span>
+                </div>
+              </a>
+            </div>
+          
+        
+        
+          <div class="col-4 mobile-grid-cell" id="mobile-search-btn">
+            <a href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <div class="mobile-grid-item">
+                <i class="iconfont icon-search"></i>
+                <span>Search</span>
+              </div>
+            </a>
+          </div>
+        
+        
+          <div class="col-4 mobile-grid-cell" id="mobile-color-toggle-btn"
+               data-label-light="Light"
+               data-label-dark="Dark">
+            <a href="javascript:;" aria-label="Color Toggle">
+              <div class="mobile-grid-item">
+                <i class="iconfont icon-dark" id="mobile-color-toggle-icon"></i>
+                <span id="mobile-color-toggle-label">Dark</span>
+              </div>
+            </a>
+          </div>
+        
+      </div>
+    </div>
+  </div>
+</div>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/post_background.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="【Paper Reading】Notes and Thoughts on LZR: Identifying Unexpected Internet Services"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2024-12-09 11:00" pubdate>
+          December 9, 2024 am
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          26k words
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          221 mins
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">【Paper Reading】Notes and Thoughts on LZR: Identifying Unexpected Internet Services</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h2 id="Original-Paper-Resources"><a href="#Original-Paper-Resources" class="headerlink" title="Original Paper &amp; Resources"></a>Original Paper &amp; Resources</h2><p><a target="_blank" rel="noopener" href="https://github.com/stanford-esrg/lzr">Source Code</a><br><a target="_blank" rel="noopener" href="https://data.esrg.stanford.edu/study/lzr">Data</a><br><a target="_blank" rel="noopener" href="https://lizizhikevich.github.io/assets/papers/lzr.pdf">Original Paper</a><br><a target="_blank" rel="noopener" href="https://www.usenix.org/system/files/sec21_slides_izhikevich.pdf">Slides</a><br><a target="_blank" rel="noopener" href="https://www.usenix.org/conference/usenixsecurity21/presentation/izhikevich">Talk</a> (YouTube)</p>
+<h2 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h2><p>A Chinese-friendly reading note for the paper “LZR: Identifying Unexpected Internet Services”. Contains a large amount of machine translation and summarization of the original text, <em>with my additions in italics</em>.</p>
+<h2 id="Research-Highlights"><a href="#Research-Highlights" class="headerlink" title="Research Highlights"></a>Research Highlights</h2><ul>
+<li>Investigated the deployment location of services in the network and evaluated the security posture of services deployed on unexpected ports.</li>
+<li>Past scans assumed services were deployed on common ports, ignoring scans of unexpected service ports. Hosts responding to SYN scans did not complete application-layer handshakes, perhaps due to hidden services or firewalls blocking further interaction.</li>
+<li>By analyzing the behavior of uncompleted application-layer handshakes on non-expected service ports, firewalls and middleware were traced, and the effectiveness of anti-scanning measures was evaluated.</li>
+<li>Discovered that due to services running on unexpected ports, L7 handshakes require pre-established secret protocol handshakes and acknowledgment of data on each port. Services deployed on unexpected ports have poorer security, such as some IoT devices.</li>
+<li>Fingerprinted 88% of recognizable services with one packet, and identified 99% of recognizable unexpected services with five handshakes.</li>
+<li>Filtered hosts that responded well, returned SYN-ACK but could not complete application-layer handshakes to speed up the process.</li>
+</ul>
+<h2 id="Finding-Real-TCP-Services"><a href="#Finding-Real-TCP-Services" class="headerlink" title="Finding Real TCP Services"></a>Finding Real TCP Services</h2><p>TCP activity does not necessarily indicate the presence of an application-layer service, as security defense tools like firewalls and middleware exist.</p>
+<h3 id="L4-and-L7-Responsiveness"><a href="#L4-and-L7-Responsiveness" class="headerlink" title="L4 and L7 Responsiveness"></a>L4 and L7 Responsiveness</h3><p>Confirm whether hosts responding to SYN-ACK packets complete application-layer handshakes for services corresponding to common ports. First, ZMap sends SYN packets, then ZGrab attempts application-layer handshakes.</p>
+<p>A considerable portion of hosts responding with TCP failed to complete the L7 handshake, with application-layer handshakes most likely to complete on common ports and rarely on rare ports.</p>
+<p>The following analyzes application-layer unresponsiveness by examining state changes during two scanning phases.</p>
+<h3 id="Connection-Evasion"><a href="#Connection-Evasion" class="headerlink" title="Connection Evasion"></a>Connection Evasion</h3><p>If firewalls indiscriminately forged port open packets, it would affect normal user usage. Therefore, firewalls need to follow certain rules to determine whether to forge responses, commonly by blacklisting IPs that send a large number of request packets.</p>
+<p>During TCP handshakes using ZGrab, some ports did not respond with SYN-ACK, possibly due to network failures, DHCP interruptions, or scanner blocking. We used another IP that had not previously connected to the host to scan a random ephemeral port to confirm the presence of connection evasion. It was found that 70% of hosts responded to this new IP, indicating that the previous IP was evaded. In the evaded IP blocks, 40% of hosts evaded the &#x2F;32 subnet, 10% evaded the &#x2F;24, and the largest one was Mexico’s ISP Alestra Net (ASN 11172), which evaded a &#x2F;20.</p>
+<p>For IPs considered malicious, network hardware (<em>e.g., routers</em>) and host software (<em>e.g., Snort</em>) evade connections or dynamically block them. These methods prevent scanners from using a single IP to scan the network, forcing them to use multiple IPs to reach target hosts, thus increasing the difficulty of attacks. By comparing scanning results from a single source IP and multiple source IPs, it was found that hosts that evade connections do not provide legitimate services. If filtering can be effective during scans, they can be safely ignored in research.</p>
+<h3 id="Do-TCP-Responsive-Hosts-Speak-TCP"><a href="#Do-TCP-Responsive-Hosts-Speak-TCP" class="headerlink" title="Do TCP-Responsive Hosts Speak TCP?"></a>Do TCP-Responsive Hosts Speak TCP?</h3><p>When ZGrab performed the second handshake, 96% of port services did not complete the application-layer handshake and returned SYN-ACK. The following discusses whether hosts enter a state of exchanging application-layer data or stop responding after sending a SYN-ACK. The figure below illustrates how the scanner infers server state based on captured data. To enter the established state, the server only needs to send a SYN-ACK. Once the client sends an ACK, data can be transmitted normally, with the amount of data specified by the window size in the server’s SYN-ACK packet.</p>
+<p>The server can respond with a zero window in the SYN-ACK. When the server is ready to accept data, the client sends subsequent ACK packets to probe. In the figure, ACKNOWLEDGE DATA is defined as the state where the server allows the client to send data and acknowledges client data.</p>
+<p>ACCEPT DATA captures whether the server is ready to receive data. Servers that reach this state will keep the TCP connection open long enough to accept and acknowledge data. These two states are used to distinguish whether established connections can exchange data.</p>
+<p><img src="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260110233036206.png" srcset="/img/loading.gif" lazyload alt="TCP Handshake as Defined by LZR"></p>
+<p>A new scanner developed based on ZGrab establishes a TCP connection, sends two newlines, and infers the server’s TCP state.</p>
+<p><img src="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260110233045683.png" srcset="/img/loading.gif" lazyload alt="TCP State Inference Flowchart"></p>
+<p>After scanning random ports and IP addresses, it was found that 16% of services on common ports and 40% on rare ports could not enter the ACKNOWLEDGES DATA state.</p>
+<p><img src="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260110233049700.png" srcset="/img/loading.gif" lazyload alt="TCP Response State Distribution Across Different Ports and Analysis of Handshake Failure Reasons"></p>
+<p><em>Figure caption: (a) Proportion of ports with only SYN-ACK responses and those reaching the ACKNOWLEDGE DATA state among hosts with TCP responses; (b) Reasons why hosts that returned SYN-ACK failed to enter the ACKNOWLEDGE DATA state.</em></p>
+<h3 id="Zero-Window-DDoS-Protection"><a href="#Zero-Window-DDoS-Protection" class="headerlink" title="Zero Window DDoS Protection"></a>Zero Window DDoS Protection</h3><p>Among services that do not accept data, 13% of common port services and 26% of rare port services return TCP packets with a zero window (<em>if window scanning is used in nmap, a zero window is considered a closed port</em>) and do not increase the window size, actively preventing the client from sending data. Among all scanned ports, 99.94% of hosts returning a zero window do not increase the window size, 90% do not respond to secondary probes, and 10% reset the connection. These behaviors are network- or host-based rather than service-based.</p>
+<p>Among these, 99% of hosts that return a zero window on one port also return a zero window on other ports on the same host. If a host never increases its window size in responses, it may never respond. In Juniper’s Secure Services Gateway proxy, this method is used to prevent network-based SYN cookie DDoS attacks. The SYN-ACK packet responds with a zero window; after the client completes the three-way handshake with an ACK, the firewall sends a SYN packet to the server behind the firewall to establish a connection. During this time, it maintains a TCP window of zero size with the client, and the middleware prevents the client from sending data to the server behind the firewall.</p>
+<p>Zero-window SYN-ACKs are deployed across entire subnets, with 90% of IPs exhibiting zero-window SYN-ACKs doing so in subnets larger than &#x2F;24. The Florida Department of Management Services issued 16% of all zero-window SYN-ACKs across the network, accounting for 3% of all SYN-ACKs on random ports. Compared to subsequent RSTs, the TTL of SYN-ACKs is consistently near one hop, indicating they are issued by network devices.</p>
+<h3 id="Connection-Interruption-During-Handshake"><a href="#Connection-Interruption-During-Handshake" class="headerlink" title="Connection Interruption During Handshake"></a>Connection Interruption During Handshake</h3><p>In addition to specifying a zero window, 2% of hosts on each port never acknowledge data, and despite the client returning an ACK, the three-way handshake cannot be completed. After retransmitting SYN-ACK 7 or 8 times, it is inferred that the server will not reach the established state. Not only the TCP stack, but under MCI Communications Services, IPs retransmitting SYN-ACK on port 4567 also exhibit the same behavior on other ports. The TTL of real service responses is more than double that of retransmitted SYN-ACKs, indicating that middleware selectively drops packets.</p>
+<p>Interrupting connections during the handshake is a defensive behavior, a way for ISPs to protect users. CenturyLink (AS 209), Frontier Communications (AS 5650), and MCI Communications Services (AS 701) discard inbound traffic to port 4567&#x2F;TRAM post-SYN. Korea Telecom (AS 4766) and Axtel (AS 6503) account for 73% of interrupted connections on port 7547&#x2F;CWMP. This situation is rare on common ports, with only 5% of TCP-responsive hosts not accepting data and interrupting connections on port 80.</p>
+<h3 id="Resetting-Connections"><a href="#Resetting-Connections" class="headerlink" title="Resetting Connections"></a>Resetting Connections</h3><p>73% of services on common ports and 34% on rare ports that do not receive data and cannot reach the ESTABLISH state immediately reset the connection after the client completes the three-way handshake. According to RFC793, if the server does not want to communicate with the client, the server should close the TCP connection after the client acknowledges the SYN-ACK. This is how the DenyHosts firewall responds to scanners. Blocking occurs more frequently on hosts running SSH than HTTP. Similar to networks sending zero windows, this behavior is also caused by DDoS protection.</p>
+<p>To prevent SYN flood attacks, middleware sends back a SYN-ACK on behalf of the server, then establishes a connection with the server after the client completes the three-way handshake. If the server rejects the connection, the middleware will terminate the client’s connection. Cisco IOS-based routers use this scheme.</p>
+<p>The likelihood of hosts closing connections on common ports increased by 20%, as standard firewall policies included with Google Cloud load balancers default to accepting communication on these ports for service health checks, and rely on backend virtual machines to reset connections if the port is closed.</p>
+<h3 id="Dynamic-Blocking-After-Handshake"><a href="#Dynamic-Blocking-After-Handshake" class="headerlink" title="Dynamic Blocking After Handshake"></a>Dynamic Blocking After Handshake</h3><p>Many hosts simply do not acknowledge any data at all and do not respond to subsequent handshakes.<br>To distinguish between hosts that evade scanners after the handshake and those that simply do not acknowledge data, we used both the source IP of the initial connection and a new IP to perform an L7 handshake with hosts that initially responded but did not acknowledge data. 98% of hosts responded to the new IP, indicating they blocked previous incoming connections. This dynamic blocking behavior only occurred after the three-way handshake, unlike the connection evasion in 2.2. The largest network exhibiting post-handshake dynamic blocking was Coming ABCDE HK (AS 133201), accounting for 48% of all IPs with post-handshake blocking.</p>
+<p>Other hosts that failed to acknowledge data did not perform dynamic blocking, as they did not respond to anything after the actual handshake but always responded to all scans. Vodafone (AS 133612) and Webclassit (AS 34358) exhibited this behavior on all scanned ports, accounting for 66% of all IPs. Additionally, TTL values did not match, indicating the presence of middleware.</p>
+<h3 id="Middleware-Protection-Capabilities"><a href="#Middleware-Protection-Capabilities" class="headerlink" title="Middleware Protection Capabilities"></a>Middleware Protection Capabilities</h3><p>Dynamic blocking, i.e., completing the handshake without acknowledging data, is the most effective way to reduce scanning speed. This technique causes scanners to timeout by not receiving the scanner’s ACK. Zero-window SYN-ACKs also cause timeouts, but zero-windows are easily filtered. Closing the connection after the handshake only results in negligible slowdown.</p>
+<h3 id="Summary"><a href="#Summary" class="headerlink" title="Summary"></a>Summary</h3><p>SYN-ACKs do not indicate the presence of a service. 16% of services on common ports and 40% on rare ports are protected by middleware and do not accept data. The following section investigates why hosts using TCP do not always complete the L7 handshake.</p>
+<h2 id="Application-Layer-Service-Deployment"><a href="#Application-Layer-Service-Deployment" class="headerlink" title="Application-Layer Service Deployment"></a>Application-Layer Service Deployment</h2><p>The previous section studied L4-responsive services that do not communicate with L7 services due to DDoS and scanning protection. After excluding 28% of pseudo-services (<em>see 3.1 for how they were excluded</em>), it was found that 27% of services on common ports and 63% of services on rare ports were not running the expected application-layer protocols. This section analyzes services that complete unexpected application-layer handshakes or acknowledge data but are not any recognizable application-layer protocol services. A significant proportion of recognizable services are deployed on unexpected ports. IANA-assigned ports only account for a small fraction, with only 6.4% of TLS services running on port 443.</p>
+<h3 id="Finding-Unexpected-Services"><a href="#Finding-Unexpected-Services" class="headerlink" title="Finding Unexpected Services"></a>Finding Unexpected Services</h3><p>Scanning a subset of IPs, for each responsive service, we first perform an L7 handshake using the expected protocol, and if that fails, we use a 30-protocol scanner for subsequent handshakes. 98% of IPs provided less than 4 unrecognized services, while 2% of IPs provided unrecognized services on over 60,000 ports. On rare ports, approximately 75% of unrecognized services were provided by hosts that had unrecognized services on almost every port. Those hosts had unrecognized services on most ports because some networks drop all traffic to security-sensitive ports. Among the top 50 networks with the most SYN-ACK responses on all ports, 28% dropped all traffic to port 445, and 10% dropped to port 23. Hosts with unrecognized services on almost every port were concentrated in a few networks.</p>
+<p>Additionally, in RST-fingerprinted F5 Big-IP firewalls, IPs respond on every port due to wildcards in firewall configurations or firewall SYN-cookie caches being overloaded. These hosts can be identified and excluded by checking whether they acknowledge data on 5 random ports. After filtering, an average of 10% of common services and 25% of rare services remained unrecognized (<em>i.e., did not respond to any of the 30 handshakes</em>).</p>
+<h3 id="Characterizing-Unexpected-Services"><a href="#Characterizing-Unexpected-Services" class="headerlink" title="Characterizing Unexpected Services"></a>Characterizing Unexpected Services</h3><p>Common ports typically run expected protocol services, with most unexpected services on port 80 being TLS-based.</p>
+<h3 id="Security-of-Unexpected-Services"><a href="#Security-of-Unexpected-Services" class="headerlink" title="Security of Unexpected Services"></a>Security of Unexpected Services</h3><p>A large number of IoT devices occupy non-standard port 45, but many studies only focus on standard ports (14, 20, 27, 55, 62, 71). By manually identifying server certificates belonging to IoT manufacturers, we found that IoT interfaces are widely present on unexpected ports; 50% of TLS server certificates on unexpected ports belonged to IoT devices, and the likelihood of TLS belonging to IoT devices was 5 times higher than on port 443.</p>
+<p>For example, 35% of Korea Telecom’s 8000&#x2F;TLS devices were icctv devices (i.e., surveillance cameras), and 38% of 80&#x2F;TLS devices were Huawei network nodes, distributed across 1% of international networks. In Korean networks, approximately 5% of TLS on port 8443 belonged to Android TVs, and at least 20% belonged to routers.</p>
+<p>Unassigned ports also contain more TCP&#x2F;UPnP devices. For instance, the number of TCP&#x2F;UPnP devices on port 49152 (primarily in Latin American and Asian telecommunications) was 12 times that on port 80, and on ports 58000 and 30005, it was 2 times that on port 80.</p>
+<p>TLS services on unassigned ports were 1.71 times more likely to have certificates with known private keys than those on assigned ports. When scanning unassigned ports, we found the number of certificates with known private keys to be more than double what was reported in previous work [32, 36]. For example, 40.2% of TLS hosts on port 8081 were DOCSIS 3.1 wireless gateways from Telecom Argentina (AS 10481 and 10318) using the same OpenSSL test certificate and known private key, and 39% of TLS hosts on port 58000 were Qno wireless devices using the same self-signed certificate and known private key. On 23% of scanned ports, public keys were more likely to be shared (up to 1.7 times) than on port 443 (e.g., 1.5 times more likely for 80&#x2F;TLS). Nevertheless, previous studies on encrypted keys on the Internet limited their analysis to 443&#x2F;HTTPS, 22&#x2F;SSH, 995&#x2F;POP3, 993&#x2F;IMAPS, and 25&#x2F;SMTPS.</p>
+<h3 id="Summary-1"><a href="#Summary-1" class="headerlink" title="Summary"></a>Summary</h3><p>Many popular protocols are distributed across all 65K ports, not just IANA-assigned ports.</p>
+<h2 id="Efficient-Service-Identification"><a href="#Efficient-Service-Identification" class="headerlink" title="Efficient Service Identification"></a>Efficient Service Identification</h2><p>Previously, for L7 handshakes, 30 types of handshakes (<em>probes</em>) were sent. This section discusses sending five handshake messages to discover 99% of recognizable unexpected services.</p>
+<h3 id="Protocol-Discovery"><a href="#Protocol-Discovery" class="headerlink" title="Protocol Discovery"></a>Protocol Discovery</h3><p>Two directions for accelerating protocol discovery:</p>
+<ol>
+<li>Methods to trigger protocol identification responses across a large number of protocols.</li>
+<li>Optimizing handshake order for efficient service discovery.<ul>
+<li>Banner fingerprinting.</li>
+<li>Optimal handshake order.<br>On both IANA-assigned and ephemeral ports, simply opening a connection and waiting could identify over half of the unexpected services. For IANA-assigned ports, waiting and sending a TLS Client Hello could discover 80% of unexpected services. On ephemeral ports, waiting and an HTTP request discovered 83.4% of services.</li>
+</ul>
+</li>
+</ol>
+<h3 id="Impact-of-L7-Filtering-Application-Layer-Fingerprinting"><a href="#Impact-of-L7-Filtering-Application-Layer-Fingerprinting" class="headerlink" title="Impact of L7 Filtering (Application-Layer Fingerprinting)"></a>Impact of L7 Filtering (Application-Layer Fingerprinting)</h3><p>One reason for not identifying all services is that even if the protocol guess is correct, the chosen handshake parameters might be rejected. (e.g., in SNMP, the server first acknowledges data and then sends a TCP RST to reject requests that do not specify the correct community string in the first data packet). Can this L7 filtering strategy prevent the server from sending any data to the client, hindering fingerprinting efforts?</p>
+<p>Experiment: Taking PPTP as an example, according to RFC2637, add the magic cookie option (a pending constant used to synchronize TCP data streams), setting it to 0x1A2B3C4D in one request and 0x11111111 in another. The standard stipulates that loss of synchronization must close the TCP session of the control connection; therefore, if the magic cookie is incorrect, the number of IPs sending data to the client will decrease. The experimental results are shown in the figure below, indicating that handshake parameters indeed affect IP responses.</p>
+<p><img src="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260110233136612.png" srcset="/img/loading.gif" lazyload alt="Impact of Magic Cookie Option in PPTP Protocol on the Number of IP Responses"></p>
+<p>Responsive IPs acknowledge data and close the connection upon receiving a GET request, preventing scanners from identifying the service as HTTP. By sending requests with OPTIONS, 72% of IPs responded with 501 (<em>Method Not Implemented</em>), and 17% of IPs responded with 405 (<em>Method Not Allowed</em>), confirming their use of HTTP. IPs that specifically respond to OPTIONS requests are not limited to a particular network, being present across 5.3% of ASNs. However, the response difference for port 80 between requests with and without OPTIONS was small.</p>
+<p>For TLS, according to RFC8446, handshake failures should generate error messages and notify the application before closing the connection, but when presented with incompatible ciphers, 2.65% of IPs will simply close the connection without any application-layer error. For instance, an incorrect magic cookie in PPTP will cause 67.1% of IPs not to respond with any data. Hosts perform application-layer filtering based on options, not sending any data to the client. For scanners, the challenge lies in guessing good parameters that make the host return a correct response.</p>
+<p><em>(<em>Similar to how probes mentioned in nmap UDP port scans may not necessarily elicit a correct response from the host</em>)</em></p>
+<h3 id="Impact-of-Handshake-Order-Corresponding-to-Optimal-Handshake-Order"><a href="#Impact-of-Handshake-Order-Corresponding-to-Optimal-Handshake-Order" class="headerlink" title="Impact of Handshake Order (Corresponding to Optimal Handshake Order)"></a>Impact of Handshake Order (Corresponding to Optimal Handshake Order)</h3><p>Similar to how handshake options prevent server responses, repeatedly attempting incorrect handshakes before the correct one might prevent service identification. To evaluate whether hosts filter or reject connections after receiving incorrect L7 information, we conducted the following experiment: sending consecutive HTTP GET and TLS hello to all IANA-assigned ports in 1% of IPv4, comparing the number of hosts that completed subsequent handshakes after sending expected L7 data with those that completed subsequent handshakes after sending incorrect L7 data.</p>
+<p>Across different protocols, sending incorrect L7 data resulted in 30% of subsequent handshakes failing compared to hosts discovered when directly scanning with the protocol. Some, even if fingerprinting was successful, could not complete subsequent handshakes. For example, sending non-Telnet data to Telnet servers resulted in 17% of subsequent handshakes failing, with 65% returning TCP RST and 35% not returning SYN-ACK. Sending an HTTP GET to TLS servers resulted in 29% of subsequent TLS handshakes failing. This behavior is similar to Cisco IOS’s Login Block feature, which allows administrators to temporarily block connections to L7 services after login failures.</p>
+<p>This phenomenon often occurs after the host sends protocol identification data, possibly because this is the first time the host stores application-layer state about the server side of the connection. It does not prevent fingerprinting, only blocks subsequent handshakes after the identified data has been sent to the scanner. Waiting for a period after fingerprinting before attempting subsequent handshakes significantly increases handshake success rates; 99% of hosts could complete subsequent handshakes within 2 minutes after fingerprinting.</p>
+<p>Sending incorrect handshake data can cause some services to fail to complete subsequent handshakes, even if fingerprinting is successful.</p>
+<h3 id="Summary-2"><a href="#Summary-2" class="headerlink" title="Summary"></a>Summary</h3><p>A limitation of L7 scanning is that services require specific handshake options to respond. Results show that many hosts respond to incorrect L7 handshakes by sending data that helps identify the service. A single HTTP GET request can detect 16 out of 30 protocols, and 99% of unexpected services are identified within 5 handshakes (<em>referring to five distinct handshake types</em>). This led to the construction of LZR.</p>
+<h2 id="LZR"><a href="#LZR" class="headerlink" title="LZR"></a>LZR</h2><p>Introduction to the LZR system, a scanner that efficiently identifies Internet services. It can be used with ZMap or as a plugin between ZMap and an application-layer scanner (ZGrab), indicating what subsequent handshakes to perform.</p>
+<p>LZR’s advantage lies in its “fail fast” method and an “everything fingerprint” method for protocol identification, primarily relying on the following ideas:</p>
+<ul>
+<li><p><strong>Ignore non-acknowledging hosts</strong>:<br>40% of services sending SYN-ACK never reach the acknowledge data state. These services cannot complete L7 handshakes and can be ignored during scanning. Non-acknowledging services force stateful scanners to open operating system sockets and wait for timeouts. By sending ACK application-layer packets with TCP handshakes, non-acknowledging hosts are filtered out, similar to ZMap’s stateless SYN scanning.</p>
+<p><em>Attached are the principles of two port scanning prevention tools:</em><br><em>1. Generating fake banners using a dynamic service signature database, dynamically generating valid service signatures based on a service signature regular expression database to respond to service probes (e.g., nmap -F -sV)</em></p>
+<p><em>The only way to identify if a service is being emulated is through protocol probing.</em></p>
+<p><img src="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260115201108438.png" srcset="/img/loading.gif" lazyload alt="Portspoof"></p>
+<p><em>2. <a target="_blank" rel="noopener" href="https://qinqianshan.com/web/web_basic/tcp-scan/">Preventing port scanning using TCP protocol</a></em></p>
+<p><img src="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260115201148779.png" srcset="/img/loading.gif" lazyload alt="Firewall Interception-1"></p>
+<p><img src="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260110233237565.png" srcset="/img/loading.gif" lazyload alt="Firewall Interception-2"></p>
+<p><em>My summary for judging non-acknowledge state:</em><br><em>1. If an IP responds with SYN-ACK, but even one port returns a zero window, then it’s highly probable that all other ports on that IP will also return a zero window. This is a protection strategy.</em></p>
+<p><em>2. If SYN-ACK is returned but subsequent data sent is not acknowledged, it’s an ACK sent by middleware (firewall) on behalf of the server, not providing a real service.</em></p>
+</li>
+<li><p><strong>Multi-listen</strong>.<br>Up to 96% of services on each port run unexpected protocols. Among the 30 protocols scanned, 8 protocols send data first from the server, and 10 protocols send fingerprinting data when an incorrect L7 handshake is sent.</p>
+<p>By always waiting and then fingerprinting invalid server responses, we can identify 16 out of 30 protocols by sending a single packet. The scanner only needs to perform minimal computation to fingerprint services: the first packet from the server identifies the running protocol, which does not require a full TCP&#x2F;IP stack.</p>
+</li>
+</ul>
+<h3 id="Scanning-Algorithm"><a href="#Scanning-Algorithm" class="headerlink" title="Scanning Algorithm"></a>Scanning Algorithm</h3><p>LZR receives a stream of SYN-ACK packets from ZMap or (IP,port) tuples for scanning. After obtaining full connection details, LZR first filters out hosts sending with a zero window (<em>according to previous research, 99% of hosts responding with SYN-ACK will return a zero window on other ports if they return one on a single port</em>). For non-zero window cases, LZR will send an ACK packet containing the first packet’s handshake data of the expected protocol to continue the connection. If any type of data is received as a response, the data will be fingerprinted and the connection closed.</p>
+<p>If the host neither acknowledges data nor closes the connection, LZR will use the PUSH flag and retransmit data (see 5.3 for details). If the host does not acknowledge data (<em>e.g., never responds or resets the connection with RST without acknowledging</em>), LZR will mark the host as potentially not hosting a real service and will not proceed with further connection attempts.</p>
+<p><em>I deployed a simple rule to respond with SYN-ACK upon receiving a SYN packet. When using nmap for service detection, the PSH flag was also set to 1. After sending 5 times, the connection was disconnected, and a new connection was opened to send the next probe. This was very time-consuming, and the final result was ‘open’, with an uncertain service indicated by a question mark.</em></p>
+<p>If the host acknowledges data but does not send any data in response (<em>i.e., the server does not respond or immediately closes the connection afterward</em>), LZR will close the connection, initiate a new one, and send the next handshake.</p>
+<p>The above process continues until the running protocol is identified or no other handshakes can be attempted. LZR can also selectively filter IPs that respond on almost every port by simultaneously sending SYN packets to a user-specified number of random ephemeral ports and checking for SYN-ACKs (see <a href="#finding-unexpected-services">Finding Unexpected Services</a>).</p>
+<p><img src="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260115201412632.png" srcset="/img/loading.gif" lazyload alt="LZR Service Identification and Fingerprinting Algorithm Flowchart"></p>
+<h3 id="Architecture"><a href="#Architecture" class="headerlink" title="Architecture"></a>Architecture</h3><p>LZR is developed in Go language, provides all protocol handshakes from Appendix A, and uses libpcap to send and receive raw Ethernet packets. It offers efficient fingerprinting services, uses a single socket during scanning, adopts and continues connections initiated by stateless scanners, only needs to send and receive a single packet to complete service fingerprinting, and does not require a full TCP stack.</p>
+<p>LZR takes a list of command-line parameters for the protocols to be tested and a stream of SYN-ACKs from ZMap or IP&#x2F;port as input for scanning. A subset of routines sends subsequent ACK packets containing handshake messages and fingerprints the responses. It is easy to add new protocols&#x2F;handshakes to LZR; each handshake produces a handshake interface, specifying what data to append to the ACK packet and what to search for in the response packet to fingerprint the protocol.</p>
+<p>Once fingerprinting data is received, it first checks if the data matches the fingerprint of the attempted protocol (specified in the handshake interface). If not, it checks if all remaining fingerprints match. When using LZR, iptables rules must be set to prevent the Linux kernel from sending RST packets in response to SYN-ACKs it receives. Otherwise, LZR cannot adopt and continue these connections.</p>
+<h3 id="Evaluation"><a href="#Evaluation" class="headerlink" title="Evaluation"></a>Evaluation</h3><h4 id="Performance-Evaluation"><a href="#Performance-Evaluation" class="headerlink" title="Performance Evaluation"></a>Performance Evaluation</h4><ol>
+<li>Compare ZMap and LZR in identifying services running on ports found by ZMap.</li>
+<li>Use LZR as a plugin between ZMap and ZGrab, instructing ZGrab on what kind of L7 handshake to complete for hosts found by ZMap. LZR can filter hosts faster than ZMap, which is particularly advantageous on ephemeral ports with low hit rates.</li>
+<li>ZMap&#x2F;LZR+ZGrab Offline Scan. First, we use ZMap and LZR to identify Internet hosts using known protocols and exclude this stage from our benchmarking. Then, in the second stage, we allow ZGrab to process services at full speed.</li>
+<li>ZMap+LZR Offline Scan. First, we use ZMap to find candidate services and exclude this stage from our benchmarking. In the second stage, we tested how fast LZR could run fingerprinting services at full speed.<br>We calculate the runtime performance of ZGrab and LZR using CPU cycles per second, as both tools are CPU-bound: ZGrab’s completion of full handshakes (e.g., TLS encryption&#x2F;decryption) and LZR’s fingerprinting (e.g., pattern matching) create the largest performance bottlenecks for each tool.</li>
+</ol>
+<h4 id="Number-of-Unexpected-Services-Discovered"><a href="#Number-of-Unexpected-Services-Discovered" class="headerlink" title="Number of Unexpected Services Discovered"></a>Number of Unexpected Services Discovered</h4><p>LZR identifies unexpected services while analyzing responses to data contained in ACK packets to filter out unresponsive services. LZR uses a keyword fingerprinting strategy, identifying an average of 12 unexpected unique protocols across ports using only 1-2 expected handshakes; with just one expected handshake, it can discover 1.3 million IPs hosting 16 unexpected protocols on port 443 and 238,000 IPs hosting 18 unexpected protocols on port 80.</p>
+<h4 id="Host-Filtering"><a href="#Host-Filtering" class="headerlink" title="Host Filtering"></a>Host Filtering</h4><p>LZR is similar to using only ZMap and ZGrab for host filtering.</p>
+<h4 id="Detection-Speed"><a href="#Detection-Speed" class="headerlink" title="Detection Speed"></a>Detection Speed</h4><p>LZR can identify services without completing L7 handshakes.<br>When many services return a zero window or do not acknowledge data, LZR significantly improves service detection speed compared to ZGrab.</p>
+<h4 id="Bandwidth-Savings"><a href="#Bandwidth-Savings" class="headerlink" title="Bandwidth Savings"></a>Bandwidth Savings</h4><p>Reasons:<br>(1) LZR does not attempt to retransmit ACKs to zero-window hosts to check for window size increases.<br>(2) LZR does not require completing full L7 handshakes. However, with ZGrab+LZR scanning, when most TCP-responsive hosts serve expected protocols on their ports, there is an overhead in the total number of packets sent because LZR sends at least one extra ACK for fingerprinting before reattempting a handshake (e.g., for 80&#x2F;HTTP, ZLR+ZGrab sends 28% more packets in total than ZMap+ZGrab, even though ZLR+ZGrab runs 1.2 times faster).</p>
+<h2 id="Related-Work"><a href="#Related-Work" class="headerlink" title="Related Work"></a>Related Work</h2><p>Several studies have pointed out significant differences between L4 and L7 responses:</p>
+<ul>
+<li><p>“Tarpits”—fake services attempting to deceive network scanners, using some of the same middleware techniques seen at the beginning of connections.<br><em>L. Alt, R. Beverly, and A. Dainotti. Uncovering network tarpits with degreaser. In 30th Annual Computer Security Applications Conf., 2014.</em><br>Similar to the work in this paper, they considered the relationship between live services at different points, showing that responses on popular ports are correlated with each other.</p>
+</li>
+<li><p><em>S. Bano, P. Richter, M. Javed, S. Sundaresan, Z. Durumeric, S. J. Murdoch, R. Mortier, and V. Paxson. Scanning the Internet for liveness. ACM SIGCOMM Computer Communication Review, 2018.</em><br>LZR strives to identify services using a single packet, reducing the time required to scan rare ports.</p>
+</li>
+<li><p>Klick et al. showed that many IP address spaces do not require continuous scanning by services like <strong>Censys</strong>.<br><em>J. Klick, S. Lau, M. Wählisch, and V. Roth. Towards better Internet citizenship: Reducing the footprint of Internet-wide scans by topology aware prefix selection. In ACM Internet Measurement Conf., 2016.</em><br><em>(Censys: Z. Durumeric, D. Adrian, A. Mirian, M. Bailey, and J. A. Halderman. A search engine backed by Internet-wide scanning. In ACM Conference on Computer and Communications Security, 2015.)</em></p>
+</li>
+<li><p><strong>ZMap</strong>: Fast Internet-wide scanning and its security applications.<br><em>Z. Durumeric, E. Wustrow, and J. A. Halderman. ZMap: Fast Internet-wide scanning and its security applications. In 22nd USENIX Security Symposium, 2013.</em></p>
+</li>
+</ul>
+<h2 id="Conclusion"><a href="#Conclusion" class="headerlink" title="Conclusion"></a>Conclusion</h2><p>A significant portion of hosts responding to SYN scans never complete the application-layer handshake; in the absence of a real service, most replies are handled by middleware. Furthermore, many services are also on unexpected ports, and compared to services on standard ports, those on unexpected ports have weaker security.</p>
+<p>LZR reduces the time required to perform application-layer scanning on rare ports and identifies unexpected services running on ports. It identifies 16 protocols and 88% of recognizable services (referring to services the system can identify) with one packet, and 99% of recognizable services with five handshakes (sending up to 5 different handshake packets).</p>
+<p>Using only the top n most popular ports is insufficient to assess which ports are most likely to host specific services, as HTTP and TLS are more widely used than most protocols.</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/" class="category-chain-item">论文阅读</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>【Paper Reading】Notes and Thoughts on LZR: Identifying Unexpected Internet Services</div>
+      <div>https://q1uki.xyz/en/2024/12/09/lzr/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>Author</div>
+          <div>q1uki</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Posted on</div>
+          <div>December 9, 2024</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>Licensed under</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - Attribution">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/en/2024/12/09/obfs4/" title="【Paper Reading】《Detecting probe resistant proxy》Experimental Validation and Analysis">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">【Paper Reading】《Detecting probe resistant proxy》Experimental Validation and Analysis</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2024/12/09/lzr/" title="【论文阅读】《LZR: Identifying Unexpected Internet Services》笔记与思考">
+                        <span class="hidden-mobile">【论文阅读】《LZR: Identifying Unexpected Internet Services》笔记与思考</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+  <div id="gitalk-container"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#gitalk-container', function() {
+      Fluid.utils.createCssLink('/css/gitalk.css')
+      Fluid.utils.createScript('https://lib.baomitu.com/gitalk/1.8.0/gitalk.min.js', function() {
+        var options = Object.assign(
+          {"clientID":"Ov23liuSYABDuZ6zWRwx","clientSecret":"8769c790613602f767e5ed67a101d7948d60ad49","repo":"blog-comments","owner":"q1uki","admin":["q1uki"],"language":"en","labels":["Gitalk"],"perPage":10,"pagerDirection":"last","distractionFreeMode":false,"createIssueManually":true,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token"},
+          {
+            id: '725704d2b0cd69ed3e187b16e92d0aeb'
+          }
+        )
+        var gitalk = new Gitalk(options);
+        gitalk.render('gitalk-container');
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>Table of Contents</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  <script>
+  Fluid.utils.createScript('https://lib.baomitu.com/mermaid/8.14.0/mermaid.min.js', function() {
+    mermaid.initialize({"theme":"default"});
+
+    Fluid.utils.listenDOMLoaded(function() {
+      Fluid.events.registerRefreshCallback(function() {
+        if ('mermaid' in window) {
+          mermaid.init();
+        }
+      });
+    });
+  });
+</script>
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">Keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+      <div class="col-lg-7 mx-auto nopadding-x-md">
+        <div class="container custom mx-auto">
+          <script>
+  function switchLang() {
+      var path = window.location.pathname;
+      if (path.indexOf('/en/') === 0) {
+          // 如果是英文版，直接剔除开头的 /en 即可变回中文版
+          window.location.href = path.replace('/en/', '/');
+      } else {
+          // 如果是中文版，直接在开头补上 /en 即可跳往英文版
+          window.location.href = '/en' + (path === '/' ? '/' : path);
+      }
+  }
+</script>
+
+        </div>
+      </div>
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    function isExpandAllEnabled() {
+      return CONFIG.toc && CONFIG.toc.expand_all === true;
+    }
+    function expandAllToc() {
+      if (!isExpandAllEnabled()) { return; }
+      jQuery('#toc-body .tocbot-is-collapsed').removeClass('tocbot-is-collapsed');
+    }
+    function updateTocToggle($li, $childList) {
+      var $toggle = $li.children('.toc-toggle');
+      if ($toggle.length === 0) { return; }
+      var collapsed = $childList.hasClass('tocbot-is-collapsed');
+      $toggle
+        .toggleClass('toc-toggle-collapsed', collapsed)
+        .toggleClass('toc-toggle-expanded', !collapsed);
+    }
+    function bindTocToggle() {
+      if (!isExpandAllEnabled()) { return; }
+      jQuery('#toc-body .toc-list-item').each(function() {
+        var $li = jQuery(this);
+        var $childList = $li.children('ol');
+        if ($childList.length === 0) {
+          if ($li.children('.toc-toggle').length === 0) {
+            $li.prepend('<span class="toc-toggle toc-toggle-placeholder" aria-hidden="true">›</span>');
+          }
+          return;
+        }
+
+        if ($li.children('.toc-toggle').length === 0) {
+          $li.prepend('<span class="toc-toggle toc-toggle-expanded" aria-hidden="true">›</span>');
+        }
+        updateTocToggle($li, $childList);
+      });
+      jQuery('#toc-body').off('click.tocToggle').on('click.tocToggle', '.toc-toggle', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        var $li = jQuery(this).parent('.toc-list-item');
+        var $childList = $li.children('ol');
+        if ($childList.length === 0) { return; }
+        $childList.toggleClass('tocbot-is-collapsed');
+        updateTocToggle($li, $childList);
+      });
+      if (!window.__tocToggleObserver) {
+        window.__tocToggleObserver = new MutationObserver(function(mutations) {
+          mutations.forEach(function(mutation) {
+            if (mutation.type !== 'attributes' || mutation.attributeName !== 'class') { return; }
+            var $list = jQuery(mutation.target);
+            var $li = $list.parent('.toc-list-item');
+            if ($li.length === 0) { return; }
+            updateTocToggle($li, $list);
+          });
+        });
+        jQuery('#toc-body ol').each(function() {
+          window.__tocToggleObserver.observe(this, { attributes: true });
+        });
+      }
+    }
+    var tocConfig = Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc);
+    if (isExpandAllEnabled()) {
+      tocConfig.collapseDepth = 6;
+    }
+    window.tocbot.init(tocConfig);
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+    expandAllToc();
+    bindTocToggle();
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+        expandAllToc();
+        bindTocToggle();
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">Blog works best with JavaScript enabled</div>
+  </noscript>
+</body>
+</html>
