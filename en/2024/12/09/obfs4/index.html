@@ -1,0 +1,990 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN,en,default" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/tab.png">
+  <link rel="icon" href="/img/tab.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#CE6D39">
+  <meta name="author" content="q1uki">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="《detecting probe resistant proxy》论文阅读，对其中obfs4部分进行验证实验，并分析了obfs4proxy的部分源代码结构和函数、obfs4协议及其使用的加密方法和身份验证方式。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Paper Reading:《Detecting probe resistant proxy》Experimental Validation and Analysis">
+<meta property="og:url" content="https://q1uki.xyz/en/2024/12/09/obfs4/index.html">
+<meta property="og:site_name" content="q1uki&#39;s blog">
+<meta property="og:description" content="《detecting probe resistant proxy》论文阅读，对其中obfs4部分进行验证实验，并分析了obfs4proxy的部分源代码结构和函数、obfs4协议及其使用的加密方法和身份验证方式。">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260110231135876.png">
+<meta property="article:published_time" content="2024-12-09T11:29:51.000Z">
+<meta property="article:modified_time" content="2026-04-01T16:34:32.384Z">
+<meta property="article:author" content="q1uki">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260110231135876.png">
+  
+  
+  
+  <title>Paper Reading:《Detecting probe resistant proxy》Experimental Validation and Analysis - q1uki&#39;s blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+  
+<link rel="stylesheet" href="/css/custom.css">
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"q1uki.xyz","root":"/","version":"1.9.9","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"expand_all":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"openkounter":{"server_url":"https://open-kounter.mintimate.cn","path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 8.1.1"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>q1uki</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content (desktop) -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>Home</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>Archives</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>Categories</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>Tags</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>About</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="javascript:switchLang()" target="_self">
+                <i class="iconfont icon-globe"></i>
+                <span>lang</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- Mobile grid menu overlay -->
+<div id="mobile-grid-menu" class="d-lg-none">
+  <div class="mobile-grid-menu-inner">
+    <div class="container">
+      <div class="row">
+        
+          
+          
+          
+          
+            <div class="col-4 mobile-grid-cell">
+              <a href="/" target="_self">
+                <div class="mobile-grid-item">
+                  <i class="iconfont icon-home-fill"></i>
+                  <span>Home</span>
+                </div>
+              </a>
+            </div>
+          
+        
+          
+          
+          
+          
+            <div class="col-4 mobile-grid-cell">
+              <a href="/archives/" target="_self">
+                <div class="mobile-grid-item">
+                  <i class="iconfont icon-archive-fill"></i>
+                  <span>Archives</span>
+                </div>
+              </a>
+            </div>
+          
+        
+          
+          
+          
+          
+            <div class="col-4 mobile-grid-cell">
+              <a href="/categories/" target="_self">
+                <div class="mobile-grid-item">
+                  <i class="iconfont icon-category-fill"></i>
+                  <span>Categories</span>
+                </div>
+              </a>
+            </div>
+          
+        
+          
+          
+          
+          
+            <div class="col-4 mobile-grid-cell">
+              <a href="/tags/" target="_self">
+                <div class="mobile-grid-item">
+                  <i class="iconfont icon-tags-fill"></i>
+                  <span>Tags</span>
+                </div>
+              </a>
+            </div>
+          
+        
+          
+          
+          
+          
+            <div class="col-4 mobile-grid-cell">
+              <a href="/about/" target="_self">
+                <div class="mobile-grid-item">
+                  <i class="iconfont icon-user-fill"></i>
+                  <span>About</span>
+                </div>
+              </a>
+            </div>
+          
+        
+          
+          
+          
+          
+            <div class="col-4 mobile-grid-cell">
+              <a href="javascript:switchLang()" target="_self">
+                <div class="mobile-grid-item">
+                  <i class="iconfont icon-globe"></i>
+                  <span>lang</span>
+                </div>
+              </a>
+            </div>
+          
+        
+        
+          <div class="col-4 mobile-grid-cell" id="mobile-search-btn">
+            <a href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <div class="mobile-grid-item">
+                <i class="iconfont icon-search"></i>
+                <span>Search</span>
+              </div>
+            </a>
+          </div>
+        
+        
+          <div class="col-4 mobile-grid-cell" id="mobile-color-toggle-btn"
+               data-label-light="Light"
+               data-label-dark="Dark">
+            <a href="javascript:;" aria-label="Color Toggle">
+              <div class="mobile-grid-item">
+                <i class="iconfont icon-dark" id="mobile-color-toggle-icon"></i>
+                <span id="mobile-color-toggle-label">Dark</span>
+              </div>
+            </a>
+          </div>
+        
+      </div>
+    </div>
+  </div>
+</div>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/post_background.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Paper Reading:《Detecting probe resistant proxy》Experimental Validation and Analysis"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2024-12-09 11:29" pubdate>
+          December 9, 2024 am
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          13k words
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          106 mins
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">Paper Reading:《Detecting probe resistant proxy》Experimental Validation and Analysis</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h2 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h2><p>When I first encountered this paper on proxy detection, there was little discussion about it in Chinese. I’ve compiled my notes after reading and experimenting (focusing on Tor’s obfs4), to facilitate learning and discussion for those who might find it useful.<br>(Currently, obfs4 is becoming obsolete, with new WebTunnels being introduced, but the upgrade and iteration still require time.)</p>
+<h2 id="Paper-Review"><a href="#Paper-Review" class="headerlink" title="Paper Review"></a>Paper Review</h2><h3 id="Probe-Selection"><a href="#Probe-Selection" class="headerlink" title="Probe Selection"></a>Probe Selection</h3><p>Our attack focuses on the observation that not responding with data is unusual behavior on the internet. By sending probes composed of popular protocols and random data, we can elicit responses from almost all endpoints (94%) in the Tap dataset of over 400k IP&#x2F;port pairs.<br>For endpoints that do not respond, proxy-specific TCP behaviors (such as timeouts and data thresholds) differ from those of other servers.</p>
+<p>Starting with 6 basic probes: HTTP, TLS, MODBUS, S7, random bytes, and an empty probe that sends no data after connection. For each probe, we record how the server responds with data (if any), when it closes the connection (if any), and how it closes the connection (TCP FIN or RST).</p>
+<ul>
+<li><strong>HTTP</strong>: For HTTP, we send a simple HTTP&#x2F;1.1 GET request with a host header of example.com. Most servers respond with a redirect or error page. Even non-HTTP servers may respond to this probe with error messages inherent to their protocol.</li>
+<li><strong>TLS</strong>: We send a TLS client Hello message, typically generated by a Chromium version 71 browser. This includes popular cipher suites and extensions, and even if the server does not support TLS, it should respond with a TLS alert message.</li>
+<li><strong>Modbus</strong>: Modbus is commonly used in Programmable Logic Controllers (PLCs) and other embedded devices in Supervisory Control and Data Acquisition (SCADA) environments. The probe defined in ZGrab was used, which sends a 3-byte command requesting device information descriptors from the remote host.</li>
+<li><strong>S7</strong>: S7 is a proprietary protocol used by Siemens PLC devices. Again, the probe defined in ZGrab was used, which sends a device identifier request via the COTP&#x2F;S7 protocol.</li>
+<li><strong>Random Bytes</strong>: Probes with varying amounts of random bytes. Servers will fail to parse them and respond with an error message, or close the connection in a way that distinguishes them from proxy servers.</li>
+<li><strong>Empty Probe</strong>: Sends no data after connecting. Some protocols (e.g., SSH) have the server communicate first (or concurrently) with the client. For other protocols, implementations might have different timeouts when the client sends some initial data compared to when no data is sent.</li>
+<li><strong>DNS AXFR</strong>: Constructed a DNS AXFR (zone transfer) query probe based on the DNS specification.</li>
+<li><strong>STUN</strong>: Implemented a STUN probe, based on the ZGrab-Golang library, to probe Cisco WebEx devices.</li>
+</ul>
+<h3 id="Experimental-Data"><a href="#Experimental-Data" class="headerlink" title="Experimental Data"></a>Experimental Data</h3><ul>
+<li><strong>Proxy Endpoints</strong>: Collected over 20 obfs4 proxy endpoints from Tor’s BridgeDB.</li>
+<li><strong>Non-Proxy Endpoints</strong>: Used active network scanning with ZMap and passive collection of network flow data. We used ZMap to send a SYN packet to 20,000 hosts on every TCP port (0-65535), totaling 1.3 billion probes. We found 1.5 million endpoints that responded with SYN ACK, which we labeled as the ZMap dataset. We sampled netflow data from the University of Colorado’s 10 Gbps gateway to collect endpoints. In countries without network censorship, the vast majority of traffic does not involve proxies, so the collected endpoints are primarily other services. Over a 3-day span, we collected over 550,000 server IP&#x2F;port nodes from an ISP. Of these, 433,286 (79%) hosts accepted connections (responding with a TCP SYN-ACK), while most of the remainder simply timed out when connection was attempted. Subsequent scans were conducted within days of observing connections, and some servers may have moved IP or gone offline during this time. Secondly, servers might be configured with firewalls that only allow access from certain IPs, potentially blocking ZMap scanning hosts. Ultimately, over 400,000 servers that sent data were captured in this dataset.</li>
+</ul>
+<h3 id="Experimental-Results"><a href="#Experimental-Results" class="headerlink" title="Experimental Results"></a>Experimental Results</h3><p>We sent 13 probes (7 probes from Section III-A and 6 random data probes ranging from 4KB-40KB) to 1.9 million nodes and recorded whether and when the server responded with data or closed the connection. If the server closed, we recorded whether it used FIN or RST. If the server did not respond or close the connection, we timed out after 300 seconds and marked the result as a timeout. Their closing thresholds were recorded.</p>
+<p>Since anti-probing proxies never respond with data, responsive endpoints can be discarded. In the passive Tap dataset, this excluded 94% of hosts, leaving only 26,021 potential proxies. In the ZMap dataset, the vast majority of hosts did not respond with data to any probe, with only 1.16% of endpoints being discarded.</p>
+<p>The reason is that among the nodes identified by ZMap, firewalls used a chaff strategy, responding to SYN only on specific subnets. 42% of nodes behaved similarly, neither sending data nor closing the connection to the probe. Clustering response data (response type, number of response bytes, connection close time, or timeout time) in the Tap dataset, the most popular response group contained 3% of endpoints and appeared to be TLS servers within the Cloudflare network (99.9% on endpoints with port 443). Figure 2 shows the CDFs of different response sets (ordered by popularity) for the ZMap and Tap datasets, illustrating greater diversity in the Tap dataset. The top 10 response sets accounted for over 80% of endpoints in the ZMap dataset but only 13% of endpoints collected in Tap.</p>
+<h3 id="Detection-Methods"><a href="#Detection-Methods" class="headerlink" title="Detection Methods"></a>Detection Methods</h3><ol>
+<li><strong>Buffer Threshold</strong>: Servers will close with FIN after receiving a certain number of bytes, and may close with RST after receiving a higher number of bytes. The closing thresholds of proxy services are mostly unique. Consider a server that reads N bytes from a client and tries to parse them as a protocol header. If parsing fails (e.g., invalid field, checksum, or MAC), the server can simply close the connection. If the client sends only N−1 bytes, the server might keep the connection open and wait for additional data before attempting to parse.</li>
+</ol>
+<p>The obfs4 handshake length can be up to 8192 bytes, so the server reads this many bytes before determining the client is invalid and entering the <code>closeAfterDelay</code> function. This function closes the connection after a random delay (30-90 seconds), or after reading an additional N bytes (N randomly chosen between 0 and 8192) when the server starts. However, these reads are all done using a 1448-byte buffer. This means that if 8192+N bytes are sent, the obfs4 server will send a FIN, and if 8192 + N - ((8192 + N) mod 1448) + 1448 bytes are sent, it will return an RST. This is obfs4-specific behavior.</p>
+<p><strong>After the paper’s authors communicated their research findings with torproject, obfs4proxy fixed the closing threshold behavior in version 0.0.11.</strong><br>2.  <strong>Timeout Duration</strong>: Many endpoints have different timeouts based on the amount of data they receive. Hosts that do not acknowledge data are not standard TCP behavior; we would retransmit, but proxies do not exhibit this behavior, so it does not affect the results.</p>
+<p><strong>The closing threshold was fixed, but timeout behavior can still be observed.</strong><br>3.  <strong>Rare Responses</strong>: Not responding to any probe is rare.</p>
+<h2 id="obfs4proxy-Analysis"><a href="#obfs4proxy-Analysis" class="headerlink" title="obfs4proxy Analysis"></a>obfs4proxy Analysis</h2><h3 id="obfs4-Protocol-Verification-Logic"><a href="#obfs4-Protocol-Verification-Logic" class="headerlink" title="obfs4 Protocol Verification Logic"></a>obfs4 Protocol Verification Logic</h3><h4 id="Handshake-Process"><a href="#Handshake-Process" class="headerlink" title="Handshake Process"></a>Handshake Process</h4><pre><code class=" mermaid">sequenceDiagram
+    Client-&gt;&gt;Server: SYN+ECN+CWR
+    Server--&gt;&gt;Client: SYN+ACK 
+    Client-&gt;&gt;Server: ACK
+    Client-&gt;&gt;Server: PSH+ACK+data
+</code></pre>
+
+<h4 id="data-content"><a href="#data-content" class="headerlink" title="data content"></a>data content</h4><p>Involves algorithm: curve25519</p>
+<p>Both client and server must have their own Keypair instances. As defined in the curve25519 package, the PrivateKey is randomly generated within a certain range. According to the ECC algorithm, the PublicKey can be generated from the private key by calling <code>curve25519.ScalarBaseMult()</code>.</p>
+<p>The Representative key is generated from the public key and can be converted back to a public key by calling the <code>extra25519.RepresentativeToPublicKey()</code> function when needed. The definition and initialization code for Keypair are located in the <code>NewKeypair()</code> function, which is defined in the ntor.go file.</p>
+<p>Using <code>ScalarBaseMult()</code> from extra25519.go, the public and representative keys are generated from the private key. The representative key is obfuscated via an Elligator 2 mapping to prevent inferring the encryption algorithm after collecting a significant number of public keys.<br><a target="_blank" rel="noopener" href="http://elligator.cr.yp.to/elligator-20130828.pdf">Algorithm detailed explanation</a></p>
+<p>Both the client and the server should securely store their private keys and send their public keys to each other in the form of Representative keys. The connection process for an Obfs4 client begins with a handshake message, so let’s look at the client’s handshake message. The overall structure of this message is as follows:<br><img src="https://raw.githubusercontent.com/q1uki/blog-images/main/img/20260110231135876.png" srcset="/img/loading.gif" lazyload></p>
+<ol>
+<li><code>Keypair.representative</code>, its length is 20h bytes. On the server side, it can be used to restore the client’s public key. (obfs4 bridge configuration line)</li>
+<li>Padding data using random bytes, with a size ranging from 4Dh to 1FC0h. This padding data obfuscates the size of the handshake packet, making it harder to identify.</li>
+<li>The HMAC value of the first part, <code>Keypair.representative</code>. Obfs4 uses SHA-256 to generate HMAC, which is 20h bytes long. Obfs4 only keeps the first 10h bytes as the HMAC, and the remaining 10h bytes are discarded.</li>
+<li>Obfs4 uses the current system time to calculate the hour value of the UNIX Epoch time (starting from UTC 1970-01-01 Thursday 00:00:00). It calculates the HMAC value of the first three parts of the packet, plus (meaning concatenated with) the hour value in the string. Similarly, its result length is 20h bytes, with the first 10h bytes serving as the fourth part of the packet. (anti-replay)</li>
+</ol>
+<h3 id="obfs4proxy-Source-Code-Structure"><a href="#obfs4proxy-Source-Code-Structure" class="headerlink" title="obfs4proxy Source Code Structure"></a>obfs4proxy Source Code Structure</h3><h4 id="common"><a href="#common" class="headerlink" title="common&#x2F;"></a>common&#x2F;</h4><p>Cryptography, socks5 and other components</p>
+<h4 id="internal"><a href="#internal" class="headerlink" title="internal&#x2F;"></a>internal&#x2F;</h4><p>Updated obfuscation algorithms</p>
+<h4 id="obfs4proxy"><a href="#obfs4proxy" class="headerlink" title="obfs4proxy&#x2F;"></a><strong>obfs4proxy&#x2F;</strong></h4><p>obfs4proxy.go Main function</p>
+<h4 id="transports"><a href="#transports" class="headerlink" title="transports&#x2F;"></a><strong>transports&#x2F;</strong></h4><p>Contains implementations of meeklite, obfs2, 3, 4, scramblesuit transport protocols</p>
+<ul>
+<li>obfs4&#x2F;<ul>
+<li>framing&#x2F;: Data frame processing<ul>
+<li>handshake_ntor.go: Completes obfs4 handshake, including verification</li>
+<li>obfs4.go: Handshake related functions</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="obfs4proxy-Source-Code-Functions"><a href="#obfs4proxy-Source-Code-Functions" class="headerlink" title="obfs4proxy Source Code Functions"></a>obfs4proxy Source Code Functions</h3><h4 id="obfs4-go"><a href="#obfs4-go" class="headerlink" title="obfs4.go"></a>obfs4.go</h4><ul>
+<li><strong>WrapConn()</strong>: Calls <code>serverHandshake()</code>, and no matter what error is returned, it calls <code>closeAfterDelay()</code>.</li>
+<li><strong>serverHandshake()</strong>: Creates a new server handshake, sets the base timeout. Then sets a buffer according to the maximum readable length (8192), reads incoming packets, saves packet content, and then <code>parseClientHandshake()</code> parses the content.<br>  If the parsing error is <code>ErrMarkNotFoundYet</code>, it continues to read packets; other errors cause the function to return an error.<br>  If parsing is normal, the buffer is cleared.</li>
+</ul>
+<h4 id="handshake-ntor-go"><a href="#handshake-ntor-go" class="headerlink" title="handshake_ntor.go"></a>handshake_ntor.go</h4><ul>
+<li><strong>parseClientHandshake()</strong>: For too little received content &#x2F; received content length not reaching the upper limit, or <code>MarkMAC</code> not found, an <code>ErrMarkNotFoundYet</code> error handler is prepared, which can return to continue reading.<br>  Other errors close the connection. If <code>markMAC</code>&#x2F;HMAC&#x2F;packet length is irregular (contains data not needed in the handshake), <code>ErrInvalidHandshake</code> is returned.<br>  For replay, <code>ErrReplayedHandshake</code> is returned.<br>  If calculation verification fails, <code>ErrNtorFailed</code> is returned.</li>
+<li><strong>closeAfterDelay()</strong>: <a target="_blank" rel="noopener" href="https://gitlab.com/yawning/obfs4/-/commit/1a6129b66ff3e66c347b54fbae203c1c61d12d74"><code>closeAfterDelay()</code> was modified</a>, fixing the vulnerability that caused FIN and RST due to thresholds. Older versions would terminate the connection after a delay of 30s&#x2F;receiving a certain length of data; new versions always terminate the connection after a 30s delay.</li>
+<li><strong>SetReadDeadline()</strong>: After 30s of starting to read data, any subsequent data entry also returns a timeout error and terminates the connection. (The paper mentions a random delay, which I couldn’t find.)</li>
+</ul>
+<h4 id="obfs4proxy-go"><a href="#obfs4proxy-go" class="headerlink" title="obfs4proxy.go"></a>obfs4proxy.go</h4><ul>
+<li><strong>serverHandler()</strong>:<br>Calls <code>WrapConn()</code>. If an error is returned, a handshake failure is logged.</li>
+<li><strong>serverAcceptLoop()</strong>:<br>Makes the server loop to initiate handshakes with clients, calling <code>serverHandler()</code>.</li>
+</ul>
+<h2 id="Analysis-and-Experiment"><a href="#Analysis-and-Experiment" class="headerlink" title="Analysis and Experiment"></a>Analysis and Experiment</h2><h3 id="Brief-Analysis-of-the-Paper"><a href="#Brief-Analysis-of-the-Paper" class="headerlink" title="Brief Analysis of the Paper"></a>Brief Analysis of the Paper</h3><p>In the paper’s manually constructed obfs4 decision tree, it first sends 17k of random data. If an RST is returned within 2 seconds, it proceeds to the next step, sending other probes. If a FIN is returned within 30-90 seconds, it is identified as obfs4. The 17k data was meant to trigger the threshold issue, which has since been fixed, but the delayed FIN situation still exists.</p>
+<p>The experimental data for obfs4 bridges in the paper was too scarce, so I decided to verify it myself. After testing several known obfs4 bridges, I coincidentally found that each bridge had a fixed timeout duration.</p>
+<p>Hypothesis: Each bridge has a fixed timeout duration. (Could the bridge’s timeout change after service restart? Is the random delay time generated only once?)<br>I tested 6 known obfs4 bridges, sending the same data (replaying data from a successful handshake initiated by a Tor browser). This hit the verification failure error, leading to <code>closeAfterDelay()</code>.<br>I initiated two handshakes for each bridge. For the same bridge, initiated from two different client IPs, both handshakes returned FIN after the same duration, with durations falling within [30, 90]s.</p>
+<h3 id="Experimental-Verification"><a href="#Experimental-Verification" class="headerlink" title="Experimental Verification"></a>Experimental Verification</h3><ol>
+<li><strong>Test Set</strong>: After filtering the <a target="_blank" rel="noopener" href="https://github.com/scriptzteam/Tor-Bridges-Collector">test set</a>, I obtained over four hundred active services.</li>
+<li><strong>Judgment Criteria</strong>: TLS and HTTP probes receive no response, and 17k bytes return RST or a timeout (returning FIN) within [30, 90]s.</li>
+<li><strong>Experimental Results</strong>:<br>① 80% of services were identified as obfs4 bridges. Among these, 50% returned RST, and 50% had timeouts within the range.<br>② 6% of services were not identified as obfs4 bridges.<br>③ 10% of services could not be determined. Sending 17k bytes immediately received FIN, and both TLS and HTTP timed out.</li>
+</ol>
+<h3 id="Experimental-Analysis"><a href="#Experimental-Analysis" class="headerlink" title="Experimental Analysis"></a>Experimental Analysis</h3><ol>
+<li>80% of bridge services met the judgment criteria, verifying the feasibility of the criteria.</li>
+<li>Among the 6% of services, sending TLS and HTTP both received responses, indicating other services. This is as expected, suggesting the provided service had changed.</li>
+<li>For the remaining 10% of services, the judgment criteria were not met. However, after picking a few and setting their configuration lines in the Tor browser, they could be used as bridges. After sending 20k bytes, 50% returned RST. After replaying obfs4 handshake data, all returned FIN within [30, 90]s. It is speculated that these are bridge services that have already been upgraded to new versions. After replaying handshake data, the verification fails, leading to the delayed FIN function. However, 20k already exceeds the RST threshold observed in the paper. Later, I sent 30k, and only a few responded with RST.</li>
+</ol>
+<h3 id="Experimental-Conclusions"><a href="#Experimental-Conclusions" class="headerlink" title="Experimental Conclusions"></a>Experimental Conclusions</h3><ol>
+<li>Sending sufficiently large random data immediately returns RST (fixed in obfs4proxy version 0.0.11).</li>
+<li>Sending data matching the handshake length returns FIN within [30, 90]s.</li>
+</ol>
+<h2 id="Follow-up"><a href="#Follow-up" class="headerlink" title="Follow-up"></a>Follow-up</h2><p>An active collection scheme has been implemented by combining other features.</p>
+<h2 id="Related-Resources"><a href="#Related-Resources" class="headerlink" title="Related Resources"></a>Related Resources</h2><p><a target="_blank" rel="noopener" href="https://gitlab.torproject.org/legacy/trac/-/issues/7349">torproject discussion about ORPort</a>(<a target="_blank" rel="noopener" href="https://gitlab.torproject.org/tpo/core/tor/-/issues/7349">move to here</a>)<br><a target="_blank" rel="noopener" href="https://jiangph2016.github.io/2020/04/07/detect-probe/">In-depth paper reading</a><br><a target="_blank" rel="noopener" href="https://github.com/net4people/bbs/issues/26">Paper discussion issue</a><br><a target="_blank" rel="noopener" href="http://meetbot.debian.net/tor-meeting/2020/tor-meeting.2020-04-02-17.59.html">torproject meeting minutes</a><br><a target="_blank" rel="noopener" href="http://meetbot.debian.net/tor-meeting/2020/tor-meeting.2020-04-02-17.59.log.html">torproject chat logs</a></p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/" class="category-chain-item">论文阅读</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Paper Reading:《Detecting probe resistant proxy》Experimental Validation and Analysis</div>
+      <div>https://q1uki.xyz/en/2024/12/09/obfs4/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>Author</div>
+          <div>q1uki</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Posted on</div>
+          <div>December 9, 2024</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>Licensed under</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - Attribution">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2024/12/09/obfs4/" title="【论文阅读】《Detecting probe resistant proxy》实验验证与分析">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">【论文阅读】《Detecting probe resistant proxy》实验验证与分析</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/en/2024/12/09/lzr/" title="Paper Reading: Notes and Thoughts on &#39;LZR: Identifying Unexpected Internet Services&#39;">
+                        <span class="hidden-mobile">Paper Reading: Notes and Thoughts on &#39;LZR: Identifying Unexpected Internet Services&#39;</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+  <div id="gitalk-container"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#gitalk-container', function() {
+      Fluid.utils.createCssLink('/css/gitalk.css')
+      Fluid.utils.createScript('https://lib.baomitu.com/gitalk/1.8.0/gitalk.min.js', function() {
+        var options = Object.assign(
+          {"clientID":"Ov23liuSYABDuZ6zWRwx","clientSecret":"8769c790613602f767e5ed67a101d7948d60ad49","repo":"blog-comments","owner":"q1uki","admin":["q1uki"],"language":"en","labels":["Gitalk"],"perPage":10,"pagerDirection":"last","distractionFreeMode":false,"createIssueManually":true,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token"},
+          {
+            id: 'f5591b9693f3f6cd5ab24d9e2fa980c5'
+          }
+        )
+        var gitalk = new Gitalk(options);
+        gitalk.render('gitalk-container');
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>Table of Contents</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  <script>
+  Fluid.utils.createScript('https://lib.baomitu.com/mermaid/8.14.0/mermaid.min.js', function() {
+    mermaid.initialize({"theme":"default"});
+
+    Fluid.utils.listenDOMLoaded(function() {
+      Fluid.events.registerRefreshCallback(function() {
+        if ('mermaid' in window) {
+          mermaid.init();
+        }
+      });
+    });
+  });
+</script>
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">Keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+      <div class="col-lg-7 mx-auto nopadding-x-md">
+        <div class="container custom mx-auto">
+          <script>
+  function switchLang() {
+      var path = window.location.pathname;
+      if (path.indexOf('/en/') === 0) {
+          // 如果是英文版，直接剔除开头的 /en 即可变回中文版
+          window.location.href = path.replace('/en/', '/');
+      } else {
+          // 如果是中文版，直接在开头补上 /en 即可跳往英文版
+          window.location.href = '/en' + (path === '/' ? '/' : path);
+      }
+  }
+</script>
+
+        </div>
+      </div>
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    function isExpandAllEnabled() {
+      return CONFIG.toc && CONFIG.toc.expand_all === true;
+    }
+    function expandAllToc() {
+      if (!isExpandAllEnabled()) { return; }
+      jQuery('#toc-body .tocbot-is-collapsed').removeClass('tocbot-is-collapsed');
+    }
+    function updateTocToggle($li, $childList) {
+      var $toggle = $li.children('.toc-toggle');
+      if ($toggle.length === 0) { return; }
+      var collapsed = $childList.hasClass('tocbot-is-collapsed');
+      $toggle
+        .toggleClass('toc-toggle-collapsed', collapsed)
+        .toggleClass('toc-toggle-expanded', !collapsed);
+    }
+    function bindTocToggle() {
+      if (!isExpandAllEnabled()) { return; }
+      jQuery('#toc-body .toc-list-item').each(function() {
+        var $li = jQuery(this);
+        var $childList = $li.children('ol');
+        if ($childList.length === 0) {
+          if ($li.children('.toc-toggle').length === 0) {
+            $li.prepend('<span class="toc-toggle toc-toggle-placeholder" aria-hidden="true">›</span>');
+          }
+          return;
+        }
+
+        if ($li.children('.toc-toggle').length === 0) {
+          $li.prepend('<span class="toc-toggle toc-toggle-expanded" aria-hidden="true">›</span>');
+        }
+        updateTocToggle($li, $childList);
+      });
+      jQuery('#toc-body').off('click.tocToggle').on('click.tocToggle', '.toc-toggle', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        var $li = jQuery(this).parent('.toc-list-item');
+        var $childList = $li.children('ol');
+        if ($childList.length === 0) { return; }
+        $childList.toggleClass('tocbot-is-collapsed');
+        updateTocToggle($li, $childList);
+      });
+      if (!window.__tocToggleObserver) {
+        window.__tocToggleObserver = new MutationObserver(function(mutations) {
+          mutations.forEach(function(mutation) {
+            if (mutation.type !== 'attributes' || mutation.attributeName !== 'class') { return; }
+            var $list = jQuery(mutation.target);
+            var $li = $list.parent('.toc-list-item');
+            if ($li.length === 0) { return; }
+            updateTocToggle($li, $list);
+          });
+        });
+        jQuery('#toc-body ol').each(function() {
+          window.__tocToggleObserver.observe(this, { attributes: true });
+        });
+      }
+    }
+    var tocConfig = Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc);
+    if (isExpandAllEnabled()) {
+      tocConfig.collapseDepth = 6;
+    }
+    window.tocbot.init(tocConfig);
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+    expandAllToc();
+    bindTocToggle();
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+        expandAllToc();
+        bindTocToggle();
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">Blog works best with JavaScript enabled</div>
+  </noscript>
+</body>
+</html>
